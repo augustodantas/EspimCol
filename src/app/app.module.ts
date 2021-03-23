@@ -16,10 +16,9 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { IndexModule } from './index/index.module';
 import { SecurityModule } from './security/security.module';
 import { LoggedInGuard } from './security/loggedin.guard';
-import { AuthInterceptor } from './security/auth.interceptor';
-import { ApplicationErrorHandler } from './app.error-handler';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 
 // tslint:disable-next-line:class-name
 export class missingTranslationHandler implements MissingTranslationHandler {
@@ -46,6 +45,15 @@ const providers = [
     // configure the imports
     NgbModule,
     HttpClientModule,
+    ToastrModule.forRoot({
+      closeButton: true,
+      disableTimeOut: false,
+      preventDuplicates: true,
+      enableHtml: true,
+      progressBar: true,
+      timeOut: 15000,
+      extendedTimeOut: 15000,
+    }),
     TranslateModule.forRoot({
       loader: { provide: TranslateLoader, useFactory: HttpLoaderFactory, deps: [HttpClient] },
       missingTranslationHandler: { provide: MissingTranslationHandler, useClass: missingTranslationHandler }
@@ -53,7 +61,7 @@ const providers = [
     [SweetAlert2Module.forRoot()],
     BrowserAnimationsModule
   ],
-  exports: [TranslateModule, ComponentsModule],
+  exports: [ToastrModule, TranslateModule, ComponentsModule],
   providers: [
     // import services
     LoggedInGuard,

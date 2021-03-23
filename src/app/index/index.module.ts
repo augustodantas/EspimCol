@@ -1,3 +1,4 @@
+import { ComponentsModule } from './../components/components.module';
 import { SharedModule } from './../app.shared.module';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgModule } from '@angular/core';
@@ -29,6 +30,7 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
     CommonModule,
     IndexRoutingModule,
     SecurityModule,
+    ComponentsModule,
     TranslateModule,
     ReactiveFormsModule,
     NgbModule,

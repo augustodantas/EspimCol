@@ -1,3 +1,4 @@
+import { ToastrService } from 'ngx-toastr';
 import { SwallAlertService } from './../util/util.swall.service';
 import { LoginService } from './../security/login/login.service';
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
@@ -56,14 +57,6 @@ export class ErrorHandlerInterceptor implements HttpInterceptor {
       data: error.error,
     };
 
-    if (
-      /\/api\/(?=login|logout|esqueciSenha|redefinirSenha)(\/.*)?/.exec(url) ||
-      /\/visitante\/redefinirSenha/.exec(url) ||
-      /\/informe-rendimentos\/solicitar/.exec(url)
-    ) {
-      return throwError(objError);
-    }
-
     if (error.status === 401) {
       this._authenticationService.clearStorage();
       if (!url.startsWith('/login')) {
@@ -87,6 +80,7 @@ export class ErrorHandlerInterceptor implements HttpInterceptor {
       }
     }
 
+ 
     this._toastr.error(this._getMessage(error), this._getTitle(error));
 
     return throwError(objError);

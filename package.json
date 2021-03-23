@@ -11,9 +11,6 @@
   },
   "private": true,
   "dependencies": {
-    "ng-inline-svg": "^11.0.2",
-    "spinkit": "^1.2.5",
-    "ngx-toastr": "^13.2.0",
     "@angular/animations": "^9.1.0",
     "@angular/cdk": "~9.2.0-next.0",
     "@angular/common": "^9.1.0",
@@ -35,10 +32,12 @@
     "jquery": "^3.4.1",
     "moment": "^2.24.0",
     "ngx-social-login": "^6.0.1",
+    "ngx-toastr": "^12.1.0",
     "popper.js": "^1.16.1",
     "rxjs": "^6.5.5",
     "rxjs-compat": "^6.5.5",
     "secure-ls": "^1.2.6",
+    "spinkit": "^1.2.5",
     "sweetalert2": "^8.19.0",
     "tslib": "^2.1.0",
     "zone.js": "~0.10.2"

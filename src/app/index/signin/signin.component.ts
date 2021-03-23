@@ -1,3 +1,4 @@
+import { ToastrService } from 'ngx-toastr';
 import { finalize, map } from 'rxjs/operators';
 import { LoaderService } from './../../services/loader.service';
 import { FormUtil } from './../../util/util.form.service';
@@ -38,7 +39,7 @@ export class SigninComponent  {
     })
   });
 
-  constructor(private _loaderService: LoaderService,  private readonly _toastr: ToastrService, private route: ActivatedRoute, private loginService: LoginService, private observerService: ObserversService, private formBuilder: FormBuilder, private daoService: DAOService, private dateConverterService: DateConverterService, private router: Router) {
+  constructor(private _loaderService: LoaderService,  private _toastr: ToastrService, private route: ActivatedRoute, private loginService: LoginService, private observerService: ObserversService, private formBuilder: FormBuilder, private daoService: DAOService, private dateConverterService: DateConverterService, private router: Router) {
     // Carrega os parametros da rota nos valores do formulário
     this.form.patchValue({
       name: this.route.snapshot.params.name,
@@ -47,7 +48,6 @@ export class SigninComponent  {
   }
 
   save() {
-    var t = this
     this.form.markAllAsTouched();
     
     if (this.form.valid) {
@@ -61,9 +61,8 @@ export class SigninComponent  {
       )
       .subscribe(
         (resp) => {
-          this._toastr.success('Observador registrado!', 'Observador registrado com sucesso!').show().then(function() {
-            t.loginService.handleAuth(resp);
-          });
+          this._toastr.success('Observador registrado!', 'Observador registrado com sucesso!');
+          this.loginService.handleAuth(resp);
         },
         (resp) => FormUtil.setErrorsBackend(this.form, resp)
       )

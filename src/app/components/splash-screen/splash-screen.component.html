@@ -6,14 +6,6 @@
   [@fadeInOut]
   *ngIf="isLoading | async"
 >
-  <span
-    class="svg-icon"
-    [ngClass]="{
-      'svg-icon-10x': !isInsideDataTables,
-      'svg-icon-8x': isInsideDataTables
-    }"
-    [inlineSVG]="'./assets/media/logos/default/logo-dark.svg'"
-  ></span>
   <div id="loading" class="sk-circle sk-primary">
     <div class="sk-circle1 sk-child"></div>
     <div class="sk-circle2 sk-child"></div>
@@ -30,13 +22,12 @@
   </div>
 
   <span
-    class="text-center mb-0 message"
+    class="mb-0 text-center message"
     [ngClass]="{
       'mt-15': !isInsideDataTables,
       'mt-10': isInsideDataTables,
       h4: !isInsideDataTables,
       h6: isInsideDataTables
     }"
-    >{{ message | async }}...</span
-  >
+    >{{ message | async }}...</span>
 </div>
