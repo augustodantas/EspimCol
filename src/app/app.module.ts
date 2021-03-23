@@ -1,6 +1,10 @@
+import { ErrorHandlerInterceptor } from './interceptors/error-handler.interceptor';
+import { ComponentsModule } from './components/components.module';
+import { LoaderService } from './services/loader.service';
+import { JsonDateInterceptor } from './interceptors/json-date.interceptor';
 import { SwallAlertService } from './util/util.swall.service';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, ErrorHandler, InjectionToken } from '@angular/core';
+import { NgModule, ErrorHandler, InjectionToken, ModuleWithProviders } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -24,6 +28,10 @@ export class missingTranslationHandler implements MissingTranslationHandler {
   }
 }
 
+const providers = [
+  LoaderService
+];
+
 @NgModule({
   declarations: [
     AppComponent
@@ -31,6 +39,7 @@ export class missingTranslationHandler implements MissingTranslationHandler {
   imports: [
     // imports modules
     BrowserModule,
+    ComponentsModule,
     AppRoutingModule,
     IndexModule,
     SecurityModule,
@@ -44,17 +53,32 @@ export class missingTranslationHandler implements MissingTranslationHandler {
     [SweetAlert2Module.forRoot()],
     BrowserAnimationsModule
   ],
-  exports: [TranslateModule],
+  exports: [TranslateModule, ComponentsModule],
   providers: [
     // import services
     LoggedInGuard,
     SwallAlertService,
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-    { provide: ErrorHandler, useClass: ApplicationErrorHandler}
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: JsonDateInterceptor,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ErrorHandlerInterceptor,
+      multi: true,
+    }
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+  static forRoot(): ModuleWithProviders<AppModule> {
+    return {
+      ngModule: AppModule,
+      providers,
+    };
+  }
+}
 
 
 // required for AOT (ahead of time) compilation

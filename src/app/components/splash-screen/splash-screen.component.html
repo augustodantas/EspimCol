@@ -1,0 +1,42 @@
+<!-- splash screen -->
+<div
+  #splashScreen
+  class="splash-screen"
+  [ngClass]="{ global: !isInsideDataTables, datatables: isInsideDataTables }"
+  [@fadeInOut]
+  *ngIf="isLoading | async"
+>
+  <span
+    class="svg-icon"
+    [ngClass]="{
+      'svg-icon-10x': !isInsideDataTables,
+      'svg-icon-8x': isInsideDataTables
+    }"
+    [inlineSVG]="'./assets/media/logos/default/logo-dark.svg'"
+  ></span>
+  <div id="loading" class="sk-circle sk-primary">
+    <div class="sk-circle1 sk-child"></div>
+    <div class="sk-circle2 sk-child"></div>
+    <div class="sk-circle3 sk-child"></div>
+    <div class="sk-circle4 sk-child"></div>
+    <div class="sk-circle5 sk-child"></div>
+    <div class="sk-circle6 sk-child"></div>
+    <div class="sk-circle7 sk-child"></div>
+    <div class="sk-circle8 sk-child"></div>
+    <div class="sk-circle9 sk-child"></div>
+    <div class="sk-circle10 sk-child"></div>
+    <div class="sk-circle11 sk-child"></div>
+    <div class="sk-circle12 sk-child"></div>
+  </div>
+
+  <span
+    class="text-center mb-0 message"
+    [ngClass]="{
+      'mt-15': !isInsideDataTables,
+      'mt-10': isInsideDataTables,
+      h4: !isInsideDataTables,
+      h6: isInsideDataTables
+    }"
+    >{{ message | async }}...</span
+  >
+</div>

@@ -13,7 +13,6 @@ export class FormDirective {
   @HostListener('submit')
   onFormSubmit() {
     const invalidControl = this.el.nativeElement.querySelector('.ng-invalid');
-    console.log('teste submit')
     if (invalidControl) {
       invalidControl.focus();
     }

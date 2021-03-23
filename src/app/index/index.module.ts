@@ -1,5 +1,4 @@
 import { SharedModule } from './../app.shared.module';
-import { InputValidationsComponent } from './../components/input-validations/input-validations.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -43,7 +42,7 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
       }
     )
   ],
-  declarations: [IndexComponent, HeaderComponent, FooterComponent, HomeComponent, WorksComponent, DownloadComponent, TimelineComponent, TeamComponent, DocumentationComponent, SigninComponent, InputValidationsComponent],
+  declarations: [IndexComponent, HeaderComponent, FooterComponent, HomeComponent, WorksComponent, DownloadComponent, TimelineComponent, TeamComponent, DocumentationComponent, SigninComponent],
   providers:[DAOService, ObserversService, DateConverterService],
   exports: []
 })

@@ -11,6 +11,9 @@
   },
   "private": true,
   "dependencies": {
+    "ng-inline-svg": "^11.0.2",
+    "spinkit": "^1.2.5",
+    "ngx-toastr": "^13.2.0",
     "@angular/animations": "^9.1.0",
     "@angular/cdk": "~9.2.0-next.0",
     "@angular/common": "^9.1.0",

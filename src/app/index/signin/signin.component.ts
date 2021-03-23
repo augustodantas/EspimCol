@@ -1,3 +1,5 @@
+import { finalize, map } from 'rxjs/operators';
+import { LoaderService } from './../../services/loader.service';
 import { FormUtil } from './../../util/util.form.service';
 import { SwallAlertService } from './../../util/util.swall.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
@@ -13,7 +15,7 @@ import { Router, ActivatedRoute } from '@angular/router';
   selector: 'esm-signin',
   templateUrl: './signin.component.html'
 })
-export class SigninComponent implements OnInit {
+export class SigninComponent  {
   urlObservers: string = ESPIM_REST_Observers;
   form: FormGroup = this.formBuilder.group({
     name: this.formBuilder.control('', [Validators.required]),
@@ -36,7 +38,7 @@ export class SigninComponent implements OnInit {
     })
   });
 
-  constructor(private _swall: SwallAlertService, private route: ActivatedRoute, private loginService: LoginService, private observerService: ObserversService, private formBuilder: FormBuilder, private daoService: DAOService, private dateConverterService: DateConverterService, private router: Router) {
+  constructor(private _loaderService: LoaderService,  private readonly _toastr: ToastrService, private route: ActivatedRoute, private loginService: LoginService, private observerService: ObserversService, private formBuilder: FormBuilder, private daoService: DAOService, private dateConverterService: DateConverterService, private router: Router) {
     // Carrega os parametros da rota nos valores do formulário
     this.form.patchValue({
       name: this.route.snapshot.params.name,
@@ -44,26 +46,27 @@ export class SigninComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
-  }
-
   save() {
     var t = this
     this.form.markAllAsTouched();
     
     if (this.form.valid) {
-      // converter data aqui senão vai dar problema de formato aceito pelo backend
       var dados = {...this.form.value};
-      dados['birthdate'] = this.dateConverterService.toString(this.form.value.birthdate);
 
-      this.daoService.postObject(this.urlObservers, dados).subscribe(
+      this._loaderService.show();
+      
+      this.daoService.postObject(this.urlObservers, dados)
+      .pipe(
+        finalize(() => this._loaderService.hide())
+      )
+      .subscribe(
         (resp) => {
-          this._swall.success('Observador registrado!', 'Observador registrado com sucesso!').show().then(function() {
+          this._toastr.success('Observador registrado!', 'Observador registrado com sucesso!').show().then(function() {
             t.loginService.handleAuth(resp);
           });
         },
         (resp) => FormUtil.setErrorsBackend(this.form, resp)
-      );
+      )
     }
   }
 

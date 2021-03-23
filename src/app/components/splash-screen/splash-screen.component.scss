@@ -1,0 +1,84 @@
+@import '~spinkit/scss/spinkit';
+
+:host {
+  .splash-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    z-index: 99999;
+
+    &.global {
+      background-color: #f2f3f8;
+      position: fixed;
+
+      img {
+        margin-left: calc(100vw - 100%);
+        width: 90px;
+        margin-bottom: 20px;
+      }
+
+      span.message {
+        margin-left: calc(100vw - 100%) !important;
+        margin-bottom: 30px !important;
+      }
+    }
+
+    &.datatables {
+      opacity: 0.7;
+
+      img {
+        width: 60px;
+      }
+
+      span.message {
+        margin-bottom: 30px !important;
+      }
+    }
+  }
+}
+
+.splash-screen {
+  &.global {
+    .sk-circle {
+      margin: 0;
+      width: 100px;
+      height: 100px;
+    }
+  }
+  &.datatables {
+    .sk-circle {
+      margin: -5px 0 0 0 !important;
+      width: 50px;
+      height: 50px;
+    }
+  }
+}
+
+.sk-circle .sk-child:before {
+  background-color: #000;
+}
+
+@-webkit-keyframes load8 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes load8 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
