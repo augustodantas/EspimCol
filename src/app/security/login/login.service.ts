@@ -1,3 +1,5 @@
+import { finalize } from 'rxjs/operators';
+import { LoaderService } from './../../services/loader.service';
 import { Injectable, NgZone } from '@angular/core';
 import { SocialLoginService, Provider, SocialUser } from 'ngx-social-login';
 import 'rxjs/operator/do';
@@ -17,7 +19,7 @@ export class LoginService {
 
   user: Observable<SocialUser>;
 
-  constructor(private _service: SocialLoginService, private router: Router, private zone: NgZone, private _observerService: ObserversService,     private readonly _localStorageService: LocalStorageService,
+  constructor(private _loaderService: LoaderService, private _service: SocialLoginService, private router: Router, private zone: NgZone, private _observerService: ObserversService,     private readonly _localStorageService: LocalStorageService,
     ) {
 
       this._currentUserSubject = new BehaviorSubject<SocialUser>(
@@ -28,10 +30,16 @@ export class LoginService {
   }
 
   loginWithGoogle(): void {
-    this._service.login(Provider.GOOGLE).subscribe(
+    this._service.login(Provider.GOOGLE)
+    .subscribe(
       user => {
+        this._loaderService.show()
         this.zone.run(() => {
-          this._observerService.authenticate(this.urlObservers, user.accessToken).subscribe(
+          this._observerService.authenticate(this.urlObservers, user.accessToken)
+          .pipe(
+            finalize(() => this._loaderService.hide())
+          )
+          .subscribe(
               (response: any) => {
                 this.handleAuth(response)
               },

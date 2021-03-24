@@ -1,14 +1,10 @@
-import { Directive, HostListener, ElementRef } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
-import { FormGroup } from '@angular/forms';
+import { Directive, ElementRef, HostListener } from '@angular/core';
 
 @Directive({
-  selector: '[focusInvalidInput]'
+  selector: '[focusInvalidInput]',
 })
 export class FormDirective {
-  constructor(private el: ElementRef) {
-    console.log(el)
-  }
+  constructor(private el: ElementRef) {}
 
   @HostListener('submit')
   onFormSubmit() {

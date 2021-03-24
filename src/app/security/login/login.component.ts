@@ -1,24 +1,26 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+
 import { LoginService } from './login.service';
-import { SocialLoginService, Provider } from 'ngx-social-login';
 
 @Component({
   selector: 'esm-login',
-  templateUrl: './login.component.html'
+  templateUrl: './login.component.html',
 })
 export class LoginComponent implements OnInit {
+  constructor(private _loginService: LoginService, private router: Router) {}
 
-  constructor(private _loginService: LoginService) { }
-
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   login() {
-    this._loginService.loginWithGoogle();
+    if (this._loginService.isLoggedIn) {
+      this.router.navigate(['/private']);
+    } else {
+      this._loginService.loginWithGoogle();
+    }
   }
 
   logout() {
     this._loginService.logout();
   }
-
 }

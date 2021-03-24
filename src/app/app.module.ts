@@ -1,25 +1,31 @@
-import { ErrorHandlerInterceptor } from './interceptors/error-handler.interceptor';
-import { ComponentsModule } from './components/components.module';
-import { LoaderService } from './services/loader.service';
-import { JsonDateInterceptor } from './interceptors/json-date.interceptor';
-import { SwallAlertService } from './util/util.swall.service';
+import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
+import { ModuleWithProviders, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, ErrorHandler, InjectionToken, ModuleWithProviders } from '@angular/core';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import {
+  MissingTranslationHandler,
+  MissingTranslationHandlerParams,
+  TranslateLoader,
+  TranslateModule,
+} from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import { ToastrModule } from 'ngx-toastr';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { TranslateLoader, TranslateModule, MissingTranslationHandler, MissingTranslationHandlerParams } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-// local modules
+import { SharedModule } from './app.shared.module';
+import { ComponentsModule } from './components/components.module';
 import { IndexModule } from './index/index.module';
-import { SecurityModule } from './security/security.module';
+import { ErrorHandlerInterceptor } from './interceptors/error-handler.interceptor';
+import { JsonDateInterceptor } from './interceptors/json-date.interceptor';
 import { LoggedInGuard } from './security/loggedin.guard';
-import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ToastrModule } from 'ngx-toastr';
+import { SecurityModule } from './security/security.module';
+import { LoaderService } from './services/loader.service';
+import { SwallAlertService } from './util/util.swall.service';
 
+// local modules
 // tslint:disable-next-line:class-name
 export class missingTranslationHandler implements MissingTranslationHandler {
   handle(params: MissingTranslationHandlerParams) {
@@ -27,17 +33,14 @@ export class missingTranslationHandler implements MissingTranslationHandler {
   }
 }
 
-const providers = [
-  LoaderService
-];
+const providers = [LoaderService];
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
+  declarations: [AppComponent],
   imports: [
     // imports modules
     BrowserModule,
+    SharedModule,
     ComponentsModule,
     AppRoutingModule,
     IndexModule,
@@ -55,13 +58,17 @@ const providers = [
       extendedTimeOut: 15000,
     }),
     TranslateModule.forRoot({
-      loader: { provide: TranslateLoader, useFactory: HttpLoaderFactory, deps: [HttpClient] },
-      missingTranslationHandler: { provide: MissingTranslationHandler, useClass: missingTranslationHandler }
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient],
+      },
+      missingTranslationHandler: { provide: MissingTranslationHandler, useClass: missingTranslationHandler },
     }),
     [SweetAlert2Module.forRoot()],
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
   ],
-  exports: [ToastrModule, TranslateModule, ComponentsModule],
+  exports: [ToastrModule, ComponentsModule, SharedModule],
   providers: [
     // import services
     LoggedInGuard,
@@ -75,9 +82,9 @@ const providers = [
       provide: HTTP_INTERCEPTORS,
       useClass: ErrorHandlerInterceptor,
       multi: true,
-    }
+    },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule {
   static forRoot(): ModuleWithProviders<AppModule> {
@@ -88,9 +95,7 @@ export class AppModule {
   }
 }
 
-
 // required for AOT (ahead of time) compilation
-
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);

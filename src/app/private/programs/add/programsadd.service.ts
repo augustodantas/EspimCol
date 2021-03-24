@@ -36,6 +36,9 @@ export class ProgramsAddService {
   private programObservable$: Subject<Program> = new Subject<Program>();
 
   constructor(private daoService: DAOService, private loginService: LoginService) {
+  }
+
+  ngOnInit() {
     this.observers = this.requestObservers();
     this.participants = this.requestParticipants();
   }
@@ -124,6 +127,7 @@ export class ProgramsAddService {
    * If "observersId" is passed, requests such observers, sort, and returns. Else, requests all observers contacts of the user. They already come sorted.
    */
   requestObservers(observersId?: number[]): Array<Observer> {
+    console.log('caiu aqui')
     /**
      * The received interventions will be stored in "observersInstance" and returned
      */

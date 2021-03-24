@@ -1,15 +1,12 @@
 import { NgModule } from '@angular/core';
+
 import { FormDirective } from './directives/focus-invalid-input';
 
-const components = [
-    FormDirective
-];
+const components = [FormDirective];
 
 @NgModule({
   declarations: [...components],
-  imports: [
-    
-  ],
+  imports: [],
   exports: [...components],
 })
 export class SharedModule {}

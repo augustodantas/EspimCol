@@ -1,0 +1,18 @@
+{
+  "recommendations": [
+    "loiane.angular-extension-pack",
+    "EditorConfig.EditorConfig",
+    "vscode-icons-team.vscode-icons",
+    "christian-kohler.path-intellisense",
+    "bmewburn.vscode-intelephense-client",
+    "eg2.vscode-npm-script",
+    "steoates.autoimport",
+    "eamodio.gitlens",
+    "donjayamanne.githistory",
+    "msjsdiag.debugger-for-chrome",
+    "aaron-bond.better-comments",
+    "ExodiusStudios.comment-anchors",
+    "MariusAlchimavicius.json-to-ts",
+    "dbaeumer.vscode-eslint"
+  ]
+}
