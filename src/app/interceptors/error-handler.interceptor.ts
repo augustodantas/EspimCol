@@ -73,8 +73,8 @@ export class ErrorHandlerInterceptor implements HttpInterceptor {
   }
 
   private _getMessage(error: HttpErrorResponse): string {
-    if (error.error && error.error.error_message && (!environment.production || (environment.production && error.status < 500))) {
-      return error.error.error_message;
+    if (error.error && error.error.message && (!environment.production || (environment.production && error.status < 500))) {
+      return error.error.message;
     }
 
     let message: string;
@@ -94,6 +94,7 @@ export class ErrorHandlerInterceptor implements HttpInterceptor {
                   para o endereço solicitado.`;
         break;
       case 412:
+      case 422:
         message = 'Existem alguns erros, favor verificar os dados fornecidos.';
         break;
       case 500:
@@ -127,6 +128,7 @@ export class ErrorHandlerInterceptor implements HttpInterceptor {
         case 405:
           return 'Acesso Negado!';
         case 412:
+        case 422:
           return 'Parâmetros inválidos!';
         default:
           return `Falha na comunicação com o servidor`;

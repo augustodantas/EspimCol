@@ -17,7 +17,7 @@ export class ParticipantsListComponent {
   urlParticipants: string = ESPIM_REST_Participants;
   participants: Participant[];
   total: number;
-  loading: boolean = false;
+  loading: boolean = true;
   page: number = 1;
   pageSize: 10;
   search: Subject<string> = new Subject<string>();

@@ -1,17 +1,21 @@
-import { Injectable } from '@angular/core';
 import { HttpParams } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+
 import { DAOService } from '../dao/dao.service';
 
 @Injectable()
 export class ObserversService extends DAOService {
-    // TODO - Trazer as requests de observadores de programsadd.service.ts
-    getObserverByEmail(urlObject: string, email: string) {
-        const params = new HttpParams().set('search', email);
-        return this.http.get(urlObject, {params });
-    }
+  getObserverByEmail(urlObject: string, email: string) {
+    const params = new HttpParams().set('search', email);
+    return this.http.get(urlObject, { params });
+  }
 
-    authenticate(urlObject: string, token: string) {
-        return this.http.post(urlObject, {token: token});
-    }
+  authenticate(urlObject: string, token: string) {
+    return this.http.post(urlObject, { token: token });
+  }
 
+  fetchUser(urlObject: string): Observable<any> {
+    return this.http.get<any>(urlObject);
+  }
 }

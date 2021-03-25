@@ -1,11 +1,13 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
+import { Observable } from 'rxjs';
+import { finalize } from 'rxjs/operators';
 import { ESPIM_REST_Participants } from 'src/app/app.api';
+import { LoaderService } from 'src/app/services/loader.service';
+import { FormUtil } from 'src/app/util/util.form.service';
 
 import { DAOService } from '../../dao/dao.service';
-import { Participant } from '../../models/participant.model';
 
 @Component({
   selector: 'esm-participants-add',
@@ -13,66 +15,71 @@ import { Participant } from '../../models/participant.model';
 })
 export class ParticipanstAddComponent implements OnInit {
   urlParticipants: string = ESPIM_REST_Participants;
-  participantForm: FormGroup;
+  form: FormGroup;
   editing: boolean = false;
-
-  //sweet alert elements
-  @ViewChild('swalSaveSuccess') private swalSaveSuccess: SwalComponent;
-  @ViewChild('swalSaveAndAddAnotherSuccess') private swalSaveAndAddAnotherSuccess: SwalComponent;
+  loading: boolean = true;
 
   constructor(
     private _daoService: DAOService,
     private _activatedRoute: ActivatedRoute,
     private _formBuilder: FormBuilder,
+    private _loaderService: LoaderService,
     private route: Router
   ) {}
 
   ngOnInit() {
-    this.participantForm = this._formBuilder.group({
-      id: this._formBuilder.control(''),
-      name: this._formBuilder.control('', [Validators.required]),
+    this.form = this._formBuilder.group({
       email: this._formBuilder.control('', [Validators.required, Validators.email]),
-      alias: this._formBuilder.control(''),
+      alias: this._formBuilder.control('', [Validators.required]),
     });
     let id: string = this._activatedRoute.snapshot.params['id'];
+
     if (id) {
-      this._daoService.getObject(this.urlParticipants, id).subscribe((response) => {
-        let participant = new Participant(response);
-        this.participantForm.patchValue({ id: participant.getId() });
-        this.participantForm.patchValue({ name: participant.getName() });
-        this.participantForm.patchValue({ email: participant.getEmail(), disabled: true });
-        this.participantForm.patchValue({ alias: participant.getAlias() });
-        this.editing = true;
-      });
+      this.fetchData(id);
+    } else {
+      this.loading = false;
     }
   }
 
+  fetchData(id: string) {
+    this._daoService
+      .getObject(this.urlParticipants, id)
+      .pipe(finalize(() => (this.loading = false)))
+      .subscribe((response) => {
+        console.log(response);
+      });
+  }
+
   save(event) {
-    if (this.participantForm.value.id) {
-      this._daoService.putObject(this.urlParticipants, this.participantForm.value).subscribe((response) => {
-        this.swalSaveSuccess.show();
-      });
+    this.form.markAllAsTouched();
+
+    if (this.form.valid) {
+      var dados = { ...this.form.value };
+
+      this._loaderService.show();
+
+      this.sendRequest()
+        .pipe(finalize(() => this._loaderService.hide()))
+        .subscribe(
+          (response) => {
+            console.log(response);
+          },
+          (resp) => FormUtil.setErrorsBackend(this.form, resp)
+        );
+    }
+  }
+
+  sendRequest(): Observable<any> {
+    let id: string = this._activatedRoute.snapshot.params['id'];
+
+    if (id) {
+      return this._daoService.putObject(this.urlParticipants + id, this.form.value);
     } else {
-      this._daoService.postObject(this.urlParticipants, this.participantForm.value).subscribe((response) => {
-        this.swalSaveSuccess.show();
-      });
+      return this._daoService.postObject(this.urlParticipants, this.form.value);
     }
   }
 
   onSaveSuccess(event) {
     this.route.navigate(['private/participants/list']);
-  }
-
-  saveAndAddAnother(event) {
-    this._daoService.postObject(this.urlParticipants, this.participantForm.value).subscribe((response) => {
-      this.swalSaveAndAddAnotherSuccess.show();
-    });
-  }
-
-  onSaveAndAddAnotherSuccess(event) {
-    this.participantForm.patchValue({ id: '' }),
-      this.participantForm.patchValue({ name: '' }),
-      this.participantForm.patchValue({ email: '' }),
-      this.participantForm.patchValue({ alias: '' });
   }
 }

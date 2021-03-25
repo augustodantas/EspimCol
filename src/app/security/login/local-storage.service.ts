@@ -6,7 +6,7 @@ import * as SecureLS from 'secure-ls';
   providedIn: 'root',
 })
 export class LocalStorageService {
-  private _prefix: string = 'sagui_';
+  private _prefix: string = 'esm_';
   private _ls: any = new SecureLS({ encodingType: 'aes' });
 
   Get(key: string): any {
