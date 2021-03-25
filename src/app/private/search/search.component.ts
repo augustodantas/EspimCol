@@ -1,37 +1,29 @@
-import { Component, OnInit, Output, Input } from '@angular/core';
-import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
-import 'rxjs/add/operator/catch';
-import { EventEmitter } from '@angular/core';
-import { SearchService } from './search.service';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/switchMap';
+
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'esm-search',
-  templateUrl: './search.component.html'
+  templateUrl: './search.component.html',
 })
 export class SearchComponent implements OnInit {
+  form: FormGroup;
+  @Output() doSearch: EventEmitter<any> = new EventEmitter();
 
-  searchTerm: string;
+  constructor(private readonly _formBuilder: FormBuilder) {}
 
-  @Output() searchResults: EventEmitter<any> = new EventEmitter();
-  @Input() urlObject: string;
-
-  constructor(private _searchService: SearchService) { }
-
-  ngOnInit() {
+  handleChange($event: any): void {
+    this.doSearch.emit($event);
   }
 
-  search() {
-    if (this.searchTerm) {
-      this._searchService.objectsSearch(this.urlObject, this.searchTerm).subscribe(response => {
-        this.searchResults.emit({response:response});
-      });
-    } else {
-      this._searchService.objectsSearch(this.urlObject).subscribe(response => {
-        this.searchResults.emit({response:response});
-      });
-    }
+  ngOnInit(): void {
+    this.form = this._formBuilder.group({
+      query: [''],
+    });
   }
 }

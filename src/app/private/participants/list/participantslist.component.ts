@@ -1,65 +1,68 @@
-import { Component, OnInit, Injectable, Input, ViewChild } from '@angular/core';
-import { Pagination } from 'src/app/private/pagination/pagination.model';
+import { DecimalPipe } from '@angular/common';
+import { HttpParams } from '@angular/common/http';
+import { Component } from '@angular/core';
+import { Observable, Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
 import { ESPIM_REST_Participants } from 'src/app/app.api';
+
 import { DAOService } from '../../dao/dao.service';
-import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
 import { Participant } from '../../models/participant.model';
 
 @Component({
   selector: 'esm-particpants-list',
-  templateUrl: './participantslist.component.html'
+  templateUrl: './participantslist.component.html',
+  providers: [DecimalPipe],
 })
-@Injectable()
-export class ParticipantsListComponent implements OnInit {
-
+export class ParticipantsListComponent {
   urlParticipants: string = ESPIM_REST_Participants;
   participants: Participant[];
-  totalParticipants: string;
-  pagination: Pagination;
+  total: number;
+  loading: boolean = false;
+  page: number = 1;
+  pageSize: 10;
+  search: Subject<string> = new Subject<string>();
+  searchTerm: '';
 
-  // sweet alert elements
-  @ViewChild('swalDeleteParticipant') private swalDeleteParticipant: SwalComponent;
-  @ViewChild('swalAfterDelete') private swalAfterDelete: SwalComponent;
-
-  // temp program stored for deleting program
-  tempParticipant: Participant;
-
-  constructor(private daoService: DAOService) { }
-
-  ngOnInit() {
-    this.getParticipants();
-  }
-
-  getParticipants(url: string = this.urlParticipants) {
-    this.daoService.getObjects(url).subscribe(
-      response => {
+  constructor(private daoService: DAOService) {
+    this.search
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        tap(() => {
+          this.participants = [];
+          this.total = 0;
+          this.loading = true;
+        }),
+        switchMap((query) => {
+          return this.getParticipants(query);
+        })
+      )
+      .subscribe((response) => {
+        this.loading = false;
         this.setParticipants(response);
       });
   }
 
-  onNext(event) {
-    this.getParticipants(event.url);
+  handleChange($event: any): void {
+    this.search.next($event);
   }
 
-  onNextSearch(event) {
-    this.setParticipants(event.response);
+  ngOnInit() {
+    this.search.next('');
+  }
+
+  getParticipants(query: string = ''): Observable<any> {
+    let params = new HttpParams().set('search', query).set('page', this.page?.toString());
+    return this.daoService.getObjects(this.urlParticipants, params);
   }
 
   setParticipants(response) {
-    this.totalParticipants = response.count;
-    this.participants = response.results.map(reponse => new Participant(reponse));
-    this.pagination = new Pagination(response);
+    this.total = response.total;
+    this.participants = response.data;
   }
 
-  // deleting a program from list
   deleteParticipant(participant: Participant) {
-    this.tempParticipant = participant;
-    this.swalDeleteParticipant.show();
-  }
-
-  onConfirmDeleteParticipant(event) {
-    this.daoService.deleteObject(this.urlParticipants, this.tempParticipant.getId().toString()).subscribe(response => {
-      this.swalAfterDelete.show();
+    this.daoService.deleteObject(this.urlParticipants, participant.id.toString()).subscribe((response) => {
       this.getParticipants();
     });
   }

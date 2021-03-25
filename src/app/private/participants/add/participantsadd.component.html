@@ -1,15 +1,15 @@
-<div class="card mx-auto mt-4 w-main container-fluid">
+<div class="mx-auto mt-4 card w-main container-fluid">
   <div class="row">
-    <section class="col-12 mx-auto bg-white rounded p-xl-2 p-0">
+    <section class="p-0 mx-auto bg-white rounded col-12 p-xl-2">
       <div class="container-fluid">
-        <div class="row p-xl-5 p-4">
-          <div class="col-12 mt-4 mt-xl-0 p-0">
+        <div class="p-4 row p-xl-5">
+          <div class="p-0 mt-4 col-12 mt-xl-0">
             <h1 class="h4 font-weight-bold" translate>private.participants.add.title</h1>
           </div>
-          <form class="col-12 pl-0 pb-3 pr-0" [formGroup]="participantForm">
+          <form class="pb-3 pl-0 pr-0 col-12" [formGroup]="participantForm">
             <div class="container-fluid">
               <div class="row">
-                <div class="col-12 mt-4 mb-4 p-0">
+                <div class="p-0 mt-4 mb-4 col-12">
                   <div class="form-group">
                     <input id="id" name="id" type="hidden" formControlName="id" />
                   </div>
@@ -50,7 +50,7 @@
                   </div>
                 </div>
                 <button
-                  class="btn btn-secondary text-center font-weight-bold"
+                  class="text-center btn btn-secondary font-weight-bold"
                   [swal]="swalSaveAndAddAnother"
                   name="saveAndAddAnother"
                   *ngIf="participantForm.valid && !participantForm.get('id').value"
@@ -61,7 +61,7 @@
                 <button
                   type="submit"
                   name="saveButton"
-                  class="btn btn-success mx-auto col-7 col-xl-4 p-3 px-xl-0 mt-4 mt-xl-0 font-weight-bold"
+                  class="p-3 mx-auto mt-4 btn btn-success col-7 col-xl-4 px-xl-0 mt-xl-0 font-weight-bold"
                   [disabled]="participantForm.invalid"
                   *ngIf="participantForm.valid"
                   [swal]="swalSaveButton"

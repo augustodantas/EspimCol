@@ -13,7 +13,7 @@ export class LoginComponent implements OnInit {
   ngOnInit() {}
 
   login() {
-    if (this._loginService.isLoggedIn) {
+    if (this._loginService.isLoggedIn()) {
       this.router.navigate(['/private']);
     } else {
       this._loginService.loginWithGoogle();

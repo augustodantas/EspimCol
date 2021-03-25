@@ -20,6 +20,7 @@ import { ComponentsModule } from './components/components.module';
 import { IndexModule } from './index/index.module';
 import { ErrorHandlerInterceptor } from './interceptors/error-handler.interceptor';
 import { JsonDateInterceptor } from './interceptors/json-date.interceptor';
+import { AuthInterceptor } from './security/auth.interceptor';
 import { LoggedInGuard } from './security/loggedin.guard';
 import { SecurityModule } from './security/security.module';
 import { LoaderService } from './services/loader.service';
@@ -73,6 +74,11 @@ const providers = [LoaderService];
     // import services
     LoggedInGuard,
     SwallAlertService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: JsonDateInterceptor,
