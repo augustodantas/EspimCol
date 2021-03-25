@@ -10,8 +10,8 @@ export class DAOService {
     return this.http.get(urlObject, { params: parameters });
   }
 
-  getObject(urlObject: string, id: string) {
-    return this.http.get(urlObject + `${id}/`);
+  getObject(urlObject: string, id: string): Observable<any> {
+    return this.http.get(urlObject + `${id}`);
   }
 
   postObject(urlObject: string, object: any): Observable<any> {
@@ -19,7 +19,7 @@ export class DAOService {
   }
 
   putObject(urlObject: string, object: any): Observable<any> {
-    return this.http.put(urlObject + `${object.id}/`, object);
+    return this.http.put(urlObject, object);
   }
 
   patchObject(urlObject: string, object: any) {

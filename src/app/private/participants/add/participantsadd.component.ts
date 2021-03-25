@@ -42,11 +42,12 @@ export class ParticipanstAddComponent implements OnInit {
   }
 
   fetchData(id: string) {
+    this._loaderService.show();
     this._daoService
       .getObject(this.urlParticipants, id)
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(finalize(() => this._loaderService.hide()))
       .subscribe((response) => {
-        console.log(response);
+        this.form.patchValue({ ...response.data });
       });
   }
 
