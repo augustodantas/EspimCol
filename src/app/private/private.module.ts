@@ -9,9 +9,7 @@ import { PrivateComponent } from './private.component';
 
 // local imports
 @NgModule({
-  imports: [CommonModule, TranslateModule.forChild({ extend: true }), PrivateRoutingModule],
+  imports: [PrivateRoutingModule, CommonModule, TranslateModule.forChild({ extend: true })],
   declarations: [PrivateComponent, HeaderComponent, DashboardComponent],
-  exports: [],
-  providers: [],
 })
 export class PrivateModule {}

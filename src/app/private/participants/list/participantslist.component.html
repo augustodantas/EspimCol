@@ -19,9 +19,9 @@
         <tr *ngFor="let participant of participants">
           <td scope="row">
             <a [routerLink]="['/private/participants/edit', participant.id]">
-              <ngb-highlight [result]="participant.alias" [term]="searchTerm"></ngb-highlight>
+              {{ participant.alias }}
               -
-              <ngb-highlight [result]="participant.user.email" [term]="searchTerm"></ngb-highlight>
+              {{ participant.user.email }}
             </a>
           </td>
 
@@ -51,15 +51,14 @@
     </table>
 
     <div class="p-2">
-      <ngb-pagination
+      <pagination
+        [totalItems]="total"
         *ngIf="total"
-        [disabled]="loading"
-        (pageChange)="handleChange($event)"
-        [collectionSize]="total"
-        [(page)]="page"
-        [pageSize]="pageSize"
-      >
-      </ngb-pagination>
+        [(ngModel)]="page"
+        name="page"
+        (pageChanged)="handleChange($event)"
+        [disabled]="!total"
+      ></pagination>
 
       <div *ngIf="!total">
         <div class="loader-bg w-25"></div>

@@ -2,7 +2,6 @@ import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {
   MissingTranslationHandler,
   MissingTranslationHandlerParams,
@@ -10,7 +9,7 @@ import {
   TranslateModule,
 } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import { MomentModule } from 'ngx-moment';
 import { ToastrModule } from 'ngx-toastr';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -24,7 +23,6 @@ import { AuthInterceptor } from './security/auth.interceptor';
 import { LoggedInGuard } from './security/loggedin.guard';
 import { SecurityModule } from './security/security.module';
 import { LoaderService } from './services/loader.service';
-import { SwallAlertService } from './util/util.swall.service';
 
 // local modules
 // tslint:disable-next-line:class-name
@@ -45,9 +43,9 @@ const providers = [LoaderService];
     ComponentsModule,
     AppRoutingModule,
     IndexModule,
+    MomentModule,
     SecurityModule,
     // configure the imports
-    NgbModule,
     HttpClientModule,
     ToastrModule.forRoot({
       closeButton: true,
@@ -66,14 +64,12 @@ const providers = [LoaderService];
       },
       missingTranslationHandler: { provide: MissingTranslationHandler, useClass: missingTranslationHandler },
     }),
-    [SweetAlert2Module.forRoot()],
     BrowserAnimationsModule,
   ],
   exports: [ToastrModule, ComponentsModule, SharedModule],
   providers: [
     // import services
     LoggedInGuard,
-    SwallAlertService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,

@@ -1,4 +1,4 @@
-import { SocialUser } from 'ngx-social-login';
+import { SocialUser } from 'angularx-social-login';
 
 export class Participant {
   id: number;

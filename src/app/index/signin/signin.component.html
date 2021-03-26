@@ -1,6 +1,6 @@
 <main class="card mx-auto mt-4 w-main">
   <!-- Forms -->
-  <form focusInvalidInput class="d-flex flex-wrap p-3 pt-4 p-md-5" [formGroup]="form" (submit)="save()">
+  <form focusInvalidInput class="d-flex flex-wrap p-3 pt-4 p-md-5" [formGroup]="form" (ngSubmit)="save()">
     <!-- Placeholder, Nome e Sobre você -->
     <div class="container-fluid mb-2 mb-md-5">
       <div class="row">
@@ -18,40 +18,53 @@
           <!-- Name -->
           <div class="w-100 mb-4">
             <label class="font-weight-bold w-100 mb-0" for="name">Nome</label>
-            <input class="form-control" name="name" id="name" formControlName="name" type="text"
-              placeholder="Nome completo">
-              <input-validations
-                *ngIf="form.controls['name'].invalid && form.controls['name'].touched"
-                [errors]="form.controls['name'].errors"
-                label="Nome">
-              </input-validations>
+            <input class="form-control" name="name" id="name" formControlName="name" type="text" placeholder="Nome completo" />
+            <input-validations
+              *ngIf="form.controls['name'].invalid && form.controls['name'].touched"
+              [errors]="form.controls['name'].errors"
+              label="Nome"
+            >
+            </input-validations>
           </div>
 
           <!-- About -->
           <div class="w-100 mb-4">
             <label class="font-weight-bold w-100 mb-0" for="about">Sobre você</label>
-            <input class="form-control" name="about" id="about" formControlName="about" type="text"
-              placeholder="Conte-nos um pouco sobre você!">
-              <input-validations
-                *ngIf="form.controls['about'].invalid && form.controls['about'].touched"
-                [errors]="form.controls['about'].errors"
-                label="Sobre você">
-              </input-validations>              
+            <input
+              class="form-control"
+              name="about"
+              id="about"
+              formControlName="about"
+              type="text"
+              placeholder="Conte-nos um pouco sobre você!"
+            />
+            <input-validations
+              *ngIf="form.controls['about'].invalid && form.controls['about'].touched"
+              [errors]="form.controls['about'].errors"
+              label="Sobre você"
+            >
+            </input-validations>
           </div>
-          
-          
+
           <!-- E-mail -->
           <div class="w-100 mb-4">
             <label class="font-weight-bold w-100 mb-0" for="email">E-mail</label>
-            <input class="form-control" name="email" id="email" formControlName="email" type="email"
-              placeholder="Qual o seu e-mail?">
+            <input class="form-control" name="email" id="email" formControlName="email" type="email" placeholder="Qual o seu e-mail?" />
           </div>
           <!------------>
           <!-- Dia de nascimento -->
           <div class="w-100 mb-4">
-            <label class="font-weight-bold w-100 mb-0" [for]="birthdate">Data de Nascimento</label>
+            <label class="font-weight-bold w-100 mb-0" for="birthdate">Data de Nascimento</label>
             <div class="input-group align-items-center">
-              <input class="form-control" name="birthdate" (click)="birthdate.toggle()" ngbDatepicker #birthdate="ngbDatepicker" type="text" placeholder="Data de nascimento" formControlName="birthdate" readonly>
+              <input
+                class="form-control"
+                name="birthdate"
+                bsDatepicker
+                type="text"
+                placeholder="Data de nascimento"
+                formControlName="birthdate"
+                readonly
+              />
               <i class="far fa-calendar-alt fa-2x px-3"></i>
             </div>
           </div>
@@ -75,19 +88,19 @@
           <!-- Profissão -->
           <div class="w-100 mb-4">
             <label class="font-weight-bold w-100 mb-0" for="role">Cargo</label>
-            <input class="form-control" name="role" id="role" formControlName="role" type="text">
+            <input class="form-control" name="role" id="role" formControlName="role" type="text" />
           </div>
           <!--------------->
           <!-- Empresa ou instituição -->
           <div class="w-100 mb-4">
             <label class="font-weight-bold w-100 mb-0" for="institution">Instituição</label>
-            <input class="form-control" name="institution" id="institution" formControlName="institution" type="text">
+            <input class="form-control" name="institution" id="institution" formControlName="institution" type="text" />
           </div>
           <!---------------------------->
           <!-- Número de telefone -->
           <div class="w-100 mb-4">
             <label class="font-weight-bold w-100 mb-0" for="phone_number">Número de telefone</label>
-            <input class="form-control" name="phone_number" id="phone_number" formControlName="phone_number" type="text">
+            <input class="form-control" name="phone_number" id="phone_number" formControlName="phone_number" type="text" />
           </div>
           <!------------------------>
         </div>
@@ -97,42 +110,48 @@
           <!-- Endereço -->
           <div class="w-100 mb-4">
             <label class="font-weight-bold w-100 mb-0" for="address">Endereço</label>
-            <input class="form-control" name="address" formControlName="address" id="address" type="text">
+            <input class="form-control" name="address" formControlName="address" id="address" type="text" />
           </div>
           <!-------------->
           <!-- Número -->
           <div class="w-100 mb-4">
             <label class="font-weight-bold w-100 mb-0" for="address_number">Número</label>
-            <input class="form-control" name="address_number" id="address_number" formControlName="address_number" type="text">
+            <input class="form-control" name="address_number" id="address_number" formControlName="address_number" type="text" />
           </div>
           <!------------>
           <!-- Complemento -->
           <div class="w-100 mb-4">
             <label class="font-weight-bold w-100 mb-0" for="address_complement">Complemento</label>
-            <input class="form-control" name="address_complement" id="address_complement" formControlName="address_complement" type="text">
+            <input
+              class="form-control"
+              name="address_complement"
+              id="address_complement"
+              formControlName="address_complement"
+              type="text"
+            />
           </div>
           <!----------------->
           <!-- Cep -->
           <div class="w-100 mb-4">
             <label class="font-weight-bold w-100 mb-0" for="cep">CEP</label>
-            <input class="form-control" name="cep"  id="cep" formControlName="cep" type="text">
+            <input class="form-control" name="cep" id="cep" formControlName="cep" type="text" />
           </div>
           <!--------->
           <!-- Cidade -->
           <div class="w-100 mb-4">
             <label class="font-weight-bold w-100 mb-0" for="city">Estado</label>
-            <input class="form-control" name="city" id="city" formControlName="city" type="text">
+            <input class="form-control" name="city" id="city" formControlName="city" type="text" />
           </div>
           <!------------>
           <!-- Estado -->
           <div class="w-100 mb-4">
             <label class="font-weight-bold w-100 mb-0" for="state">Cidade</label>
-            <input type="text" class="form-control p-0" id="state" name="state" formControlName="state">
+            <input type="text" class="form-control p-0" id="state" name="state" formControlName="state" />
           </div>
           <!-- País -->
           <div class="w-100 mb-4">
             <label class="font-weight-bold w-100 mb-0" for="country">País</label>
-            <input type="text" class="form-control p-0" id="country" name="country" formControlName="country">
+            <input type="text" class="form-control p-0" id="country" name="country" formControlName="country" />
           </div>
           <!------------>
         </div>
@@ -143,7 +162,6 @@
     <div class="d-flex justify-content-center w-100">
       <button name="saveButton" class="btn btn-primary w-100 w-md-25">REGISTRE-SE</button>
     </div>
-
   </form>
   <!----------->
 </main>

@@ -6,9 +6,7 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class LoaderService {
   isLoading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
-  message: BehaviorSubject<string> = new BehaviorSubject<string>(
-    'Iniciando o sistema'
-  );
+  message: BehaviorSubject<string> = new BehaviorSubject<string>('Iniciando o sistema');
   count: number = 1;
 
   show(message: string = 'Carregando dados'): void {
@@ -19,6 +17,8 @@ export class LoaderService {
 
   hide(): void {
     this.count -= this.count > 0 ? 1 : 0;
+    console.log(this.count);
+
     this.isLoading.next(!!this.count);
   }
 }

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
+import { LoggedInGuard } from '../security/loggedin.guard';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { PrivateComponent } from './private.component';
 
@@ -8,6 +9,7 @@ const routes: Routes = [
   {
     path: '',
     component: PrivateComponent,
+    canActivate: [LoggedInGuard],
     children: [
       { path: '', component: DashboardComponent },
       // {

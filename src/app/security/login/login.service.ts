@@ -1,6 +1,6 @@
 import { Injectable, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
-import { Provider, SocialLoginService, SocialUser } from 'ngx-social-login';
+import { GoogleLoginProvider, SocialAuthService, SocialUser } from 'angularx-social-login';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 import { ESPIM_REST_Observers } from 'src/app/app.api';
@@ -21,7 +21,7 @@ export class LoginService {
 
   constructor(
     private _loaderService: LoaderService,
-    private _service: SocialLoginService,
+    private _service: SocialAuthService,
     private router: Router,
     private zone: NgZone,
     private _observerService: ObserversService,
@@ -33,15 +33,16 @@ export class LoginService {
   }
 
   loginWithGoogle(): void {
-    this._service.login(Provider.GOOGLE).subscribe(
+    this._service.signIn(GoogleLoginProvider.PROVIDER_ID).then(
       (user) => {
         this._loaderService.show();
         this.zone.run(() => {
           this._observerService
-            .authenticate(this.urlObservers, user.accessToken)
+            .authenticate(this.urlObservers, user.authToken)
             .pipe(finalize(() => this._loaderService.hide()))
             .subscribe(
               (response: any) => {
+                console.log('oi');
                 this.handleAuth(response);
               },
               (error) => {
@@ -64,29 +65,22 @@ export class LoginService {
   }
 
   handleAuth(response: any) {
+    console.log(7);
     this.accessToken = response.token;
+    console.log(5);
     this._currentUserSubject.next(response.user);
+    console.log('caiu aqui');
     this._localStorageService.Set(this._propertyName, response.token);
 
-    this.router.navigate(['/private']);
+    this.router.navigate(['private']);
   }
 
   logout(): void {
-    this._service.logout().subscribe({
-      complete: () => {
-        this.zone.run(() => {
-          this.router.navigate(['/']);
-        });
-      },
-      error: (err) => console.log(err),
-    });
-
     this.accessToken = '';
     this.clearStorage();
   }
 
   public get userValue(): SocialUser {
-    console.log(this._currentUserSubject.value);
     return this._currentUserSubject.value;
   }
 

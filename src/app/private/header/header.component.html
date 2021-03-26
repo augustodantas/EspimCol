@@ -94,12 +94,12 @@
           >
           <ul class="py-0 text-center dropdown-menu w-xl-px-200 py-xl-2">
             <li>
-              <a class="dropdown-item" [routerLinkActive]="['active']" routerLink="participants/add" translate
+              <a class="dropdown-item" [routerLinkActive]="['active']" routerLink="/private/participants/add" translate
                 >private.header.participants.add</a
               >
             </li>
             <li>
-              <a class="dropdown-item" [routerLinkActive]="['active']" routerLink="participants/list" translate
+              <a class="dropdown-item" [routerLinkActive]="['active']" routerLink="/private/participants/list" translate
                 >private.header.participants.list</a
               >
             </li>
@@ -121,7 +121,9 @@
               >
             </li>
             <li>
-              <a class="dropdown-item" [routerLinkActive]="['active']" routerLink="programs/list" translate>private.header.programs.list</a>
+              <a class="dropdown-item" [routerLinkActive]="['active']" routerLink="/private/programs/list" translate
+                >private.header.programs.list</a
+              >
             </li>
           </ul>
         </li>
@@ -131,7 +133,7 @@
           >
           <ul class="py-0 text-center dropdown-menu w-xl-px-200 py-xl-2">
             <li>
-              <a [routerLinkActive]="['active']" [routerLink]="['results/list']" class="dropdown-item" translate
+              <a [routerLinkActive]="['active']" [routerLink]="['/private/results/list']" class="dropdown-item" translate
                 >private.header.results.list</a
               >
             </li>
