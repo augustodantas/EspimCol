@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import * as moment from 'moment';
 import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs/operators';
 import { ESPIM_REST_Observers } from 'src/app/app.api';
@@ -60,7 +61,7 @@ export class SigninComponent {
 
     if (this.form.valid) {
       var dados = { ...this.form.value };
-      // dados['birthdate'] = moment(this.form.value.birthdate).format();
+      dados['birthdate'] = moment(this.form.value.birthdate).format('YYYY-MM-DD');
 
       console.log(this.form.value.birthdate);
 

@@ -1,9 +1,11 @@
 import { DecimalPipe } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
+import { BsModalService } from 'ngx-bootstrap/modal';
 import { Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { ESPIM_REST_Participants } from 'src/app/app.api';
+import { ModalConfirmDeleteComponent } from 'src/app/components/modal-confirm-delete/modal-confirm-delete.component';
 
 import { DAOService } from '../../dao/dao.service';
 import { Participant } from '../../models/participant.model';
@@ -14,7 +16,6 @@ import { Participant } from '../../models/participant.model';
   providers: [DecimalPipe],
 })
 export class ParticipantsListComponent {
-  @ViewChild('modalDelete') modalDelete: any;
   urlParticipants: string = ESPIM_REST_Participants;
   participants: Participant[];
   total: number;
@@ -24,7 +25,7 @@ export class ParticipantsListComponent {
   search: Subject<string> = new Subject<string>();
   searchTerm: string = '';
 
-  constructor(private daoService: DAOService) {
+  constructor(private daoService: DAOService, private readonly _modalService: BsModalService) {
     this.search
       .pipe(
         debounceTime(300),
@@ -70,7 +71,7 @@ export class ParticipantsListComponent {
   }
 
   deleteParticipant(participant: Participant) {
-    // this._modalService.open(this.modalDelete);
+    this._modalService.show(ModalConfirmDeleteComponent);
     // this.daoService.deleteObject(this.urlParticipants, participant.id.toString()).subscribe(() => {
     //   this.getParticipants();
     // });

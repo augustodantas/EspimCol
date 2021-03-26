@@ -42,7 +42,6 @@ export class LoginService {
             .pipe(finalize(() => this._loaderService.hide()))
             .subscribe(
               (response: any) => {
-                console.log('oi');
                 this.handleAuth(response);
               },
               (error) => {
@@ -65,19 +64,17 @@ export class LoginService {
   }
 
   handleAuth(response: any) {
-    console.log(7);
     this.accessToken = response.token;
-    console.log(5);
     this._currentUserSubject.next(response.user);
-    console.log('caiu aqui');
     this._localStorageService.Set(this._propertyName, response.token);
 
-    this.router.navigate(['private']);
+    this.router.navigate(['/private']);
   }
 
   logout(): void {
     this.accessToken = '';
     this.clearStorage();
+    this.router.navigate(['/']);
   }
 
   public get userValue(): SocialUser {
