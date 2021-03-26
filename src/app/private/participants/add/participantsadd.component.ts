@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import { ESPIM_REST_Participants } from 'src/app/app.api';
@@ -18,24 +19,28 @@ export class ParticipanstAddComponent implements OnInit {
   form: FormGroup;
   editing: boolean = false;
   loading: boolean = true;
+  id: string = '';
 
   constructor(
     private _daoService: DAOService,
+    private _toastr: ToastrService,
     private _activatedRoute: ActivatedRoute,
     private _formBuilder: FormBuilder,
     private _loaderService: LoaderService,
-    private route: Router
+    private route: Router,
+    private activeRoute: ActivatedRoute
   ) {}
 
   ngOnInit() {
+    this.id = this.activeRoute.snapshot.params.id;
+
     this.form = this._formBuilder.group({
-      email: this._formBuilder.control('', [Validators.required, Validators.email]),
+      email: this._formBuilder.control({ value: '', disabled: !!this.id }, [Validators.required, Validators.email]),
       alias: this._formBuilder.control('', [Validators.required]),
     });
-    let id: string = this._activatedRoute.snapshot.params['id'];
 
-    if (id) {
-      this.fetchData(id);
+    if (this.id) {
+      this.fetchData(this.id);
     } else {
       this.loading = false;
     }
@@ -55,32 +60,31 @@ export class ParticipanstAddComponent implements OnInit {
     this.form.markAllAsTouched();
 
     if (this.form.valid) {
-      var dados = { ...this.form.value };
-
       this._loaderService.show();
 
       this.sendRequest()
         .pipe(finalize(() => this._loaderService.hide()))
         .subscribe(
           (response) => {
-            console.log(response);
+            if (response.error) {
+              FormUtil.setErrorsBackend(this.form, response);
+            } else {
+              this._toastr.success(response.message);
+              this.route.navigate(['/private/participants/list']);
+            }
           },
-          (resp) => FormUtil.setErrorsBackend(this.form, resp)
+          (resp) => FormUtil.setErrorsBackend(this.form, resp.data)
         );
     }
   }
 
   sendRequest(): Observable<any> {
-    let id: string = this._activatedRoute.snapshot.params['id'];
+    var dados = { ...this.form.value };
 
-    if (id) {
-      return this._daoService.putObject(this.urlParticipants + id, this.form.value);
+    if (this.id) {
+      return this._daoService.putObject(this.urlParticipants + this.id, dados);
     } else {
-      return this._daoService.postObject(this.urlParticipants, this.form.value);
+      return this._daoService.postObject(this.urlParticipants, dados);
     }
-  }
-
-  onSaveSuccess(event) {
-    this.route.navigate(['private/participants/list']);
   }
 }

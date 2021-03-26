@@ -11,7 +11,7 @@ const routes: Routes = [
   },
   { path: 'add', component: ParticipanstAddComponent },
   { path: 'edit/:id', component: ParticipanstAddComponent },
-  { path: '**', redirectTo: '/', pathMatch: 'full' },
+  { path: '**', redirectTo: '/private', pathMatch: 'full' },
 ];
 
 @NgModule({

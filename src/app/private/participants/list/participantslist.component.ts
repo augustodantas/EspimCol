@@ -1,8 +1,9 @@
 import { DecimalPipe } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { ESPIM_REST_Participants } from 'src/app/app.api';
 
 import { DAOService } from '../../dao/dao.service';
@@ -14,6 +15,7 @@ import { Participant } from '../../models/participant.model';
   providers: [DecimalPipe],
 })
 export class ParticipantsListComponent {
+  @ViewChild('modalDelete') modalDelete: any;
   urlParticipants: string = ESPIM_REST_Participants;
   participants: Participant[];
   total: number;
@@ -21,20 +23,15 @@ export class ParticipantsListComponent {
   page: number = 1;
   pageSize: 10;
   search: Subject<string> = new Subject<string>();
-  searchTerm: '';
+  searchTerm: string = '';
 
-  constructor(private daoService: DAOService) {
+  constructor(private daoService: DAOService, private _modalService: NgbModal) {
     this.search
       .pipe(
         debounceTime(300),
         distinctUntilChanged(),
-        tap(() => {
-          this.participants = [];
-          this.total = 0;
-          this.loading = true;
-        }),
-        switchMap((query) => {
-          return this.getParticipants(query);
+        switchMap(() => {
+          return this.getParticipants();
         })
       )
       .subscribe((response) => {
@@ -43,7 +40,13 @@ export class ParticipantsListComponent {
       });
   }
 
-  handleChange($event: any): void {
+  handleChange($event: any, search: boolean = false): void {
+    if (search) {
+      this.total = null;
+      this.searchTerm = $event;
+    }
+    this.participants = [];
+    this.loading = true;
     this.search.next($event);
   }
 
@@ -51,19 +54,26 @@ export class ParticipantsListComponent {
     this.search.next('');
   }
 
-  getParticipants(query: string = ''): Observable<any> {
-    let params = new HttpParams().set('search', query).set('page', this.page?.toString());
+  getParticipants(): Observable<any> {
+    let params = new HttpParams()
+      .set('search', this.searchTerm)
+      .set('page', this.page?.toString())
+      .set('orderBy', 'created_at')
+      .set('sortedBy', 'desc');
     return this.daoService.getObjects(this.urlParticipants, params);
   }
 
   setParticipants(response) {
     this.total = response.total;
+    this.pageSize = response.per_page;
     this.participants = response.data;
   }
 
   deleteParticipant(participant: Participant) {
-    this.daoService.deleteObject(this.urlParticipants, participant.id.toString()).subscribe((response) => {
-      this.getParticipants();
-    });
+    this._modalService.open(this.modalDelete);
+
+    // this.daoService.deleteObject(this.urlParticipants, participant.id.toString()).subscribe(() => {
+    //   this.getParticipants();
+    // });
   }
 }

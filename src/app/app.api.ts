@@ -1,5 +1,5 @@
 // configure default backend location
-export const ESPIM_API = 'http://localhost:80/api/';
+export const ESPIM_API = 'http://localhost:8083/api/';
 
 // configure participants module url
 export const ESPIM_REST_Participants: string = ESPIM_API + 'participants/';
@@ -23,5 +23,4 @@ export const ESPIM_REST_Triggers: string = ESPIM_API + 'triggers/';
 export const ESPIM_REST_Sensors: string = ESPIM_API + 'sensors/';
 
 // config default page size
-export const PAGE_SIZE = 4;
-
+export const PAGE_SIZE = 10;

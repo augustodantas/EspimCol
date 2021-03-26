@@ -1,22 +1,22 @@
+import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { finalize, map } from 'rxjs/operators';
-import { LoaderService } from './../../services/loader.service';
-import { FormUtil } from './../../util/util.form.service';
-import { SwallAlertService } from './../../util/util.swall.service';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { finalize } from 'rxjs/operators';
 import { ESPIM_REST_Observers } from 'src/app/app.api';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { DateConverterService } from 'src/app/util/util.date.converter.service';
 import { DAOService } from 'src/app/private/dao/dao.service';
 import { ObserversService } from 'src/app/private/observers/observers.service';
 import { LoginService } from 'src/app/security/login/login.service';
-import { Router, ActivatedRoute } from '@angular/router';
+import { DateConverterService } from 'src/app/util/util.date.converter.service';
+
+import { LoaderService } from './../../services/loader.service';
+import { FormUtil } from './../../util/util.form.service';
 
 @Component({
   selector: 'esm-signin',
-  templateUrl: './signin.component.html'
+  templateUrl: './signin.component.html',
 })
-export class SigninComponent  {
+export class SigninComponent {
   urlObservers: string = ESPIM_REST_Observers;
   form: FormGroup = this.formBuilder.group({
     name: this.formBuilder.control('', [Validators.required]),
@@ -35,38 +35,47 @@ export class SigninComponent  {
       cep: this.formBuilder.control('', [Validators.required]),
       state: this.formBuilder.control('', [Validators.required]),
       city: this.formBuilder.control('', [Validators.required]),
-      country: this.formBuilder.control('', [Validators.required])
-    })
+      country: this.formBuilder.control('', [Validators.required]),
+    }),
   });
 
-  constructor(private _loaderService: LoaderService,  private _toastr: ToastrService, private route: ActivatedRoute, private loginService: LoginService, private observerService: ObserversService, private formBuilder: FormBuilder, private daoService: DAOService, private dateConverterService: DateConverterService, private router: Router) {
+  constructor(
+    private _loaderService: LoaderService,
+    private _toastr: ToastrService,
+    private route: ActivatedRoute,
+    private loginService: LoginService,
+    private observerService: ObserversService,
+    private formBuilder: FormBuilder,
+    private daoService: DAOService,
+    private dateConverterService: DateConverterService,
+    private router: Router
+  ) {
     // Carrega os parametros da rota nos valores do formulário
     this.form.patchValue({
       name: this.route.snapshot.params.name,
-      email: this.route.snapshot.params.email
+      email: this.route.snapshot.params.email,
     });
   }
 
   save() {
     this.form.markAllAsTouched();
-    
+
     if (this.form.valid) {
-      var dados = {...this.form.value};
+      var dados = { ...this.form.value };
+      dados['birthdate'] = this.dateConverterService.toString(this.form.value.birthdate);
 
       this._loaderService.show();
-      
-      this.daoService.postObject(this.urlObservers, dados)
-      .pipe(
-        finalize(() => this._loaderService.hide())
-      )
-      .subscribe(
-        (resp) => {
-          this._toastr.success('Observador registrado!', 'Observador registrado com sucesso!');
-          this.loginService.handleAuth(resp);
-        },
-        (resp) => FormUtil.setErrorsBackend(this.form, resp)
-      )
+
+      this.daoService
+        .postObject(this.urlObservers, dados)
+        .pipe(finalize(() => this._loaderService.hide()))
+        .subscribe(
+          (resp) => {
+            this._toastr.success('Observador registrado!', 'Observador registrado com sucesso!');
+            this.loginService.handleAuth(resp);
+          },
+          (resp) => FormUtil.setErrorsBackend(this.form, resp.data)
+        );
     }
   }
-
 }
