@@ -29,7 +29,7 @@ export class DAOService {
     return this.http.patch(urlObject + `${objectId}/`, object);
   }
 
-  deleteObject(urlObject: string, id: string) {
+  deleteObject(urlObject: string, id: string): Observable<any> {
     return this.http.delete(`${urlObject}${id}/`);
   }
 }

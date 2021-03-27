@@ -1,15 +1,17 @@
 <div class="modal-header">
-  <h4 class="modal-title" id="modal-title">Profile deletion</h4>
+  <h4 class="modal-title" id="modal-title">{{ title }} deletion</h4>
   <button type="button" class="close" aria-describedby="modal-title" (click)="cancel()">
     <span aria-hidden="true">&times;</span>
   </button>
 </div>
 <div class="modal-body">
   <p>
-    <strong>Are you sure you want to delete <span class="text-primary">"John Doe"</span> profile?</strong>
+    <strong
+      >Are you sure you want to delete <br />
+      <span class="text-primary">"{{ object }}"</span>?</strong
+    >
   </p>
   <p>
-    All information associated to this user profile will be permanently deleted.
     <span class="text-danger">This operation can not be undone.</span>
   </p>
 </div>
