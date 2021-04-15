@@ -12,26 +12,6 @@
         <form [formGroup]="form" (ngSubmit)="save($event)">
           <div class="row">
             <div class="col-6 form-group">
-              <label for="email" class="sr-only" translate>private.participants.add.email</label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                placeholder="{{ 'private.participants.add.email' | translate }}"
-                class="form-control-plaintext border-bottom"
-                formControlName="email"
-                [readonly]="editing"
-              />
-              <input-validations
-                *ngIf="form.controls['email'].invalid && form.controls['email'].touched"
-                [errors]="form.controls['email'].errors"
-                label="E-mail"
-              >
-              </input-validations>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-6 form-group">
               <label for="text" class="sr-only" translate>private.participants.add.name</label>
               <input
                 id="name"
@@ -46,6 +26,27 @@
                 *ngIf="form.controls['alias'].invalid && form.controls['alias'].touched"
                 [errors]="form.controls['alias'].errors"
                 label="Nome"
+              >
+              </input-validations>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-6 form-group">
+              <label for="email" class="sr-only" translate>private.participants.add.email</label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="{{ 'private.participants.add.email' | translate }}"
+                class="form-control-plaintext border-bottom"
+                formControlName="email"
+                [readonly]="editing"
+              />
+              <input-validations
+                *ngIf="form.controls['email'].invalid && form.controls['email'].touched"
+                [errors]="form.controls['email'].errors"
+                label="E-mail"
               >
               </input-validations>
             </div>

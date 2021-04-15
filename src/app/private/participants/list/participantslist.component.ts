@@ -73,8 +73,8 @@ export class ParticipantsListComponent {
   }
 
   setParticipants(response) {
-    this.total = response.total;
-    this.pageSize = response.per_page;
+    this.total = response.meta.pagination.total;
+    this.pageSize = response.meta.pagination.per_page;
     this.participants = response.data;
   }
 
