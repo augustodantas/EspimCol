@@ -1,0 +1,68 @@
+<main class="px-5 mx-auto mt-4 mb-5 card w-main">
+  <!--Título & busca-->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h4 font-weight-bold flex-column no-margin" translate>private.programs.list.pageTitle</h1>
+    <a [routerLink]="['/private/programs/add/first']" class="btn btn-link align-self-end" translate>private.programs.list.addButton</a>
+  </div>
+
+  <esm-search (doSearch)="handleChange($event, true)"></esm-search>
+  <form>
+    <!-- Cabeçalho -->
+    <esm-list-header
+      [title]="'private.programs.list.listTitle' | translate"
+      [subtitle]="'private.programs.list.totalNumber' | translate"
+      [total]="total"
+    ></esm-list-header>
+
+    <table class="table table-hover">
+      <tbody>
+        <tr *ngFor="let program of programs">
+          <td scope="row">
+            <a [routerLink]="['/private/programs/edit', program.id]">
+              {{ program.title }}
+            </a>
+          </td>
+
+          <td width="100">
+            <div class="mx-3 d-flex align-items-center">
+              <a [routerLink]="['/private/programs/edit', program.id]">
+                <i class="mr-3 fas fa-edit fa-lg text-primary"></i>
+              </a>
+              <a href="javascript:">
+                <i class="fas fa-trash-alt fa-lg text-primary" (click)="deleteParticipant(program)"></i>
+              </a>
+            </div>
+          </td>
+        </tr>
+
+        <ng-template [ngIf]="loading">
+          <tr *ngFor="let i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]" class="loading">
+            <td>
+              <div class="loader-bg"></div>
+            </td>
+            <td width="100">
+              <div class="loader-bg"></div>
+            </td>
+          </tr>
+        </ng-template>
+      </tbody>
+    </table>
+
+    <div class="p-2">
+      <pagination
+        [totalItems]="total"
+        *ngIf="total"
+        [(ngModel)]="page"
+        name="page"
+        (pageChanged)="handleChange($event)"
+        [disabled]="!total"
+      ></pagination>
+
+      <div *ngIf="total == null">
+        <div class="loader-bg w-25"></div>
+        <div class="loader-bg w-25"></div>
+        <div class="loader-bg w-25"></div>
+      </div>
+    </div>
+  </form>
+</main>

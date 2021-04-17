@@ -155,6 +155,7 @@
       "programs": {
         "add": {},
         "list": {
+          "addButton": "Novo programa",
           "pageTitle": "Lista de programas",
           "listTitle": "Lista de programas",
           "totalNumber": "Total de programas",

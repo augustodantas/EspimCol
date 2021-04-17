@@ -1,0 +1,83 @@
+<!--Forms-->
+<form class="form" [formGroup]="form">
+  <h2 class="mb-3">Informações do Programa</h2>
+
+  <!--Nome do programa-->
+  <div class="row">
+    <div class="col-6 form-group">
+      <label for="email"> Nome do programa <b class="text-danger">*</b> </label>
+      <input
+        id="title"
+        name="title"
+        type="text"
+        placeholder="Nome do programa"
+        formControlName="title"
+        class="form-control-plaintext border-bottom"
+      />
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12 form-group">
+      <label for="email"> Descrição do programa <b class="text-danger">*</b> </label>
+      <textarea
+        class="form-control-plaintext border-bottom w-100"
+        name="program-description"
+        id="program-description"
+        rows="2"
+        placeholder="Descrição do programa"
+        formControlName="description"
+      ></textarea>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12 form-group">
+      <input type="checkbox" name="program-checkbox" id="program-checkbox" formControlName="isPublic" />
+      <label for="program-checkbox">Programa público</label>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-7 form-group">
+      <h5>Data e hora de início<b class="text-danger">*</b>:</h5>
+      <div class="form-row form-group input-group">
+        <!--Data de Início-->
+        <div class="col form-inline">
+          <input type="text" placeholder="Datepicker" class="form-control-plaintext border-bottom w-100" bsDatepicker />
+        </div>
+
+        <div class="col">
+          <timepicker formControlName="beginTime"></timepicker>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12 form-group">
+      <h5>Data e hora de fim</h5>
+      <div class="form-rowinput-group">
+        <!--Data de fim-->
+        <div class="col form-inline"></div>
+        <!--------------->
+        <!--Hora de fim-->
+        <div class="col">
+          <!-- <ngb-timepicker formControlName="endTime" [minuteStep]="30"></ngb-timepicker> -->
+        </div>
+        <!--------------->
+      </div>
+    </div>
+  </div>
+
+  <!--------------------------->
+  <small class="text-danger">* Campo obrigatório</small>
+  <hr />
+  <div class="container-fluid p-0 mb-3">
+    <div class="row">
+      <div class="col-12 col-xl-3 offset-xl-5">
+        <button type="button" class="btn btn btn-primary btn-block py-2" (click)="submit()">PROSSEGUIR</button>
+      </div>
+    </div>
+  </div>
+</form>
