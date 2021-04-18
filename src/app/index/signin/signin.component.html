@@ -1,6 +1,6 @@
 <main class="card mx-auto mt-4 w-main">
   <!-- Forms -->
-  <form focusInvalidInput class="d-flex flex-wrap p-3 pt-4 p-md-5" [formGroup]="form" (ngSubmit)="save()">
+  <form focusInvalidInput #formElement class="d-flex flex-wrap p-3 pt-4 p-md-5" [formGroup]="form" (ngSubmit)="save()">
     <!-- Placeholder, Nome e Sobre você -->
     <div class="container-fluid mb-2 mb-md-5">
       <div class="row">

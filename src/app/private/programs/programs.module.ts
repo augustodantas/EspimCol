@@ -9,14 +9,15 @@ import { Step1Component } from './add/step1/step1.component';
 import { Step2Component } from './add/step2/step2.component';
 import { Step3Component } from './add/step3/step3.component';
 import { Step4Component } from './add/step4/step4.component';
+import { UserCheckBoxComponent } from './add/user-checkbox/user-checkbox.component';
 import { ProgramsListComponent } from './list/programslist.component';
 import { ProgramsRoutingModule } from './programs-routing.module';
 
 // imports from dependencies
 
 @NgModule({
-  imports: [ComponentsModule, ProgramsRoutingModule, CommonModule],
-  exports: [SharedModule, StepPanelComponent, Step1Component, Step2Component, Step3Component, Step4Component],
+  imports: [SharedModule, ComponentsModule, ProgramsRoutingModule, CommonModule],
+  exports: [SharedModule, StepPanelComponent, Step1Component, Step2Component, Step3Component, Step4Component, UserCheckBoxComponent],
   declarations: [
     ProgramsAddComponent,
     ProgramsListComponent,
@@ -25,6 +26,7 @@ import { ProgramsRoutingModule } from './programs-routing.module';
     Step2Component,
     Step3Component,
     Step4Component,
+    UserCheckBoxComponent,
   ],
 })
 export class ProgramsModule {}

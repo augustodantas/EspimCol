@@ -23,7 +23,6 @@ export class LoggedInGuard implements CanLoad, CanActivate, CanActivateChild {
   constructor(private readonly _router: Router, private loginService: LoginService, private _loaderService: LoaderService) {}
 
   canLoad(route: Route, segments: UrlSegment[]): Observable<boolean> | Promise<boolean> | boolean {
-    console.log('canLoad');
     if (this.loginService.isLoggedIn()) {
       return true;
     }
@@ -33,12 +32,10 @@ export class LoggedInGuard implements CanLoad, CanActivate, CanActivateChild {
   }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-    console.log('canActivate');
     return this.checkAuthentication();
   }
 
   canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-    console.log('canActivateChild');
     return this.checkAuthentication();
   }
 

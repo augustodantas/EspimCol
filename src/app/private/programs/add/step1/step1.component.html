@@ -1,35 +1,6 @@
 <!--Forms-->
-<form class="form" [formGroup]="form">
-  <h2 class="mb-3">Informações do Programa</h2>
-
-  <!--Nome do programa-->
-  <div class="row">
-    <div class="col-6 form-group">
-      <label for="email"> Nome do programa <b class="text-danger">*</b> </label>
-      <input
-        id="title"
-        name="title"
-        type="text"
-        placeholder="Nome do programa"
-        formControlName="title"
-        class="form-control-plaintext border-bottom"
-      />
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-12 form-group">
-      <label for="email"> Descrição do programa <b class="text-danger">*</b> </label>
-      <textarea
-        class="form-control-plaintext border-bottom w-100"
-        name="program-description"
-        id="program-description"
-        rows="2"
-        placeholder="Descrição do programa"
-        formControlName="description"
-      ></textarea>
-    </div>
-  </div>
+<form class="form" [formGroup]="form" (submit)="submit()">
+  <h1 class="mb-3">Informações do Programa</h1>
 
   <div class="row">
     <div class="col-12 form-group">
@@ -38,46 +9,120 @@
     </div>
   </div>
 
+  <!--Nome do programa-->
   <div class="row">
-    <div class="col-7 form-group">
-      <h5>Data e hora de início<b class="text-danger">*</b>:</h5>
-      <div class="form-row form-group input-group">
-        <!--Data de Início-->
-        <div class="col form-inline">
-          <input type="text" placeholder="Datepicker" class="form-control-plaintext border-bottom w-100" bsDatepicker />
-        </div>
-
-        <div class="col">
-          <timepicker formControlName="beginTime"></timepicker>
-        </div>
-      </div>
+    <div class="col-6 form-group">
+      <label for="title"> Nome do programa <b class="text-danger">*</b> </label>
+      <input
+        id="title"
+        name="title"
+        type="text"
+        placeholder="Nome do programa"
+        formControlName="title"
+        class="form-control-plaintext border-bottom"
+      />
+      <input-validations
+        *ngIf="form.controls['title'].invalid && form.controls['title'].touched"
+        [errors]="form.controls['title'].errors"
+        label="Nome do programa"
+      >
+      </input-validations>
     </div>
   </div>
 
   <div class="row">
     <div class="col-12 form-group">
-      <h5>Data e hora de fim</h5>
-      <div class="form-rowinput-group">
-        <!--Data de fim-->
-        <div class="col form-inline"></div>
-        <!--------------->
-        <!--Hora de fim-->
-        <div class="col">
-          <!-- <ngb-timepicker formControlName="endTime" [minuteStep]="30"></ngb-timepicker> -->
+      <label for="program-description"> Descrição do programa </label>
+      <textarea
+        class="form-control-plaintext border-bottom w-100"
+        name="program-description"
+        id="program-description"
+        rows="2"
+        placeholder="Descrição do programa"
+        formControlName="description"
+      ></textarea>
+      <input-validations
+        *ngIf="form.controls['description'].invalid && form.controls['description'].touched"
+        [errors]="form.controls['description'].errors"
+        label="Descrição"
+      >
+      </input-validations>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-7 form-group">
+      <label for="beginDate">Data e hora de início:</label>
+
+      <div class="form-row form-group input-group">
+        <!--Data de Início-->
+        <div class="col form-inline">
+          <input
+            type="text"
+            placeholder="Data de início"
+            name="beginDate"
+            formControlName="beginDate"
+            class="form-control-plaintext border-bottom w-100"
+            bsDatepicker
+          />
+          <input-validations
+            *ngIf="form.controls['beginDate'].invalid && form.controls['beginDate'].touched"
+            [errors]="form.controls['beginDate'].errors"
+            label="Data de início"
+          >
+          </input-validations>
         </div>
-        <!--------------->
+
+        <div class="col">
+          <timepicker formControlName="beginTime"></timepicker>
+          <input-validations
+            *ngIf="form.controls['beginTime'].invalid && form.controls['beginTime'].touched"
+            [errors]="form.controls['beginTime'].errors"
+            label="Hora de início"
+          >
+          </input-validations>
+        </div>
       </div>
     </div>
   </div>
 
-  <!--------------------------->
-  <small class="text-danger">* Campo obrigatório</small>
-  <hr />
-  <div class="container-fluid p-0 mb-3">
-    <div class="row">
-      <div class="col-12 col-xl-3 offset-xl-5">
-        <button type="button" class="btn btn btn-primary btn-block py-2" (click)="submit()">PROSSEGUIR</button>
+  <div class="row">
+    <div class="col-7 form-group">
+      <label for="beginDate">Data e hora de fim:</label>
+      <div class="form-row form-group input-group">
+        <!--Data de Fim-->
+        <div class="col form-inline">
+          <input
+            type="text"
+            placeholder="Data de fim"
+            formControlName="endDate"
+            class="form-control-plaintext border-bottom w-100"
+            bsDatepicker
+          />
+          <input-validations
+            *ngIf="form.controls['endDate'].invalid && form.controls['endDate'].touched"
+            [errors]="form.controls['endDate'].errors"
+            label="Data de início"
+          >
+          </input-validations>
+        </div>
+
+        <div class="col">
+          <timepicker formControlName="endTime"></timepicker>
+          <input-validations
+            *ngIf="form.controls['endTime'].invalid && form.controls['endTime'].touched"
+            [errors]="form.controls['endTime'].errors"
+            label="Hora de fim"
+          >
+          </input-validations>
+        </div>
       </div>
+    </div>
+  </div>
+
+  <div class="row justify-content-end">
+    <div class="col-auto align-self-end">
+      <button type="submit" name="saveButton" class="btn btn-primary btn-md min-100">PROSSEGUIR</button>
     </div>
   </div>
 </form>

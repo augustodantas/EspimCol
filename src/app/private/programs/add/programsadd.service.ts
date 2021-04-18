@@ -1,11 +1,15 @@
 import { Injectable } from '@angular/core';
-import { forkJoin, Subject } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
+import { BehaviorSubject, forkJoin, Observable } from 'rxjs';
+import { finalize } from 'rxjs/operators';
+import { LoaderService } from 'src/app/services/loader.service';
 
 import {
   ESPIM_REST_Events,
   ESPIM_REST_Interventions,
   ESPIM_REST_Observers,
   ESPIM_REST_Participants,
+  ESPIM_REST_Programs,
   ESPIM_REST_Sensors,
   ESPIM_REST_Triggers,
 } from '../../../app.api';
@@ -23,96 +27,109 @@ import { Trigger } from '../../models/trigger.model';
   providedIn: 'root',
 })
 export class ProgramsAddService {
-  public program: Program = new Program();
+  urlPrograms: string = ESPIM_REST_Programs;
+  private _currentProgramSubject: BehaviorSubject<Program>;
+  program: Observable<Program>;
 
-  private observers: Observer[] = new Array<Observer>();
-  private participants: Participant[] = new Array<Participant>();
+  constructor(
+    private _daoService: DAOService,
+    private activeRoute: ActivatedRoute,
+    private loginService: LoginService,
+    private _loaderService: LoaderService
+  ) {
+    this._currentProgramSubject = new BehaviorSubject<Program>(new Program());
+    this.program = this._currentProgramSubject.asObservable();
+  }
 
-  private programObservable$: Subject<Program> = new Subject<Program>();
+  fetchData(id: string) {
+    this._loaderService.show();
+    this._daoService
+      .getObject(this.urlPrograms, id)
+      .pipe(finalize(() => this._loaderService.hide()))
+      .subscribe((response) => {
+        response.data.observers = response.data.observers.data;
+        this._currentProgramSubject.next(response.data);
+      });
+  }
 
-  constructor(private daoService: DAOService, private loginService: LoginService) {
-    // this.observers = this.requestObservers();
-    // this.participants = this.requestParticipants();
+  clearData() {
+    this._currentProgramSubject.next(new Program());
   }
 
   /**
    * Saves an step patching "programs". Patching results in updating the attributes specified in programs
    */
-  saveStep(programs?: any) {
-    programs.id = this.program.id;
+  saveStep(dados: any) {
+    let id = this.activeRoute.snapshot.params.id;
 
-    console.log('saveStep');
-    // if (programs.id !== -1) {
-    //   // this.daoService.patchObject(ESPIM_REST_Programs, programs).subscribe((program) => this.program.reconstructor(program));
-    // } else {
-    //   // When adding a program, it is necessary that the current user gets submitted as observer. The user is added to the program array at "requestObservers()" and here we post it.
-    //   const userId = Number.parseInt(this.loginService.userValue.id);
-    //   programs.observers = this.program.observers;
-    //   programs.editor = userId;
-    //   programs.beingEdited = true;
-
-    //   this.daoService.postObject(ESPIM_REST_Programs, programs).subscribe((program) => {
-    //     //   this.program.reconstructor(program);
-    //     //   if (this.program.getObserversId()) {
-    //     //     const programObservers = this.requestObservers(this.program.getObserversId());
-    //     //     for (const observer of programObservers) this.program.observersInstance.push(observer);
-    //     //   }
-    //   });
-    // }
+    if (id) {
+      this._daoService.patchObject(ESPIM_REST_Programs, dados).subscribe((resp) => {
+        this._currentProgramSubject.next(resp.data);
+      });
+    } else {
+      this._currentProgramSubject.next(dados);
+    }
   }
 
-  getProgramObservable(): Subject<Program> {
-    return this.programObservable$;
+  public get programValue(): Program {
+    return this._currentProgramSubject.value;
+  }
+
+  getProgramObservable(): Observable<Program> {
+    return this.program;
   }
   setProgram(program: Program): void {
-    this.program = program;
-    /**
-     * Incosistência aqui. Os usuários antigos do espim não possuem nenhum observerContact. Quando um usuário antigo lista um programa que tem outros observers responsáveis, esses observers são automaticamente adicionados na observerContacts do usuário atual quando é dado um retrieve pro server (o retrive é dado na linha 61). Entretanto, na linha 62 nós buscamos todos os observersContacts do usuário. O problema é que acontece de não dar retrieve em todos os observers até o momento em que a linha 62 é executada. Dessa forma, acontece de o servidor retornar os observerContacts incompletos, já que, até o momento da request, não damos retrieve em todos os observers e, portanto, tais observers não foram adicionados ao observerContacts do user. Bom, não acho que tenha o que fazer. Isso vai acontecer 1 vez, então acho que ta ok msm assim. (O mesmo acontece para os participantes)
-     */
-    if (this.program.observers) {
-      this.program.observersInstance = this.requestObservers(this.program.observers);
-    } else {
-      this.program.observersInstance = new Array<Observer>();
-    }
-
-    if (this.program.participants) {
-      this.program.participantsInstace = this.requestParticipants(this.program.participants);
-    } else {
-      this.program.participantsInstace = new Array<Participant>();
-    }
-
-    if (this.program.events) {
-      this.program.eventsInstance = this.requestEvents(this.program.events);
-    } else {
-      this.program.eventsInstance = new Array<Event>();
-    }
-
-    console.log(this.program);
-    this.programObservable$.next(this.program);
+    // this.program = program;
+    // /**
+    //  * Incosistência aqui. Os usuários antigos do espim não possuem nenhum observerContact. Quando um usuário antigo lista um programa que tem outros observers responsáveis, esses observers são automaticamente adicionados na observerContacts do usuário atual quando é dado um retrieve pro server (o retrive é dado na linha 61). Entretanto, na linha 62 nós buscamos todos os observersContacts do usuário. O problema é que acontece de não dar retrieve em todos os observers até o momento em que a linha 62 é executada. Dessa forma, acontece de o servidor retornar os observerContacts incompletos, já que, até o momento da request, não damos retrieve em todos os observers e, portanto, tais observers não foram adicionados ao observerContacts do user. Bom, não acho que tenha o que fazer. Isso vai acontecer 1 vez, então acho que ta ok msm assim. (O mesmo acontece para os participantes)
+    //  */
+    // if (this.program.observers) {
+    //   this.program.observersInstance = this.requestObservers(this.program.observers);
+    // } else {
+    //   this.program.observersInstance = new Array<Observer>();
+    // }
+    // if (this.program.participants) {
+    //   this.program.participantsInstace = this.requestParticipants(this.program.participants);
+    // } else {
+    //   this.program.participantsInstace = new Array<Participant>();
+    // }
+    // if (this.program.events) {
+    //   this.program.eventsInstance = this.requestEvents(this.program.events);
+    // } else {
+    //   this.program.eventsInstance = new Array<Event>();
+    // }
+    // console.log(this.program);
+    // this.programObservable$.next(this.program);
   }
 
   getObservers(): Observer[] {
-    return this.observers;
+    return [];
+    // return this.observers;
   }
   getObserversInstance(): Observer[] {
-    return this.program.observersInstance;
+    return [];
+    // return this.program.observersInstance;
   }
 
   getParticipants(): Participant[] {
-    return this.participants;
+    return [];
+    // return this.participants;
   }
   getParticipantsInstance(): Participant[] {
-    return this.program.participantsInstace;
+    return [];
+    // return this.program.participantsInstace;
   }
 
   getEventsId(): number[] {
-    return this.program.events;
+    return [];
+    // return this.program.events;
   }
   getEventsInstance(): Event[] {
-    return this.program.eventsInstance;
+    return [];
+    // return this.program.eventsInstance;
   }
   delete_event(eventId: number): void {
-    this.daoService.deleteObject(ESPIM_REST_Events, eventId.toString()).subscribe((_) => {
+    this._daoService.deleteObject(ESPIM_REST_Events, eventId.toString()).subscribe((_) => {
       // this.program.removeEvent(eventId);
       // new SwalComponent({
       //   title: 'Deletado com sucesso!',
@@ -127,7 +144,7 @@ export class ProgramsAddService {
     const eventsInstance = new Array<Event>();
     const requests = new Array<any>();
     for (let i = 0; i < eventsId.length; i++) {
-      requests.push(this.daoService.getObject(ESPIM_REST_Events, eventsId[i].toString()));
+      requests.push(this._daoService.getObject(ESPIM_REST_Events, eventsId[i].toString()));
       requests[i].subscribe((data: any) => {
         if (data.type === 'active') eventsInstance.push(new ActiveEvent(data));
         else eventsInstance.push(new Event(data));
@@ -153,12 +170,12 @@ export class ProgramsAddService {
        */
       const requests = new Array<any>();
       for (let i = 0; i < observersId.length; i++) {
-        requests.push(this.daoService.getObject(ESPIM_REST_Observers, observersId[i].toString()));
+        requests.push(this._daoService.getObject(ESPIM_REST_Observers, observersId[i].toString()));
         // requests[i].subscribe((data: any) => observersInstances.push(new Observer(data)));
       }
       forkJoin(requests).subscribe((_) => observersInstances.sort((a: Observer, b: Observer) => a.user.name.localeCompare(b.user.name)));
     } else
-      this.daoService.getObjects(ESPIM_REST_Observers + 'list_contacts/').subscribe((data: any) => {
+      this._daoService.getObjects(ESPIM_REST_Observers + 'list_contacts/').subscribe((data: any) => {
         // for (const observer of data.results) observersInstances.push(new Observer(observer));
       });
 
@@ -180,14 +197,14 @@ export class ProgramsAddService {
        */
       const requests = new Array<any>();
       for (let i = 0; i < participantsId.length; i++) {
-        requests.push(this.daoService.getObject(ESPIM_REST_Participants, participantsId[i].toString()));
+        requests.push(this._daoService.getObject(ESPIM_REST_Participants, participantsId[i].toString()));
         // requests[i].subscribe((data) => participantsInstances.push(new Participant(data)));
       }
       forkJoin(requests).subscribe((_) =>
         participantsInstances.sort((a: Participant, b: Participant) => a.user.name.localeCompare(b.user.name))
       );
     } else
-      this.daoService.getObjects(ESPIM_REST_Participants + 'list_contacts/').subscribe((data: any) => {
+      this._daoService.getObjects(ESPIM_REST_Participants + 'list_contacts/').subscribe((data: any) => {
         // for (const participant of data.results) participantsInstances.push(new Participant(participant));
       });
 
@@ -205,7 +222,7 @@ export class ProgramsAddService {
     const interventionsInstances = new Array<Intervention>();
     const requests = new Array<any>();
     for (let i = 0; i < interventionsId.length; i++) {
-      requests.push(this.daoService.getObject(ESPIM_REST_Interventions, interventionsId[i].toString()));
+      requests.push(this._daoService.getObject(ESPIM_REST_Interventions, interventionsId[i].toString()));
       requests[i].subscribe((data: any) => {
         if (data.type === 'empty') interventionsInstances.push(new Intervention(data));
         else if (data.type === 'media') interventionsInstances.push(new MediaIntervention(data));
@@ -230,7 +247,7 @@ export class ProgramsAddService {
     const triggerInstances: Array<Trigger> = new Array<Trigger>();
     const requests = new Array<any>();
     for (let i = 0; i < triggersId.length; i++) {
-      requests.push(this.daoService.getObject(ESPIM_REST_Triggers, triggersId[i].toString()));
+      requests.push(this._daoService.getObject(ESPIM_REST_Triggers, triggersId[i].toString()));
       requests[i].subscribe((data: any) => {
         triggerInstances.push(new Trigger(data));
       });
@@ -250,7 +267,7 @@ export class ProgramsAddService {
     const sensorsInstances: Array<Sensor> = new Array<Sensor>();
     const requests = new Array<any>();
     for (let i = 0; i < sensorsId.length; i++) {
-      requests.push(this.daoService.getObject(ESPIM_REST_Sensors, sensorsId[i].toString()));
+      requests.push(this._daoService.getObject(ESPIM_REST_Sensors, sensorsId[i].toString()));
       requests[i].subscribe((data: any) => sensorsInstances.push(new Sensor(data)));
     }
     forkJoin(requests).subscribe((_) => sensorsInstances.sort((a: Sensor, b: Sensor) => a.getId() - b.getId()));

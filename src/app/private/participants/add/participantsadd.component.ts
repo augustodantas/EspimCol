@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -15,6 +15,8 @@ import { DAOService } from '../../dao/dao.service';
   templateUrl: './participantsadd.component.html',
 })
 export class ParticipanstAddComponent implements OnInit {
+  @ViewChild('formElement') formElement: ElementRef;
+
   urlParticipants: string = ESPIM_REST_Participants;
   form: FormGroup;
   editing: boolean = false;

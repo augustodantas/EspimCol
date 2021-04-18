@@ -10,7 +10,7 @@ import { ParticipantsRoutingModule } from './participants-routing.module';
 // imports from dependencies
 
 @NgModule({
-  imports: [ComponentsModule, ParticipantsRoutingModule, CommonModule],
+  imports: [SharedModule, ComponentsModule, ParticipantsRoutingModule, CommonModule],
   exports: [SharedModule],
   declarations: [ParticipanstAddComponent, ParticipantsListComponent],
 })

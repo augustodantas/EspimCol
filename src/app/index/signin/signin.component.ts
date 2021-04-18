@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as moment from 'moment';
@@ -17,6 +17,8 @@ import { FormUtil } from './../../util/util.form.service';
   templateUrl: './signin.component.html',
 })
 export class SigninComponent {
+  @ViewChild('formElement') formElement: ElementRef;
+
   urlObservers: string = ESPIM_REST_Observers;
   form: FormGroup = this.formBuilder.group({
     name: this.formBuilder.control(''),
@@ -75,7 +77,7 @@ export class SigninComponent {
             this._toastr.success('Observador registrado!', 'Observador registrado com sucesso!');
             this.loginService.handleAuth(resp);
           },
-          (resp) => FormUtil.setErrorsBackend(this.form, resp.data)
+          (resp) => FormUtil.setErrorsBackend(this.form, resp.data, this.formElement)
         );
     }
   }

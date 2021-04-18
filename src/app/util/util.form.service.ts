@@ -1,7 +1,8 @@
+import { ElementRef } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
 export class FormUtil {
-  static setErrorsBackend(form: FormGroup, response: any): void {
+  static setErrorsBackend(form: FormGroup, response: any, formElement: ElementRef = null): void {
     let errors = response.errors;
 
     if (response.error && response.message) {
@@ -12,13 +13,17 @@ export class FormUtil {
       for (const error in errors) {
         if (errors.hasOwnProperty(error)) {
           if (form.get(error)) {
-            console.log('teste');
             form.get(error).setErrors({ server: errors[error][0] }, { emitEvent: false });
-          } else {
-            // response.error_list[error].forEach((msg) =>
-            //   toastr.error(msg, `Campo: ${error}`)
-            // );
           }
+
+          setTimeout(() => {
+            if (formElement) {
+              const invalidControl = formElement.nativeElement.querySelector('.ng-invalid');
+              if (invalidControl) {
+                invalidControl.focus();
+              }
+            }
+          });
         }
       }
     }

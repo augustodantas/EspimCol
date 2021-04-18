@@ -15,7 +15,7 @@ export class Program {
   beingDuplicated: boolean;
   // composed entities
   observer: Observer;
-  observers: Array<number>;
+  observers: Array<Observer> = [];
   observersInstance: Array<Observer>;
   participants: Array<number>;
   participantsInstace: Array<Participant>;

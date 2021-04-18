@@ -2,9 +2,8 @@ import { Component, OnDestroy } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
-import { distinctUntilChanged, filter, take } from 'rxjs/operators';
+import { filter, take } from 'rxjs/operators';
 import { LoginService } from 'src/app/security/login/login.service';
-import { isNullOrUndefined } from 'util';
 
 import { LoaderService } from './services/loader.service';
 
@@ -23,12 +22,6 @@ export class AppComponent implements OnDestroy {
     private readonly loginService: LoginService
   ) {
     translate.setDefaultLang('en');
-
-    this._user$ = this.loginService.user.pipe(distinctUntilChanged((prev, curr) => prev?.email === curr?.email)).subscribe((user) => {
-      if (!isNullOrUndefined(user) && this.loginService.isLoggedIn) {
-      } else {
-      }
-    });
   }
 
   ngOnInit() {

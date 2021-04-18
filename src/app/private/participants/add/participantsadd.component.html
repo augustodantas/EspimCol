@@ -1,4 +1,4 @@
-<div class="mx-auto mt-4 card w-main container-fluid">
+<div class="mx-auto mt-4 card card-lg w-main container-fluid">
   <div class="row">
     <section class="p-0 mx-auto bg-white rounded col-12 p-xl-2">
       <div class="container-fluid">
@@ -9,7 +9,7 @@
           </div>
         </div>
 
-        <form [formGroup]="form" (ngSubmit)="save($event)">
+        <form [formGroup]="form" focusInvalidInput #formElement (ngSubmit)="save($event)">
           <div class="row">
             <div class="col-6 form-group">
               <label for="text" class="sr-only" translate>private.participants.add.name</label>

@@ -17,8 +17,6 @@ export class LoaderService {
 
   hide(): void {
     this.count -= this.count > 0 ? 1 : 0;
-    console.log(this.count);
-
     this.isLoading.next(!!this.count);
   }
 }
