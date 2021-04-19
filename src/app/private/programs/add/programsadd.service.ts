@@ -54,7 +54,7 @@ export class ProgramsAddService {
       .pipe(finalize(() => this._loaderService.hide()))
       .subscribe((response) => {
         response.data.observers = response.data.observers.data;
-        this._currentProgramSubject.next(new Program(response.data));
+        this._currentProgramSubject.next(response.data);
       });
   }
 
@@ -70,7 +70,7 @@ export class ProgramsAddService {
   saveStep(dados: any) {
     let id = this.programValue.id;
     if (id) {
-      let programUpdated = this.programValue.reconstructor(dados);
+      let programUpdated = ({ ...this.programValue, ...dados } as unknown) as Program;
       this._loaderService.show();
 
       this._daoService
@@ -85,7 +85,7 @@ export class ProgramsAddService {
   }
 
   saveLocalStep(dados: any) {
-    let programUpdated = this.programValue.reconstructor(dados);
+    let programUpdated = ({ ...this.programValue, ...dados } as unknown) as Program;
     this._currentProgramSubject.next(programUpdated);
   }
 
