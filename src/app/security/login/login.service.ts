@@ -1,9 +1,11 @@
+import { HttpParams } from '@angular/common/http';
 import { Injectable, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 import { GoogleLoginProvider, SocialAuthService, SocialUser } from 'angularx-social-login';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 import { ESPIM_REST_Observers } from 'src/app/app.api';
+import { Observer } from 'src/app/private/models/observer.model';
 import { ObserversService } from 'src/app/private/observers/observers.service';
 
 import { LoaderService } from './../../services/loader.service';
@@ -18,6 +20,7 @@ export class LoginService {
   private _currentUserSubject: BehaviorSubject<SocialUser>;
   accessToken: string;
   user: Observable<SocialUser>;
+  userObserver: Observer;
 
   constructor(
     private _loaderService: LoaderService,
@@ -55,9 +58,11 @@ export class LoginService {
   }
 
   fetchUser(): Observable<SocialUser> {
-    return this._observerService.fetchUser(ESPIM_REST_Observers + 'me').pipe(
+    let params = new HttpParams().set('include', 'observer');
+    return this._observerService.fetchUser(ESPIM_REST_Observers + 'me', params).pipe(
       map((response) => {
         this._currentUserSubject.next(response.data);
+        this.userObserver = response.data.observer.data;
         return response.data;
       })
     );
@@ -85,6 +90,7 @@ export class LoginService {
     // remove user from local storage to log user out
     this._localStorageService.Remove(this._propertyName);
     this._currentUserSubject.next(null);
+    this.userObserver = null;
   }
 
   isLoggedIn(): boolean {

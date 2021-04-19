@@ -15,7 +15,7 @@ export class ObserversService extends DAOService {
     return this.http.post(urlObject, { token: token });
   }
 
-  fetchUser(urlObject: string): Observable<any> {
-    return this.http.get<any>(urlObject);
+  fetchUser(urlObject: string, params: HttpParams): Observable<any> {
+    return this.http.get<any>(urlObject, { params });
   }
 }

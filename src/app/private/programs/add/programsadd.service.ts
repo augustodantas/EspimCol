@@ -30,6 +30,7 @@ export class ProgramsAddService {
   urlPrograms: string = ESPIM_REST_Programs;
   private _currentProgramSubject: BehaviorSubject<Program>;
   program: Observable<Program>;
+  programInstance: Program;
 
   constructor(
     private _daoService: DAOService,
@@ -39,6 +40,11 @@ export class ProgramsAddService {
   ) {
     this._currentProgramSubject = new BehaviorSubject<Program>(new Program());
     this.program = this._currentProgramSubject.asObservable();
+
+    this.programInstance = new Program();
+    // this.program.subscribe((programInstance: Program) => {
+    //   this.programInstance = programInstance as Program;
+    // });
   }
 
   fetchData(id: string) {
@@ -48,27 +54,39 @@ export class ProgramsAddService {
       .pipe(finalize(() => this._loaderService.hide()))
       .subscribe((response) => {
         response.data.observers = response.data.observers.data;
-        this._currentProgramSubject.next(response.data);
+        this._currentProgramSubject.next(new Program(response.data));
       });
   }
 
   clearData() {
-    this._currentProgramSubject.next(new Program());
+    let program = new Program();
+    program.observers = [this.loginService.userObserver];
+    this._currentProgramSubject.next(program);
   }
 
   /**
    * Saves an step patching "programs". Patching results in updating the attributes specified in programs
    */
   saveStep(dados: any) {
-    let id = this.activeRoute.snapshot.params.id;
-
+    let id = this.programValue.id;
     if (id) {
-      this._daoService.patchObject(ESPIM_REST_Programs, dados).subscribe((resp) => {
-        this._currentProgramSubject.next(resp.data);
-      });
+      let programUpdated = this.programValue.reconstructor(dados);
+      this._loaderService.show();
+
+      this._daoService
+        .patchObject(ESPIM_REST_Programs, id)
+        .pipe(finalize(() => this._loaderService.hide()))
+        .subscribe((resp) => {
+          this._currentProgramSubject.next(programUpdated);
+        });
     } else {
-      this._currentProgramSubject.next(dados);
+      this.saveLocalStep(dados);
     }
+  }
+
+  saveLocalStep(dados: any) {
+    let programUpdated = this.programValue.reconstructor(dados);
+    this._currentProgramSubject.next(programUpdated);
   }
 
   public get programValue(): Program {
@@ -78,6 +96,7 @@ export class ProgramsAddService {
   getProgramObservable(): Observable<Program> {
     return this.program;
   }
+
   setProgram(program: Program): void {
     // this.program = program;
     // /**

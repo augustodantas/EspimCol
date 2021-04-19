@@ -4,8 +4,6 @@ import { Address } from './address.model';
 
 export class Observer {
   id: number;
-  name: string;
-  email: string;
   phoneNumber: string;
   profilePhotoUrl: string;
   role: string;

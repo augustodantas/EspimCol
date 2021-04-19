@@ -1,41 +1,21 @@
 <div *ngIf="program | async as _program">
   <h1>Adicionar observadores</h1>
 
-  <esm-search (doSearch)="handleChange($event, true)"></esm-search>
+  <esm-search #search (doSearch)="handleChange($event, true)"></esm-search>
 
   <div class="container-flex" aria-label="alphabet">
     <div class="row justify-content-center"></div>
     <div class="row justify-content-center">
-      <div class="col-12 col-md-6 d-flex justify-content-between pr-md-2" #alphabet1>
-        <button type="button" class="btn btn-lg btn-default text-primary font-weight-bold p-1" (click)="filter_by('a', $event)">*</button>
-        <button type="button" class="btn btn-lg btn-default text-primary font-weight-bold p-1" (click)="filter_by('a', $event)">A</button>
-        <button type="button" class="btn btn-lg btn-default text-primary font-weight-bold p-1" (click)="filter_by('b', $event)">B</button>
-        <button type="button" class="btn btn-lg btn-default text-primary font-weight-bold p-1" (click)="filter_by('c', $event)">C</button>
-        <button type="button" class="btn btn-lg btn-default text-primary font-weight-bold p-1" (click)="filter_by('d', $event)">D</button>
-        <button type="button" class="btn btn-lg btn-default text-primary font-weight-bold p-1" (click)="filter_by('e', $event)">E</button>
-        <button type="button" class="btn btn-lg btn-default text-primary font-weight-bold p-1" (click)="filter_by('f', $event)">F</button>
-        <button type="button" class="btn btn-lg btn-default text-primary font-weight-bold p-1" (click)="filter_by('g', $event)">G</button>
-        <button type="button" class="btn btn-lg btn-default text-primary font-weight-bold p-1" (click)="filter_by('h', $event)">H</button>
-        <button type="button" class="btn btn-lg btn-default text-primary font-weight-bold p-1" (click)="filter_by('i', $event)">I</button>
-        <button type="button" class="btn btn-lg btn-default text-primary font-weight-bold p-1" (click)="filter_by('j', $event)">J</button>
-        <button type="button" class="btn btn-lg btn-default text-primary font-weight-bold p-1" (click)="filter_by('k', $event)">K</button>
-        <button type="button" class="btn btn-lg btn-default text-primary font-weight-bold p-1" (click)="filter_by('l', $event)">L</button>
-        <button type="button" class="btn btn-lg btn-default text-primary font-weight-bold p-1" (click)="filter_by('m', $event)">M</button>
-      </div>
-      <div class="col-12 col-md-6 d-flex justify-content-between pl-md-2" #alphabet2>
-        <button type="button" class="btn btn-lg btn-default text-primary font-weight-bold p-1" (click)="filter_by('n', $event)">N</button>
-        <button type="button" class="btn btn-lg btn-default text-primary font-weight-bold p-1" (click)="filter_by('o', $event)">O</button>
-        <button type="button" class="btn btn-lg btn-default text-primary font-weight-bold p-1" (click)="filter_by('p', $event)">P</button>
-        <button type="button" class="btn btn-lg btn-default text-primary font-weight-bold p-1" (click)="filter_by('q', $event)">Q</button>
-        <button type="button" class="btn btn-lg btn-default text-primary font-weight-bold p-1" (click)="filter_by('r', $event)">R</button>
-        <button type="button" class="btn btn-lg btn-default text-primary font-weight-bold p-1" (click)="filter_by('s', $event)">S</button>
-        <button type="button" class="btn btn-lg btn-default text-primary font-weight-bold p-1" (click)="filter_by('t', $event)">T</button>
-        <button type="button" class="btn btn-lg btn-default text-primary font-weight-bold p-1" (click)="filter_by('u', $event)">U</button>
-        <button type="button" class="btn btn-lg btn-default text-primary font-weight-bold p-1" (click)="filter_by('v', $event)">V</button>
-        <button type="button" class="btn btn-lg btn-default text-primary font-weight-bold p-1" (click)="filter_by('w', $event)">W</button>
-        <button type="button" class="btn btn-lg btn-default text-primary font-weight-bold p-1" (click)="filter_by('x', $event)">X</button>
-        <button type="button" class="btn btn-lg btn-default text-primary font-weight-bold p-1" (click)="filter_by('y', $event)">Y</button>
-        <button type="button" class="btn btn-lg btn-default text-primary font-weight-bold p-1" (click)="filter_by('z', $event)">Z</button>
+      <div class="col-12 mb-2 d-flex justify-content-between">
+        <button
+          *ngFor="let letter of letters"
+          type="button"
+          class="col btn btn-lg btn-default text-primary font-weight-bold p-1"
+          [ngClass]="{ 'btn-default-active': letter === filterQuery }"
+          (click)="filter_by(letter)"
+        >
+          {{ letter }}
+        </button>
       </div>
     </div>
   </div>
@@ -52,19 +32,30 @@
   </form>
 
   <h2 class="mt-4">Selecionar observadores</h2>
-  <form class="card" *ngIf="!loading">
-    <div class="card-body">
-      <div class="row">
-        <div *ngIf="!observers?.length" class="col-12">O filtro selecionado resultou em nada, tente troca-lo.</div>
-        <div class="col-3 d-flex align-items-center overflow-hidden text-nowrap" *ngFor="let observer of observers">
-          <esm-user-checkbox
-            [observer]="observer"
-            [checked]="isChecked(observer)"
-            [disabled]="isDisabled(observer)"
-            (addUser)="addProgramObserver($event)"
-            (removeUser)="removeProgramObserver($event)"
-          ></esm-user-checkbox>
+  <form *ngIf="!loading" (submit)="submit()">
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div *ngIf="!observers?.length" class="col-12">O filtro selecionado resultou em nada, tente troca-lo.</div>
+          <div class="col-3 d-flex align-items-center overflow-hidden text-nowrap" *ngFor="let observer of observers">
+            <esm-user-checkbox
+              [observer]="observer"
+              [checked]="isChecked(observer)"
+              [disabled]="isDisabled(observer)"
+              (addUser)="addProgramObserver($event)"
+              (removeUser)="removeProgramObserver($event)"
+            ></esm-user-checkbox>
+          </div>
         </div>
+      </div>
+    </div>
+
+    <div class="row justify-content-between mt-5">
+      <div class="col-auto align-self-start">
+        <button name="saveButton" class="btn btn-default btn-md min-100">VOLTAR</button>
+      </div>
+      <div class="col-auto align-self-end">
+        <button type="submit" name="saveButton" class="btn btn-primary btn-md min-100">PROSSEGUIR</button>
       </div>
     </div>
   </form>

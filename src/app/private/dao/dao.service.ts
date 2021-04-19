@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 export class DAOService {
   constructor(protected http: HttpClient) {}
 
-  getObjects(urlObject: string, parameters?: any) {
+  getObjects(urlObject: string, parameters?: any): Observable<any> {
     return this.http.get(urlObject, { params: parameters });
   }
 

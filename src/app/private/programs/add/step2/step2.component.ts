@@ -1,10 +1,12 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { SocialUser } from 'angularx-social-login';
 import { Observable, Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { ESPIM_REST_Observers } from 'src/app/app.api';
 import { Program } from 'src/app/private/models/program.model';
+import { SearchComponent } from 'src/app/private/search/search.component';
 
 import { LoginService } from '../../../../security/login/login.service';
 import { DAOService } from '../../../dao/dao.service';
@@ -16,25 +18,50 @@ import { ProgramsAddService } from '../programsadd.service';
   templateUrl: './step2.component.html',
 })
 export class Step2Component implements OnInit, OnDestroy {
+  @ViewChild('search') searchElement: SearchComponent;
+  user$: Observable<SocialUser>;
   program: Observable<Program>; // These are the observers of this program
   loading: boolean = true;
   search: Subject<string> = new Subject<string>();
-  searchTerm: string = '';
+  filterQuery: string = '*';
   observers: Observer[]; // These are the general observers
   programObservers: Observer[] = [];
   private _subscription$: Subscription;
   urlObservers: string = ESPIM_REST_Observers;
-
-  addObserverForm: FormGroup = this.formBuilder.group({
-    email: ['', Validators.required],
-    name: ['', Validators.required],
-    role: [''],
-  });
+  letters: string[] = [
+    '*',
+    'A',
+    'B',
+    'C',
+    'D',
+    'E',
+    'F',
+    'G',
+    'H',
+    'I',
+    'J',
+    'K',
+    'L',
+    'M',
+    'N',
+    'O',
+    'P',
+    'Q',
+    'R',
+    'S',
+    'T',
+    'U',
+    'V',
+    'W',
+    'Y',
+    'Z',
+  ];
 
   constructor(
     private daoService: DAOService,
     private programAddService: ProgramsAddService,
-    private formBuilder: FormBuilder,
+    private router: Router,
+    private _route: ActivatedRoute,
     private loginService: LoginService
   ) {
     this.program = this.programAddService.program;
@@ -48,14 +75,12 @@ export class Step2Component implements OnInit, OnDestroy {
       )
       .subscribe((response) => {
         this.loading = false;
-        this.setObservers(response);
+        this.observers = response.data;
       });
   }
 
   isChecked(observer: Observer) {
-    return !!(this.programAddService.programValue.observers
-      ? this.programAddService.programValue.observers.find((value) => value.id === observer.id)
-      : undefined);
+    return !!(this.programObservers ? this.programObservers.find((value) => value.id === observer.id) : undefined);
   }
 
   isDisabled(observer: Observer) {
@@ -66,38 +91,18 @@ export class Step2Component implements OnInit, OnDestroy {
     // Trigger first Request
     this.search.next('');
 
+    this.user$ = this.loginService.user;
+
     this._subscription$ = this.programAddService.program.subscribe((programInstance: Program) => {
+      console.log(programInstance);
+
       this.programObservers = programInstance.observers;
     });
   }
 
   ngOnDestroy(): void {
     this._subscription$.unsubscribe();
-  }
-  /**
-   * Adds an observer
-   */
-  addObserver(): void {
-    // let observer = new Observer(this.addObserverForm.getRawValue());
-    // this.dao.postObject(ESPIM_REST_Observers, observer).subscribe(
-    //   (data) => {
-    //     observer = new Observer(data);
-    //     this.observers.push(observer);
-    //     this.observers.sort((a: Observer, b: Observer) => a.user.name.localeCompare(b.user.name));
-    //     this.addProgramObserver(observer);
-    //     // // Sends a success message
-    //     // new SwalComponent({
-    //     //   title: 'Observador adicionado aos contatos!',
-    //     //   type: 'success',
-    //     // }).show();
-    //     this.addObserverForm.reset();
-    //   },
-    //   (error) =>
-    //     // new SwalComponent({
-    //     //   title: 'Falha ao adicionar o contato',
-    //     //   type: 'error',
-    //     // }).show()
-    // );
+    this.programAddService.saveLocalStep({ observers: this.programObservers });
   }
 
   /**
@@ -110,66 +115,45 @@ export class Step2Component implements OnInit, OnDestroy {
   /**
    * Removes an observer from the programObservers
    */
-  removeProgramObserver(observerId: number) {
+  removeProgramObserver(observer: Observer) {
     this.programObservers.splice(
-      this.programObservers.findIndex((value: Observer) => value.id === observerId),
+      this.programObservers.findIndex((value: Observer) => value.id === observer.id),
       1
     );
   }
 
-  /**
-   * Handles filtering observers by the alphabet
-   * @param letter
-   * @param event
-   */
-  filter_by(letter: string, event: any) {
-    // if (letter === '*') {
-    //   this.observers = this.programAddService.getObservers();
-    //   event.target.classList.add('btn-default-active');
-    //   for (const button of this.alphabet1.nativeElement.children) button.classList.remove('btn-default-active');
-    //   for (const button of this.alphabet2.nativeElement.children) button.classList.remove('btn-default-active');
-    //   return;
-    // } else if (this.alphabetAll.nativeElement.classList.contains('btn-default-active')) {
-    //   this.alphabetAll.nativeElement.classList.remove('btn-default-active');
-    //   this.observers = new Array<Observer>();
-    // }
-    // if (event.target.classList.contains('btn-default-active')) {
-    //   event.target.classList.remove('btn-default-active');
-    //   this.observers = this.observers.filter(
-    //     (value: Observer) => !value.user.name.startsWith(letter.toLowerCase()) && !value.user.name.startsWith(letter.toUpperCase())
-    //   );
-    // } else {
-    //   event.target.classList.add('btn-default-active');
-    //   this.observers = this.observers.concat(
-    //     this.programAddService
-    //       .getObservers()
-    //       .filter((value: Observer) => value.user.name.startsWith(letter.toLowerCase()) || value.user.name.startsWith(letter.toUpperCase()))
-    //   );
-    //   this.observers.sort((first: Observer, second: Observer) => first.user.name.localeCompare(second.user.name));
-    // }
+  filter_by(letter: string) {
+    if (letter !== this.filterQuery) {
+      this.filterQuery = letter;
+      this.searchElement.form.get('query').setValue('');
+      this.handleChange(letter);
+    }
   }
 
+  // Search
+  // Filter by Letter
   handleChange($event: any, search: boolean = false): void {
-    if (search) {
-      this.searchTerm = $event;
-    }
     this.observers = [];
     this.loading = true;
     this.search.next($event);
   }
 
   getObservers(): Observable<any> {
-    let params = new HttpParams().set('search', this.searchTerm).set('orderBy', 'created_at').set('sortedBy', 'desc');
+    let searchTerm = this.searchElement.form.get('query').value;
+    let params = new HttpParams()
+      .set('search', searchTerm)
+      .set('letter', this.filterQuery)
+      .set('orderBy', 'created_at')
+      .set('include', 'user')
+      .set('sortedBy', 'desc');
     return this.daoService.getObjects(this.urlObservers, params);
   }
 
-  setObservers(response) {
-    this.observers = response.data;
-  }
-
   submit(): void {
-    // if (this.hasChanged) {
-    this.programAddService.saveStep({ observers: this.programAddService.programValue.observers.map((value) => value.id) });
-    // }
+    this.programAddService.saveStep({ observers: this.programObservers });
+
+    this.router.navigate(['./third'], {
+      relativeTo: this._route.parent,
+    });
   }
 }

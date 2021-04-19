@@ -34,16 +34,18 @@ export class Step1Component implements OnDestroy {
     this.program = this.programAddService.program;
 
     this._subscription$ = this.programAddService.program.subscribe((programInstance: Program) => {
+      console.log('caiu aqui');
+      console.log(programInstance);
       this.setProgram(programInstance);
     });
   }
 
   ngOnDestroy(): void {
     this._subscription$.unsubscribe();
+    this.programAddService.saveLocalStep(this.form.value);
   }
 
   setProgram(program: Program) {
-    if (!program || program.id === -1) return;
     this.form.patchValue({ ...program });
   }
   submit(): void {
