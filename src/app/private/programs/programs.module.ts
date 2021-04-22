@@ -16,8 +16,6 @@ import { ProgramsRoutingModule } from './programs-routing.module';
 // imports from dependencies
 
 @NgModule({
-  imports: [SharedModule, ComponentsModule, ProgramsRoutingModule, CommonModule],
-  exports: [SharedModule, StepPanelComponent, Step1Component, Step2Component, Step3Component, Step4Component, UserCheckBoxComponent],
   declarations: [
     ProgramsAddComponent,
     ProgramsListComponent,
@@ -28,5 +26,7 @@ import { ProgramsRoutingModule } from './programs-routing.module';
     Step4Component,
     UserCheckBoxComponent,
   ],
+  imports: [SharedModule, ComponentsModule, ProgramsRoutingModule, CommonModule],
+  exports: [],
 })
 export class ProgramsModule {}

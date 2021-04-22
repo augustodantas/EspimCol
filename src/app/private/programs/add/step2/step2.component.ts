@@ -1,7 +1,6 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SocialUser } from 'angularx-social-login';
 import { Observable, Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { ESPIM_REST_Observers } from 'src/app/app.api';
@@ -19,7 +18,6 @@ import { ProgramsAddService } from '../programsadd.service';
 })
 export class Step2Component implements OnInit, OnDestroy {
   @ViewChild('search') searchElement: SearchComponent;
-  user$: Observable<SocialUser>;
   program: Observable<Program>; // These are the observers of this program
   loading: boolean = true;
   search: Subject<string> = new Subject<string>();
@@ -91,11 +89,7 @@ export class Step2Component implements OnInit, OnDestroy {
     // Trigger first Request
     this.search.next('');
 
-    this.user$ = this.loginService.user;
-
     this._subscription$ = this.programAddService.program.subscribe((programInstance: Program) => {
-      console.log(programInstance);
-
       this.programObservers = programInstance.observers;
     });
   }

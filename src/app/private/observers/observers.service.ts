@@ -12,7 +12,9 @@ export class ObserversService extends DAOService {
   }
 
   authenticate(urlObject: string, token: string) {
-    return this.http.post(urlObject, { token: token });
+    let params = new HttpParams().set('include', 'observer').set('token', token);
+
+    return this.http.post(urlObject, params);
   }
 
   fetchUser(urlObject: string, params: HttpParams): Observable<any> {

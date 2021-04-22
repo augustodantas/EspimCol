@@ -1,8 +1,13 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { HttpParams } from '@angular/common/http';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Observable, Subject, Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { ESPIM_REST_Participants } from 'src/app/app.api';
+import { Participant } from 'src/app/private/models/participant.model';
+import { SearchComponent } from 'src/app/private/search/search.component';
 
 import { DAOService } from '../../../dao/dao.service';
-import { Participant } from '../../../models/participant.model';
 import { Program } from '../../../models/program.model';
 import { ProgramsAddService } from '../programsadd.service';
 
@@ -11,137 +16,132 @@ import { ProgramsAddService } from '../programsadd.service';
   templateUrl: './step3.component.html',
 })
 export class Step3Component implements OnInit {
+  @ViewChild('search') searchElement: SearchComponent;
+  program: Observable<Program>; // These are the participants of this program
+  loading: boolean = true;
+  search: Subject<string> = new Subject<string>();
+  filterQuery: string = '*';
   participants: Participant[]; // These are the general participants
-  programParticipants: Participant[]; // These are the participants of this program
+  programParticipants: Participant[] = [];
+  private _subscription$: Subscription;
+  urlParticipants: string = ESPIM_REST_Participants;
+  letters: string[] = [
+    '*',
+    'A',
+    'B',
+    'C',
+    'D',
+    'E',
+    'F',
+    'G',
+    'H',
+    'I',
+    'J',
+    'K',
+    'L',
+    'M',
+    'N',
+    'O',
+    'P',
+    'Q',
+    'R',
+    'S',
+    'T',
+    'U',
+    'V',
+    'W',
+    'Y',
+    'Z',
+  ];
 
-  hasChanged = false; // True if some change was applied
+  constructor(
+    private daoService: DAOService,
+    private programAddService: ProgramsAddService,
+    private router: Router,
+    private _route: ActivatedRoute
+  ) {
+    this.program = this.programAddService.program;
+    this.search
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        switchMap(() => {
+          return this.getParticipants();
+        })
+      )
+      .subscribe((response) => {
+        this.loading = false;
+        this.participants = response.data;
+      });
+  }
 
-  addParticipantForm: FormGroup = this.formBuilder.group({
-    email: ['', Validators.required],
-    name: ['', Validators.required],
-    nickname: [''],
-  });
-
-  @ViewChild('alphabet1') alphabet1: ElementRef;
-  @ViewChild('alphabet2') alphabet2: ElementRef;
-  @ViewChild('alphabetAll') alphabetAll: ElementRef;
-
-  constructor(private dao: DAOService, private programAddService: ProgramsAddService, private formBuilder: FormBuilder) {}
-
-  /**
-   * Checks if @participant is also in programParticipant
-   * @param participant
-   */
-  isChecked(participant: Participant) {
-    // return !!(this.programParticipants ? this.programParticipants.find((value) => value.id === participant.id)) : undefined);
+  isChecked(observer: Participant) {
+    return !!(this.programParticipants ? this.programParticipants.find((value) => value.id === observer.id) : undefined);
   }
 
   ngOnInit() {
-    this.participants = this.programAddService.getParticipants();
-    this.programParticipants = this.programAddService.getParticipantsInstance();
+    // Trigger first Request
+    this.search.next('');
 
-    /**
-     * Subscribes to changes in the program (whenever the program in programsadd.service.ts is changed, it reflects here too)
-     */
-    this.programAddService.getProgramObservable().subscribe((programInstance: Program) => {
-      this.participants = this.programAddService.getParticipants();
-      this.programParticipants = this.programAddService.getParticipantsInstance();
+    this._subscription$ = this.programAddService.program.subscribe((programInstance: Program) => {
+      this.programParticipants = programInstance.participants;
     });
   }
 
-  /**
-   * Adds an participant
-   */
-  addParticipant(): void {
-    // this.dao.postObject(ESPIM_REST_Participants, new Participant(this.addParticipantForm.getRawValue())).subscribe(
-    //   (data) => {
-    //     const participant = new Participant(data);
-    //     this.participants.push(participant);
-    //     this.participants.sort((a: Participant, b: Participant) => a.user.name.localeCompare(b.user.name));
-    //     this.addProgramParticipant(participant);
-    //     new SwalComponent({
-    //       title: 'Participante adicionado aos contatos!',
-    //       type: 'success',
-    //     }).show();
-    //     this.addParticipantForm.reset();
-    //   },
-    //   (error) =>
-    //     new SwalComponent({
-    //       title: 'Falha ao adicionar o contato',
-    //       type: 'error',
-    //     }).show()
-    // );
+  ngOnDestroy(): void {
+    this._subscription$.unsubscribe();
+    this.programAddService.saveLocalStep({ participants: this.programParticipants });
   }
 
   /**
-   * Adds an participant to the programParticipants
+   * Adds an observer to the programParticipants
    */
-  addProgramParticipant(participant: Participant | number) {
-    if (!(participant instanceof Participant)) participant = this.participants.find((value: Participant) => value.id === participant);
-
-    this.programParticipants.push(participant);
-    this.programParticipants.sort((a: Participant, b: Participant) => a.user.name.localeCompare(b.user.name));
-
-    this.hasChanged = true;
+  addProgramParticipant(observer: Participant) {
+    this.programParticipants.push(observer);
   }
 
   /**
-   * Removes an participant from the programParticipants
+   * Removes an observer from the programParticipants
    */
-  removeProgramObserver(participantId: number) {
+  removeProgramParticipant(observer: Participant) {
     this.programParticipants.splice(
-      this.programParticipants.findIndex((value: Participant) => value.id === participantId),
+      this.programParticipants.findIndex((value: Participant) => value.id === observer.id),
       1
     );
-
-    this.hasChanged = true;
   }
 
-  /**
-   * Handles filtering observers by the alphabet
-   * @param letter
-   * @param event
-   */
-  filter_by(letter: string, event: any) {
-    if (letter === '*') {
-      this.participants = this.programAddService.getParticipants();
-      event.target.classList.add('btn-default-active');
-      for (const button of this.alphabet1.nativeElement.children) button.classList.remove('btn-default-active');
-      for (const button of this.alphabet2.nativeElement.children) button.classList.remove('btn-default-active');
-      return;
-    } else if (this.alphabetAll.nativeElement.classList.contains('btn-default-active')) {
-      this.alphabetAll.nativeElement.classList.remove('btn-default-active');
-      this.participants = new Array<Participant>();
-    }
-    if (event.target.classList.contains('btn-default-active')) {
-      event.target.classList.remove('btn-default-active');
-      this.participants = this.participants.filter(
-        (value: Participant) => !value.user.name.startsWith(letter.toLowerCase()) && !value.user.name.startsWith(letter.toUpperCase())
-      );
-    } else {
-      event.target.classList.add('btn-default-active');
-      this.participants = this.participants.concat(
-        this.programAddService
-          .getParticipants()
-          .filter(
-            (value: Participant) => value.user.name.startsWith(letter.toLowerCase()) || value.user.name.startsWith(letter.toUpperCase())
-          )
-      );
-      this.participants.sort((first: Participant, second: Participant) => first.user.name.localeCompare(second.user.name));
+  filter_by(letter: string) {
+    if (letter !== this.filterQuery) {
+      this.filterQuery = letter;
+      this.searchElement.form.get('query').setValue('');
+      this.handleChange(letter);
     }
   }
 
-  /**
-   * Handles searching observers by the alphabet
-   * @param event
-   */
-  search_by(event: any) {
-    this.participants = this.programAddService
-      .getParticipants()
-      .filter((value: Participant) => value.user.name.includes(event.target.value));
+  // Search
+  // Filter by Letter
+  handleChange($event: any, search: boolean = false): void {
+    this.participants = [];
+    this.loading = true;
+    this.search.next($event);
+  }
+
+  getParticipants(): Observable<any> {
+    let searchTerm = this.searchElement.form.get('query').value;
+    let params = new HttpParams()
+      .set('search', searchTerm)
+      .set('letter', this.filterQuery)
+      .set('orderBy', 'created_at')
+      .set('include', 'user')
+      .set('sortedBy', 'desc');
+    return this.daoService.getObjects(this.urlParticipants, params);
   }
 
   submit(): void {
-    if (this.hasChanged) this.programAddService.saveStep({ participants: this.programParticipants.map((value) => value.id) });
+    this.programAddService.saveStep({ participants: this.programParticipants });
+
+    this.router.navigate(['./third'], {
+      relativeTo: this._route.parent,
+    });
   }
 }

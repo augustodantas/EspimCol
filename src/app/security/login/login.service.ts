@@ -71,6 +71,7 @@ export class LoginService {
   handleAuth(response: any) {
     this.accessToken = response.token;
     this._currentUserSubject.next(response.user);
+    this.userObserver = response.user.observer.data;
     this._localStorageService.Set(this._propertyName, response.token);
 
     this.router.navigate(['/private']);

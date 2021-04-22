@@ -34,8 +34,6 @@ export class Step1Component implements OnDestroy {
     this.program = this.programAddService.program;
 
     this._subscription$ = this.programAddService.program.subscribe((programInstance: Program) => {
-      console.log('caiu aqui');
-      console.log(programInstance);
       this.setProgram(programInstance);
     });
   }
@@ -46,8 +44,10 @@ export class Step1Component implements OnDestroy {
   }
 
   setProgram(program: Program) {
+    this.form.reset();
     this.form.patchValue({ ...program });
   }
+
   submit(): void {
     this.form.markAllAsTouched();
 
