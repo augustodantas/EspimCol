@@ -111,9 +111,9 @@ export class Step2Component implements OnInit, OnDestroy {
     let params = new HttpParams()
       .set('search', searchTerm)
       .set('letter', this.filterQuery)
-      .set('orderBy', 'created_at')
+      .set('orderBy', 'users|name')
       .set('include', 'user')
-      .set('sortedBy', 'desc');
+      .set('sortedBy', 'asc');
     return this.daoService.getObjects(this.urlObservers, params);
   }
 

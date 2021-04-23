@@ -114,7 +114,7 @@
               <a
                 class="dropdown-item"
                 [routerLinkActive]="['active']"
-                [routerLink]="['programs/add', -1, 'first']"
+                [routerLink]="['programs/add', 'first']"
                 [queryParams]="{ reset: true }"
                 translate
                 >private.header.programs.add</a
@@ -148,6 +148,7 @@
           </a>
           <ul class="text-center dropdown-menu w-xl-px-200">
             <li>
+              x
               <a class="dropdown-item" routerLink="observers/add"
                 ><img class="mx-4 rounded-circle" src="{{ _user.profilePhotoUrl }}" width="102" height="102"
               /></a>

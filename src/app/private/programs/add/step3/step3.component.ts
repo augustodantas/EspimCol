@@ -108,8 +108,8 @@ export class Step3Component implements OnInit {
       .set('search', searchTerm)
       .set('letter', this.filterQuery)
       .set('include', 'user')
-      .set('orderBy', 'created_at')
-      .set('sortedBy', 'desc');
+      .set('orderBy', 'name')
+      .set('sortedBy', 'asc');
     return this.daoService.getObjects(this.urlProgramUsers + (id ? id : ''), params);
   }
 
