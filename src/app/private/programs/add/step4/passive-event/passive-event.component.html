@@ -1,0 +1,9 @@
+<div class="box-event mt-2 bg-primary" [ngStyle]="{ 'background-color': event.color }">
+  <div class="box-header d-flex justify-content-between align-items-center text-white">
+    <a (click)="loadDetail(); isOpen = !isOpen">Nova Coleta por Sensor</a>
+    <div>
+      <i class="fas fa-edit text-white"></i>
+      <i class="fas fa-trash-alt text-white" (click)="deleteEvent()"></i>
+    </div>
+  </div>
+</div>

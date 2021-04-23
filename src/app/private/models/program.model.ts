@@ -16,8 +16,9 @@ export class Program {
   // composed entities
   observer: Observer;
   observers: Array<Observer> = [];
+  passiveEvents: Array<Event> = [];
+  activeEvents: Array<Event> = [];
   users: Array<User> = [];
-  events: Array<Event> = [];
 
   constructor(program: any = {}) {}
 }

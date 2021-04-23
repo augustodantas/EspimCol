@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
+import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { BsDatepickerModule, BsLocaleService } from 'ngx-bootstrap/datepicker';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { BsModalService, ModalModule } from 'ngx-bootstrap/modal';
@@ -20,8 +21,8 @@ const components = [InputValidationsComponent, SplashScreenComponent, ModalConfi
 
 @NgModule({
   declarations: [...components],
-  imports: [...modules, BsDatepickerModule.forRoot(), TimepickerModule.forRoot(), BsDropdownModule.forRoot()],
-  exports: [...modules, ...components, BsDatepickerModule, TimepickerModule],
+  imports: [...modules, BsDatepickerModule.forRoot(), TimepickerModule.forRoot(), BsDropdownModule.forRoot(), CollapseModule],
+  exports: [...modules, ...components, BsDatepickerModule, TimepickerModule, CollapseModule],
   providers: [BsLocaleService, BsModalService],
 })
 export class ComponentsModule {}

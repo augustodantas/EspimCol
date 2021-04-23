@@ -1,73 +1,71 @@
-<div *ngIf="program | async as _program">
-  <h1>Adicionar observadores</h1>
+<h1>Adicionar observadores</h1>
 
-  <esm-search #search (doSearch)="handleChange($event, true)"></esm-search>
+<esm-search #search (doSearch)="handleChange($event, true)"></esm-search>
 
-  <div class="container-flex" aria-label="alphabet">
-    <div class="row justify-content-center"></div>
-    <div class="row justify-content-center">
-      <div class="col-12 mb-2 d-flex justify-content-between">
-        <button
-          *ngFor="let letter of letters"
-          type="button"
-          class="col btn btn-lg btn-default text-primary font-weight-bold p-1"
-          [ngClass]="{ 'btn-default-active': letter === filterQuery }"
-          (click)="filter_by(letter)"
-        >
-          {{ letter }}
-        </button>
-      </div>
+<div class="container-flex" aria-label="alphabet">
+  <div class="row justify-content-center"></div>
+  <div class="row justify-content-center">
+    <div class="col-12 mb-2 d-flex justify-content-between">
+      <button
+        *ngFor="let letter of letters"
+        type="button"
+        class="col btn btn-lg btn-default text-primary font-weight-bold p-1"
+        [ngClass]="{ 'btn-default-active': letter === filterQuery }"
+        (click)="filter_by(letter)"
+      >
+        {{ letter }}
+      </button>
     </div>
   </div>
+</div>
 
-  <form class="card">
-    <div class="card-body">
-      <div *ngIf="!programObservers?.length">Você não selecionou nenhum observador.</div>
+<form class="card">
+  <div class="card-body">
+    <div *ngIf="!programObservers?.length">Você não selecionou nenhum observador.</div>
 
-      <div class="align-items-center" *ngIf="programObservers.length > 0">
-        <span>Você adicionou:</span>
-        <span *ngFor="let selectedObserver of programObservers"> {{ selectedObserver.user.name }}</span>
-      </div>
+    <div class="align-items-center" *ngIf="programObservers.length > 0">
+      <span>Você adicionou:</span>
+      <span *ngFor="let selectedObserver of programObservers"> {{ selectedObserver.user.name }}</span>
     </div>
-  </form>
+  </div>
+</form>
 
-  <h2 class="mt-4">Selecionar observadores</h2>
-  <form *ngIf="!loading" (submit)="submit()">
-    <div class="card">
-      <div class="card-body">
-        <div class="row">
-          <div *ngIf="!observers?.length" class="col-12">O filtro selecionado resultou em nada, tente troca-lo.</div>
-          <div class="col-3 d-flex align-items-center overflow-hidden text-nowrap" *ngFor="let observer of observers">
-            <esm-user-checkbox
-              [user]="observer"
-              [label]="observer.user.name"
-              [checked]="isChecked(observer)"
-              [disabled]="isDisabled(observer)"
-              (addUser)="addProgramObserver($event)"
-              (removeUser)="removeProgramObserver($event)"
-            ></esm-user-checkbox>
-          </div>
+<h2 class="mt-4">Selecionar observadores</h2>
+<form *ngIf="!loading" (submit)="submit()">
+  <div class="card">
+    <div class="card-body">
+      <div class="row">
+        <div *ngIf="!observers?.length" class="col-12">O filtro selecionado resultou em nada, tente troca-lo.</div>
+        <div class="col-3 d-flex align-items-center overflow-hidden text-nowrap" *ngFor="let observer of observers">
+          <esm-user-checkbox
+            [user]="observer"
+            [label]="observer.user.name"
+            [checked]="isChecked(observer)"
+            [disabled]="isDisabled(observer)"
+            (addUser)="addProgramObserver($event)"
+            (removeUser)="removeProgramObserver($event)"
+          ></esm-user-checkbox>
         </div>
       </div>
     </div>
-
-    <div class="row justify-content-between mt-5">
-      <div class="col-auto align-self-start">
-        <button name="saveButton" class="btn btn-default btn-md min-100">VOLTAR</button>
-      </div>
-      <div class="col-auto align-self-end">
-        <button type="submit" name="saveButton" class="btn btn-primary btn-md min-100">PROSSEGUIR</button>
-      </div>
-    </div>
-  </form>
-
-  <div *ngIf="loading">
-    <div class="loader-bg"></div>
-    <div class="loader-bg"></div>
-    <div class="loader-bg"></div>
-    <div class="loader-bg mb-1"></div>
-    <div class="loader-bg"></div>
-    <div class="loader-bg"></div>
-    <div class="loader-bg"></div>
   </div>
+
+  <div class="row justify-content-end mt-5">
+    <div class="col-auto">
+      <button name="saveButton" class="btn btn-success min-100">VOLTAR</button>
+    </div>
+    <div class="col-auto">
+      <button type="submit" name="saveButton" class="btn btn-primary min-100">PROSSEGUIR</button>
+    </div>
+  </div>
+</form>
+
+<div *ngIf="loading">
+  <div class="loader-bg"></div>
+  <div class="loader-bg"></div>
+  <div class="loader-bg"></div>
+  <div class="loader-bg mb-1"></div>
+  <div class="loader-bg"></div>
+  <div class="loader-bg"></div>
+  <div class="loader-bg"></div>
 </div>

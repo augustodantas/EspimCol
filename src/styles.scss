@@ -187,14 +187,18 @@ table {
   }
 }
 
+.btn-shadow {
+  box-shadow: 1px 1px 4px rgb(0 0 0 / 40%);
+}
+
 /* -- Buttons -- */
 .btn-primary {
   border: 0px;
   background-color: #0a467f;
-}
-.btn-primary:hover {
-  border: 0px;
-  background-color: #003061;
+  &:hover {
+    border: 0px;
+    background-color: #003061;
+  }
 }
 
 .btn-outline {
@@ -205,11 +209,11 @@ table {
   color: #00578f;
   border: 0px;
   box-shadow: 1px 1px 1px 1px #ccc;
-}
-.btn-outline-primary:hover {
-  background-color: #ededee;
-  box-shadow: 1px 1px 1px 1px #ccc;
-  color: #00578f;
+  &:hover {
+    background-color: #ededee;
+    box-shadow: 1px 1px 1px 1px #ccc;
+    color: #00578f;
+  }
 }
 
 .btn-success {
@@ -225,6 +229,14 @@ table {
 .btn-default-active {
   background-color: #0a467f;
   color: #ffffff !important;
+}
+
+.btn-white {
+  color: #0a467f;
+  background-color: #fff;
+  &:hover {
+    background-color: #f0f0f0;
+  }
 }
 
 /* -- Borders -- */
@@ -465,10 +477,6 @@ a {
 
 .dropdown-toggle-noArrow::after {
   display: none;
-}
-
-.clearfix {
-  overflow: auto;
 }
 
 /* -- header -- */

@@ -1,5 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { Observable } from 'rxjs';
 import { Program } from 'src/app/private/models/program.model';
 
 import { ProgramsAddService } from '../programsadd.service';
@@ -9,36 +10,20 @@ import { ProgramsAddService } from '../programsadd.service';
   templateUrl: './step-panel.component.html',
 })
 export class StepPanelComponent implements OnInit {
-  @Input() program: Program;
+  program: Observable<Program>; // These are the observers of this program
 
-  currentStep: number;
+  currentStep: number = 1;
 
-  get hasProgramObservers() {
-    return this.programsAddService.getObserversInstance() && this.programsAddService.getObserversInstance().length > 0;
-  }
-  get hasProgramParticipants() {
-    return this.programsAddService.getParticipantsInstance() && this.programsAddService.getParticipantsInstance().length > 0;
-  }
-  get hasEvents() {
-    return this.programsAddService.getEventsInstance() && this.programsAddService.getEventsInstance().length > 0;
-  }
-
-  constructor(private programsAddService: ProgramsAddService, private router: Router, private activatedRoute: ActivatedRoute) {}
+  constructor(private programAddService: ProgramsAddService, private router: Router, private activatedRoute: ActivatedRoute) {}
 
   ngOnInit() {
-    // Sets the currentStep when this component is created
-    if (this.program) {
-      this.currentStep = 1;
-    } else {
-      this.currentStep = 4;
-    }
+    this.program = this.programAddService.program;
+
+    this.updateStep(this.router.url);
 
     // Subscribes to url changes. At first there will be a 'reset' queryParam that indicates that the currentStep shall be reseted. Then, it will listen to url changes and update the currentStep accordingly
     this.router.events.subscribe((value: NavigationEnd) => {
-      if (this.activatedRoute.snapshot.queryParamMap.get('reset')) {
-        this.currentStep = 1;
-        return;
-      } else this.updateStep(value.urlAfterRedirects);
+      this.updateStep(value.urlAfterRedirects);
     });
   }
 

@@ -12,6 +12,7 @@ import { Step4Component } from './add/step4/step4.component';
 import { UserCheckBoxComponent } from './add/user-checkbox/user-checkbox.component';
 import { ProgramsListComponent } from './list/programslist.component';
 import { ProgramsRoutingModule } from './programs-routing.module';
+import { PassiveEventComponent } from './add/step4/passive-event/passive-event.component';
 
 // imports from dependencies
 
@@ -25,6 +26,7 @@ import { ProgramsRoutingModule } from './programs-routing.module';
     Step3Component,
     Step4Component,
     UserCheckBoxComponent,
+    PassiveEventComponent,
   ],
   imports: [SharedModule, ComponentsModule, ProgramsRoutingModule, CommonModule],
   exports: [],
