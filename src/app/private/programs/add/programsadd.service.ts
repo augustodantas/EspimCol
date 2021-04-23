@@ -1,5 +1,5 @@
+import { HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, forkJoin, Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import { LoaderService } from 'src/app/services/loader.service';
@@ -32,12 +32,7 @@ export class ProgramsAddService {
   program: Observable<Program>;
   programInstance: Program;
 
-  constructor(
-    private _daoService: DAOService,
-    private activeRoute: ActivatedRoute,
-    private loginService: LoginService,
-    private _loaderService: LoaderService
-  ) {
+  constructor(private _daoService: DAOService, private loginService: LoginService, private _loaderService: LoaderService) {
     this._currentProgramSubject = new BehaviorSubject<Program>(new Program());
     this.program = this._currentProgramSubject.asObservable();
 
@@ -49,11 +44,14 @@ export class ProgramsAddService {
 
   fetchData(id: string) {
     this._loaderService.show();
+    let params = new HttpParams().set('include', 'users');
+
     this._daoService
-      .getObject(this.urlPrograms, id)
+      .getObject(this.urlPrograms, id, params)
       .pipe(finalize(() => this._loaderService.hide()))
       .subscribe((response) => {
         response.data.observers = response.data.observers.data;
+        response.data.users = response.data.users.data;
         this._currentProgramSubject.next(response.data);
       });
   }

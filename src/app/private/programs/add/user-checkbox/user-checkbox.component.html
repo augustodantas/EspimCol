@@ -1,8 +1,2 @@
-<input
-  type="checkbox"
-  [id]="observer.user.name + observer.id"
-  [checked]="checked"
-  [disabled]="disabled"
-  (click)="checkboxHandler($event.target.checked)"
-/>
-<label class="m-0" [for]="observer.user.name + observer.id">{{ observer?.user.name }}</label>
+<input type="checkbox" [id]="label + user.id" [checked]="checked" [disabled]="disabled" (click)="checkboxHandler($event.target.checked)" />
+<label class="m-0" [for]="label + user.id">{{ label }}</label>

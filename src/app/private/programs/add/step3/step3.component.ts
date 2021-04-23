@@ -3,12 +3,13 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
-import { ESPIM_REST_Participants } from 'src/app/app.api';
-import { Participant } from 'src/app/private/models/participant.model';
+import { ESPIM_REST_ProgramUsers } from 'src/app/app.api';
+import { User } from 'src/app/private/models/user.model';
 import { SearchComponent } from 'src/app/private/search/search.component';
 
 import { DAOService } from '../../../dao/dao.service';
 import { Program } from '../../../models/program.model';
+import { LETRAS_FILTRO } from '../../constants';
 import { ProgramsAddService } from '../programsadd.service';
 
 @Component({
@@ -17,48 +18,21 @@ import { ProgramsAddService } from '../programsadd.service';
 })
 export class Step3Component implements OnInit {
   @ViewChild('search') searchElement: SearchComponent;
-  program: Observable<Program>; // These are the participants of this program
+  program: Observable<Program>; // These are the users of this program
   loading: boolean = true;
   search: Subject<string> = new Subject<string>();
   filterQuery: string = '*';
-  participants: Participant[]; // These are the general participants
-  programParticipants: Participant[] = [];
+  users: User[]; // These are the general users
+  programUsers: User[] = [];
   private _subscription$: Subscription;
-  urlParticipants: string = ESPIM_REST_Participants;
-  letters: string[] = [
-    '*',
-    'A',
-    'B',
-    'C',
-    'D',
-    'E',
-    'F',
-    'G',
-    'H',
-    'I',
-    'J',
-    'K',
-    'L',
-    'M',
-    'N',
-    'O',
-    'P',
-    'Q',
-    'R',
-    'S',
-    'T',
-    'U',
-    'V',
-    'W',
-    'Y',
-    'Z',
-  ];
+  urlProgramUsers: string = ESPIM_REST_ProgramUsers;
+  letters: string[] = LETRAS_FILTRO;
 
   constructor(
     private daoService: DAOService,
     private programAddService: ProgramsAddService,
     private router: Router,
-    private _route: ActivatedRoute
+    private activeRoute: ActivatedRoute
   ) {
     this.program = this.programAddService.program;
     this.search
@@ -66,17 +40,17 @@ export class Step3Component implements OnInit {
         debounceTime(300),
         distinctUntilChanged(),
         switchMap(() => {
-          return this.getParticipants();
+          return this.getUsers();
         })
       )
       .subscribe((response) => {
         this.loading = false;
-        this.participants = response.data;
+        this.users = response.data;
       });
   }
 
-  isChecked(observer: Participant) {
-    return !!(this.programParticipants ? this.programParticipants.find((value) => value.id === observer.id) : undefined);
+  isChecked(participant: User) {
+    return !!(this.programUsers ? this.programUsers.find((value) => value.id === participant.id) : undefined);
   }
 
   ngOnInit() {
@@ -84,28 +58,28 @@ export class Step3Component implements OnInit {
     this.search.next('');
 
     this._subscription$ = this.programAddService.program.subscribe((programInstance: Program) => {
-      this.programParticipants = programInstance.participants;
+      this.programUsers = programInstance.users;
     });
   }
 
   ngOnDestroy(): void {
     this._subscription$.unsubscribe();
-    this.programAddService.saveLocalStep({ participants: this.programParticipants });
+    this.programAddService.saveLocalStep({ users: this.programUsers });
   }
 
   /**
-   * Adds an observer to the programParticipants
+   * Adds an participant to the programUsers
    */
-  addProgramParticipant(observer: Participant) {
-    this.programParticipants.push(observer);
+  addProgramUser(participant: User) {
+    this.programUsers.push(participant);
   }
 
   /**
-   * Removes an observer from the programParticipants
+   * Removes an participant from the programUsers
    */
-  removeProgramParticipant(observer: Participant) {
-    this.programParticipants.splice(
-      this.programParticipants.findIndex((value: Participant) => value.id === observer.id),
+  removeProgramUser(participant: User) {
+    this.programUsers.splice(
+      this.programUsers.findIndex((value: User) => value.id === participant.id),
       1
     );
   }
@@ -121,27 +95,33 @@ export class Step3Component implements OnInit {
   // Search
   // Filter by Letter
   handleChange($event: any, search: boolean = false): void {
-    this.participants = [];
+    this.users = [];
     this.loading = true;
     this.search.next($event);
   }
 
-  getParticipants(): Observable<any> {
+  getUsers(): Observable<any> {
+    let id = this.activeRoute.parent.snapshot.params.id;
+
     let searchTerm = this.searchElement.form.get('query').value;
     let params = new HttpParams()
       .set('search', searchTerm)
       .set('letter', this.filterQuery)
-      .set('orderBy', 'created_at')
       .set('include', 'user')
+      .set('orderBy', 'created_at')
       .set('sortedBy', 'desc');
-    return this.daoService.getObjects(this.urlParticipants, params);
+    return this.daoService.getObjects(this.urlProgramUsers + (id ? id : ''), params);
+  }
+
+  getName(user: User): string {
+    return user.name + ' ' + (user.alias ? `(${user.alias})` : `(${user.email})`);
   }
 
   submit(): void {
-    this.programAddService.saveStep({ participants: this.programParticipants });
+    this.programAddService.saveStep({ users: this.programUsers });
 
-    this.router.navigate(['./third'], {
-      relativeTo: this._route.parent,
+    this.router.navigate(['./fourth'], {
+      relativeTo: this.activeRoute.parent,
     });
   }
 }

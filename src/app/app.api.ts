@@ -7,8 +7,10 @@ export const ESPIM_REST_Participants: string = ESPIM_API + 'participants/';
 // configure observers module url
 export const ESPIM_REST_Observers: string = ESPIM_API + 'observers/';
 
-// configure participants module url
+// configure programs module url
 export const ESPIM_REST_Programs: string = ESPIM_API + 'programs/';
+
+export const ESPIM_REST_ProgramUsers: string = ESPIM_API + 'programUsers/';
 
 // configure events module url
 export const ESPIM_REST_Events: string = ESPIM_API + 'events/';

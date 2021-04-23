@@ -17,6 +17,7 @@ const routes: Routes = [
     path: 'add',
     component: ProgramsAddComponent,
     children: [
+      { path: '', redirectTo: 'first', pathMatch: 'prefix' },
       { path: 'first', component: Step1Component },
       { path: 'second', component: Step2Component },
       { path: 'third', component: Step3Component },
@@ -27,6 +28,7 @@ const routes: Routes = [
     path: 'edit/:id',
     component: ProgramsAddComponent,
     children: [
+      { path: '', redirectTo: 'first', pathMatch: 'prefix' },
       { path: 'first', component: Step1Component },
       { path: 'second', component: Step2Component },
       { path: 'third', component: Step3Component },

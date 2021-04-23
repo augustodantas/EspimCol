@@ -10,6 +10,7 @@ import { SearchComponent } from 'src/app/private/search/search.component';
 import { LoginService } from '../../../../security/login/login.service';
 import { DAOService } from '../../../dao/dao.service';
 import { Observer } from '../../../models/observer.model';
+import { LETRAS_FILTRO } from '../../constants';
 import { ProgramsAddService } from '../programsadd.service';
 
 @Component({
@@ -26,34 +27,7 @@ export class Step2Component implements OnInit, OnDestroy {
   programObservers: Observer[] = [];
   private _subscription$: Subscription;
   urlObservers: string = ESPIM_REST_Observers;
-  letters: string[] = [
-    '*',
-    'A',
-    'B',
-    'C',
-    'D',
-    'E',
-    'F',
-    'G',
-    'H',
-    'I',
-    'J',
-    'K',
-    'L',
-    'M',
-    'N',
-    'O',
-    'P',
-    'Q',
-    'R',
-    'S',
-    'T',
-    'U',
-    'V',
-    'W',
-    'Y',
-    'Z',
-  ];
+  letters: string[] = LETRAS_FILTRO;
 
   constructor(
     private daoService: DAOService,

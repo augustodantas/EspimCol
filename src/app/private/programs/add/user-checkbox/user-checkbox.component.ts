@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { User } from 'src/app/private/models/user.model';
 
 import { Observer } from '../../../models/observer.model';
-import { Participant } from '../../../models/participant.model';
 
 // This component is used on step2 & step3
 
@@ -10,19 +10,20 @@ import { Participant } from '../../../models/participant.model';
   templateUrl: './user-checkbox.component.html',
 })
 export class UserCheckBoxComponent implements OnInit {
-  @Input() observer: Observer | Participant;
+  @Input() user: Observer | User;
+  @Input() label: string;
   @Input() checked: boolean;
   @Input() disabled: boolean;
 
-  @Output() removeUser = new EventEmitter<Observer | Participant>();
-  @Output() addUser = new EventEmitter<Observer | Participant>();
+  @Output() removeUser = new EventEmitter<Observer | User>();
+  @Output() addUser = new EventEmitter<Observer | User>();
 
   constructor() {}
 
   ngOnInit() {}
 
   checkboxHandler(checked: boolean) {
-    if (checked) this.addUser.emit(this.observer);
-    else this.removeUser.emit(this.observer);
+    if (checked) this.addUser.emit(this.user);
+    else this.removeUser.emit(this.user);
   }
 }

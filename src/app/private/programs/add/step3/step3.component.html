@@ -22,11 +22,11 @@
 
   <form class="card">
     <div class="card-body">
-      <div *ngIf="!programParticipants?.length">Você não selecionou nenhum participante.</div>
+      <div *ngIf="!programUsers?.length">Você não selecionou nenhum participante.</div>
 
-      <div class="align-items-center" *ngIf="programParticipants.length > 0">
+      <div class="align-items-center" *ngIf="programUsers.length > 0">
         <span>Você adicionou:</span>
-        <span *ngFor="let selectedParticipant of programParticipants"> {{ selectedParticipant.user.name }}</span>
+        <span *ngFor="let selectedUser of programUsers"> {{ selectedUser.name }}</span>
       </div>
     </div>
   </form>
@@ -36,13 +36,14 @@
     <div class="card">
       <div class="card-body">
         <div class="row">
-          <div *ngIf="!participants?.length" class="col-12">O filtro selecionado resultou em nada, tente troca-lo.</div>
-          <div class="col-3 d-flex align-items-center overflow-hidden text-nowrap" *ngFor="let participant of participants">
+          <div *ngIf="!users?.length" class="col-12">O filtro selecionado resultou em nada, tente troca-lo.</div>
+          <div class="col-3 d-flex align-items-center overflow-hidden text-nowrap" *ngFor="let user of users">
             <esm-user-checkbox
-              [observer]="participant"
-              [checked]="isChecked(participant)"
-              (addUser)="addProgramParticipant($event)"
-              (removeUser)="removeProgramParticipant($event)"
+              [user]="user"
+              [label]="getName(user)"
+              [checked]="isChecked(user)"
+              (addUser)="addProgramUser($event)"
+              (removeUser)="removeProgramUser($event)"
             ></esm-user-checkbox>
           </div>
         </div>

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -10,8 +10,8 @@ export class DAOService {
     return this.http.get(urlObject, { params: parameters });
   }
 
-  getObject(urlObject: string, id: string): Observable<any> {
-    return this.http.get(urlObject + `${id}`);
+  getObject(urlObject: string, id: string, parameters?: HttpParams): Observable<any> {
+    return this.http.get(urlObject + `${id}`, { params: parameters });
   }
 
   postObject(urlObject: string, object: any): Observable<any> {

@@ -39,7 +39,8 @@
           <div *ngIf="!observers?.length" class="col-12">O filtro selecionado resultou em nada, tente troca-lo.</div>
           <div class="col-3 d-flex align-items-center overflow-hidden text-nowrap" *ngFor="let observer of observers">
             <esm-user-checkbox
-              [observer]="observer"
+              [user]="observer"
+              [label]="observer.user.name"
               [checked]="isChecked(observer)"
               [disabled]="isDisabled(observer)"
               (addUser)="addProgramObserver($event)"

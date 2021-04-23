@@ -1,5 +1,6 @@
+import { Event } from './event.model';
 import { Observer } from './observer.model';
-import { Participant } from './participant.model';
+import { User } from './user.model';
 
 export class Program {
   id: number;
@@ -15,8 +16,8 @@ export class Program {
   // composed entities
   observer: Observer;
   observers: Array<Observer> = [];
-  participants: Array<Participant> = [];
-  events: Array<number>;
+  users: Array<User> = [];
+  events: Array<Event> = [];
 
   constructor(program: any = {}) {}
 }
