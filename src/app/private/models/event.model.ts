@@ -4,10 +4,10 @@ import { Trigger } from './trigger.model';
 
 export class Event {
   id: number;
-  title: string;
-  description: string;
-  color: string;
-  type: string;
+  title: string = '';
+  description: string = '';
+  color: string = '';
+  type: string = '';
   sensors: Array<Sensor> = [];
   complexConditions;
   triggers: Array<Trigger>;

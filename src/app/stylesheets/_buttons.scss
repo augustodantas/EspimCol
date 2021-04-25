@@ -1,0 +1,47 @@
+/* -- Buttons -- */
+.btn-primary {
+  border: 0px;
+  background-color: #0a467f;
+  &:hover {
+    border: 0px;
+    background-color: #003061;
+  }
+}
+
+.btn-outline {
+  outline: 1px solid #00578f;
+}
+
+.btn-outline-primary {
+  color: #00578f;
+  border: 0px;
+  box-shadow: 1px 1px 1px 1px #ccc;
+  &:hover {
+    background-color: #ededee;
+    box-shadow: 1px 1px 1px 1px #ccc;
+    color: #00578f;
+  }
+}
+
+.btn-success {
+  border: 0px;
+  background-color: #04c481;
+  box-shadow: 1px 1px 1px 1px #ccc;
+}
+.btn-success:hover {
+  background-color: #329673;
+  box-shadow: 1px 1px 1px 1px #ccc;
+}
+
+.btn-default-active {
+  background-color: #0a467f;
+  color: #ffffff !important;
+}
+
+.btn-white {
+  color: #0a467f;
+  background-color: #fff;
+  &:hover {
+    background-color: #f0f0f0;
+  }
+}

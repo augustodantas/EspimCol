@@ -13,6 +13,7 @@ import { UserCheckBoxComponent } from './add/user-checkbox/user-checkbox.compone
 import { ProgramsListComponent } from './list/programslist.component';
 import { ProgramsRoutingModule } from './programs-routing.module';
 import { PassiveEventComponent } from './add/step4/passive-event/passive-event.component';
+import { SensorsComponent } from './add/step4/sensors/sensors.component';
 
 // imports from dependencies
 
@@ -27,6 +28,7 @@ import { PassiveEventComponent } from './add/step4/passive-event/passive-event.c
     Step4Component,
     UserCheckBoxComponent,
     PassiveEventComponent,
+    SensorsComponent,
   ],
   imports: [SharedModule, ComponentsModule, ProgramsRoutingModule, CommonModule],
   exports: [],

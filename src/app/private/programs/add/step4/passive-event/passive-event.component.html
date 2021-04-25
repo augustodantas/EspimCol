@@ -1,9 +1,62 @@
-<div class="box-event mt-2 bg-primary" [ngStyle]="{ 'background-color': event.color }">
-  <div class="box-header d-flex justify-content-between align-items-center text-white">
-    <a (click)="loadDetail(); isOpen = !isOpen">Nova Coleta por Sensor</a>
-    <div>
-      <i class="fas fa-edit text-white"></i>
-      <i class="fas fa-trash-alt text-white" (click)="deleteEvent()"></i>
+<div class="card box-event mt-4">
+  <div class="card-header box-header justify-content-between d-flex bg-primary" [ngStyle]="{ 'background-color': event.color }">
+    {{ event.title ? event.title : 'Nova Coleta por Sensor' }}
+    <div class="box-buttons">
+      <a class="btn btn-default btn-sm"><i class="fas fa-edit text-white"></i></a>
+      <a class="btn btn-default btn-sm" (click)="deleteEvent()"><i class="fas fa-trash-alt text-white"></i></a>
     </div>
   </div>
+  <form class="card-body box-body" [formGroup]="form" [collapse]="!isOpen">
+    <div class="row">
+      <div class="col-6 form-group">
+        <label class="form-label" for="name">Título <b class="text-danger">*</b>:</label>
+        <input
+          class="form-control-plaintext border-bottom"
+          name="title"
+          id="title"
+          formControlName="title"
+          type="text"
+          placeholder="Título"
+        />
+        <input-validations
+          *ngIf="form.controls['title'].invalid && form.controls['title'].touched"
+          [errors]="form.controls['title'].errors"
+          label="Nome"
+        >
+        </input-validations>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12 form-group">
+        <label for="program-description"> Descrição do programa </label>
+        <textarea
+          class="form-control-plaintext border-bottom w-100 resize-none"
+          name="program-description"
+          id="program-description"
+          rows="2"
+          maxlength="200"
+          placeholder="Descrição do evento"
+          formControlName="description"
+        ></textarea>
+        <input-validations
+          *ngIf="form.controls['description'].invalid && form.controls['description'].touched"
+          [errors]="form.controls['description'].errors"
+          label="Descrição"
+        >
+        </input-validations>
+      </div>
+    </div>
+
+    <div class="clearfix mt-4 mb-4">
+      <p class="font-weight-bold">Coletas</p>
+
+      <esm-sensors (response)="updateFormSensors($event)"></esm-sensors>
+    </div>
+    <div class="row">
+      <div class="col form-group">
+        <p class="font-weight-bold">Disparos cadastrados</p>
+      </div>
+    </div>
+  </form>
 </div>

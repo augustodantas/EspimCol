@@ -1,7 +1,9 @@
 .box-event {
   .box-header {
-    padding: 13px 15px;
     font-weight: bold;
     color: #fff;
+    .box-buttons {
+      margin: -6px -8px -6px;
+    }
   }
 }

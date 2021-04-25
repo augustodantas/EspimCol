@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChildren } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 
@@ -6,6 +6,7 @@ import { DAOService } from '../../../dao/dao.service';
 import { Event } from '../../../models/event.model';
 import { Program } from '../../../models/program.model';
 import { ProgramsAddService } from '../programsadd.service';
+import { PassiveEventComponent } from './passive-event/passive-event.component';
 
 @Component({
   selector: 'esm-step4',
@@ -15,6 +16,7 @@ import { ProgramsAddService } from '../programsadd.service';
 export class Step4Component implements OnInit {
   passiveEvents: Array<Event>;
   activeEvents: Array<Event>;
+  @ViewChildren(PassiveEventComponent) passiveEventsComponents: PassiveEventComponent[];
 
   constructor(
     private programAddService: ProgramsAddService,
@@ -35,6 +37,17 @@ export class Step4Component implements OnInit {
   }
 
   submit() {
+    const dados = {
+      activeEvents: [],
+      passiveEvents: this.passiveEventsComponents.map((eventComponent) => {
+        return eventComponent.form.value;
+      }),
+    };
+
+    console.log(dados);
+
+    // const dados = SENSORS.filter((v, i) => this.passiveEvents.sensors.value[i]).join('; ');
+
     // if (this.programsAddService.getParticipantsInstance() && this.programsAddService.getParticipantsInstance().length > 0) {
     // this.programsAddService.saveStep({ editor: null, beingEdited: false });
     // new SwalComponent({
