@@ -2,45 +2,50 @@ import { Cron } from './cron.model';
 
 export class Trigger {
   id: number;
-  condition: Cron | string;
+  condition: Cron;
   priority: string;
   timeOut: number;
 
-  constructor(trigger: any = {}) {}
+  constructor(trigger: any = {}) {
+    this.id = trigger.id || null;
+    this.condition = new Cron(trigger.condition);
+    this.priority = trigger.priority;
+    this.timeOut = trigger.timeOut;
+    console.log(trigger);
+  }
 
   getDescription() {
-    const dowNames = ['', 'domingos', 'segundas', 'terças', 'quartas', 'quintas', 'sextas', 'sábados'];
+    const dowNames = ['domingos', 'segundas', 'terças', 'quartas', 'quintas', 'sextas', 'sábados'];
     let ans;
 
-    if (this.condition instanceof Cron) {
-      const dow = this.condition.getDow();
-      if (dow.length === 0) return 'Nenhum dia selecionado. Antes de modificar selecione ao menos algum dia.';
-      else if (dow.length < 7) {
-        if (dow[0] === '1' || dow[0] === '7') ans = 'Todas os ';
-        else ans = 'Todas as ';
+    const dow = this.condition.getDow();
+    if (dow.length == 0) {
+      ans = 'Todos os dias ';
+    } else {
+      if (dow[0] === '1' || dow[0] === '7') ans = 'Todos os ';
+      else ans = 'Todas as ';
 
-        for (const day of dow) {
-          ans += dowNames[day];
+      for (const day of dow) {
+        ans += dowNames[parseInt(day) - 1];
 
-          if (dow[dow.length - 1] === day) {
-            ans += ' ';
-            break;
-          }
-
-          if (dow.length >= 3) {
-            if (day === dow[dow.length - 2]) ans += ' e ';
-            else ans += ', ';
-          } else if (dow.length === 2) ans += ' e ';
-          else ans += ' ';
+        if (dow[dow.length - 1] === day) {
+          ans += ' ';
+          break;
         }
-      } else ans = 'Todos os dias ';
 
-      if (this.priority === 'NC') ans += 'uma notificação curta ';
-      else if (this.priority === 'NL') ans += 'uma notificação longa ';
-      else if (this.priority === 'AL') ans += 'um alarme ';
+        if (dow.length >= 3) {
+          if (day === dow[dow.length - 2]) ans += ' e ';
+          else ans += ', ';
+        } else if (dow.length === 2) ans += ' e ';
+        else ans += ' ';
+      }
+    }
 
-      if (this.getHour() && this.getMinutes()) ans += 'às ' + this.condition.getHours() + ':' + this.condition.getMinute();
-    } else ans = 'Manual';
+    if (this.priority === 'NC') ans += 'uma notificação curta ';
+    else if (this.priority === 'NL') ans += 'uma notificação longa ';
+    else if (this.priority === 'AL') ans += 'um alarme ';
+
+    ans += 'às ' + this.getHour() + ':' + this.getMinutes();
 
     return ans;
   }
@@ -69,22 +74,20 @@ export class Trigger {
   }
 
   isDayActive(day?: string) {
-    if (this.condition instanceof Cron) return this.condition.isDayActive(day);
+    return this.condition.isDayActive(day);
   }
   actOrDeactivateDay(day?: string) {
-    if (this.condition instanceof Cron) this.condition.actOrDeactivateDay(day);
+    this.condition.actOrDeactivateDay(day);
+  }
+
+  zeroPad(num, places) {
+    return String(num).padStart(places, '0');
   }
 
   getMinutes() {
-    if (this.condition instanceof Cron) return Number.parseInt(this.condition.getMinute());
-  }
-  setMinute(minutes: number) {
-    if (this.condition instanceof Cron && minutes) this.condition.setMinute(minutes.toString());
+    return this.zeroPad(Number.parseInt(this.condition.getMinute()), 2);
   }
   getHour() {
-    if (this.condition instanceof Cron) return Number.parseInt(this.condition.getHours());
-  }
-  setHour(hour: number) {
-    if (this.condition instanceof Cron && hour) this.condition.setHour(hour.toString());
+    return this.zeroPad(Number.parseInt(this.condition.getHours()), 2);
   }
 }

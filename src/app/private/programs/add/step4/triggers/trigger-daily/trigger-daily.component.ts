@@ -31,14 +31,16 @@ export class TriggerDailyComponent implements OnInit {
       let cron = new Cron();
       cron.convertFromForm(this.form.get('time').value);
 
-      this.form.reset();
+      console.log(cron.toString());
 
-      let trigger = ({
+      let trigger = new Trigger({
         condition: cron.toString(),
         priority: this.form.get('notificationType').value,
         timeout: this.form.get('timeout').value,
-      } as unknown) as Trigger;
+      });
+
       this.response.emit(trigger);
+      this.form.reset();
     }
   }
 }

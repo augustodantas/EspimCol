@@ -27,7 +27,7 @@
     <div class="col-4">
       <div class="form-group">
         <select class="w-100" formControlName="notificationType">
-          <option value="">Selecione o tipo do som</option>
+          <option value="" disabled>Selecione o tipo do som</option>
           <option [value]="notificationType.alias" *ngFor="let notificationType of notificationTypes">{{ notificationType.name }}</option>
         </select>
         <input-validations

@@ -37,6 +37,7 @@ export class PassiveEventComponent implements OnInit {
   }
 
   adicionarTrigger(value: Trigger): void {
+    console.log(value);
     this.triggerFormArray.push(this.formBuilder.control(value));
   }
 
@@ -56,19 +57,6 @@ export class PassiveEventComponent implements OnInit {
       this.removeEvent(this.event);
       return;
     }
-
-    // new SwalComponent({
-    //   title: 'Deletar evento?',
-    //   text: `Você tem certeza que deseja deletar ${this.event.getTitle()}?`,
-    //   type: 'question',
-    //   showCancelButton: true,
-    //   confirmButtonText: 'Sim',
-    //   cancelButtonText: 'Não',
-    // })
-    //   .show()
-    //   .then((result) => {
-    //     if (result.value === true) this.programsAddService.delete_event(this.event.getId());
-    //   });
   }
 
   removeEvent(event: Event) {

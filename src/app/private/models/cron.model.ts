@@ -17,7 +17,9 @@ export class Cron {
     this.dom = cronArray[3];
     this.month = cronArray[4];
     this.dow = cronArray[5].split(',');
-    if (this.dow[0] === '') this.dow = [];
+    if (this.dow[0] === '') {
+      this.dow = [];
+    }
     this.year = cronArray[6];
   }
 

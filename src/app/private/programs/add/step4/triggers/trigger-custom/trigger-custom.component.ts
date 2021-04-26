@@ -51,19 +51,22 @@ export class TriggerCustomComponent {
         day.hours.forEach((hour: Hour) => {
           let cron = new Cron();
           cron.convertFromForm(hour.time, [day]);
-          triggers.push(({
-            condition: cron.toString(),
-            priority: hour.notificationType,
-            timeout: hour.timeout,
-          } as unknown) as Trigger);
+          triggers.push(
+            new Trigger({
+              condition: cron.toString(),
+              priority: hour.notificationType,
+              timeout: hour.timeout,
+            })
+          );
         });
       });
+
+      this.response.emit(triggers);
 
       this.form.reset();
       this.weeklyDays.forEach((day: Day) => {
         day.hours = [];
       });
-      this.response.emit(triggers);
     }
   }
 

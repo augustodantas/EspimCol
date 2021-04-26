@@ -37,14 +37,14 @@ export class TriggerWeeklyComponent {
       let cron = new Cron();
       cron.convertFromForm(this.form.get('time').value, diasSelecionados);
 
-      this.form.reset();
-
-      let trigger = ({
+      let trigger = new Trigger({
         condition: cron.toString(),
         priority: this.form.get('notificationType').value,
         timeout: this.form.get('timeout').value,
-      } as unknown) as Trigger;
+      });
+
       this.response.emit(trigger);
+      this.form.reset();
     }
   }
 }
