@@ -1,5 +1,6 @@
 /* -- Radio and checkboxes Copiado de paper-bootstrap -- */
 select {
+  padding: 10px 0;
   background-color: transparent;
   border: none !important;
   border-bottom: solid 1px #dddddd !important;
@@ -106,7 +107,6 @@ input[type='text'],
 input[type='password'],
 input[type='email'],
 input[type='number'] {
-  padding: 0;
   border: none;
   border-radius: 0;
   -webkit-appearance: none;

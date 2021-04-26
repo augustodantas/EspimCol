@@ -1,0 +1,44 @@
+<div class="col" [formGroup]="form">
+  <div class="form-group" formArrayName="days" *ngFor="let weekDay of weeklyDays; index as i">
+    <div class="row">
+      <div class="col-2">
+        <div class="form-check mb-2">
+          <input
+            class="form-check-input"
+            [checked]="weekDay.hours && weekDay.hours.length > 0"
+            (change)="selectWeekDay($event, weekDay)"
+            [formControlName]="i"
+            type="checkbox"
+            [id]="weekDay.alias"
+            [name]="weekDay.alias"
+          />
+          <label class="form-check-label" [for]="weekDay.alias">{{ weekDay.name }}</label>
+        </div>
+      </div>
+      <div class="col">
+        <a (click)="addHour(weekDay)" href="javascript:" class="primary">+ Horário</a>
+        <esm-row-hour
+          #rowHour
+          (removeHour)="removeHour(weekDay, j)"
+          (response)="updateHour($event, weekDay, j)"
+          [weekDay]="weekDay"
+          [hour]="hour"
+          [index]="j"
+          *ngFor="let hour of weekDay.hours; index as j"
+        ></esm-row-hour>
+      </div>
+    </div>
+  </div>
+  <input-validations
+    *ngIf="form.controls['days'].invalid && form.controls['days'].touched"
+    [errors]="form.controls['days'].errors"
+    label="Dia da semana"
+  >
+  </input-validations>
+</div>
+
+<div class="row justify-content-end mt-5">
+  <div class="col-auto">
+    <button type="submit" name="saveButton" class="btn btn-primary min-100" (click)="submit()">ADICIONAR DISPARO</button>
+  </div>
+</div>

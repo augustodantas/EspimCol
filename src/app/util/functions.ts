@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable prefer-arrow/prefer-arrow-functions */
 import { HttpResponse } from '@angular/common/http';
+import { AbstractControl } from '@angular/forms';
 
 /**
  * Determines if a reference is an `Array`.
@@ -65,10 +66,7 @@ export function isDefined(value: any): boolean {
  * @param value Reference to check.
  */
 export function isError(value: any): value is Error {
-  return (
-    Object.prototype.toString.call(value) === '[object Error]' ||
-    value instanceof Error
-  );
+  return Object.prototype.toString.call(value) === '[object Error]' || value instanceof Error;
 }
 
 /**
@@ -145,10 +143,7 @@ export function isObject(value: any): value is object {
  * @param value Reference to check.
  */
 export function isPlainObject(value: any): value is object {
-  return (
-    isObject(value) &&
-    Object.prototype.toString.call(value) === '[object Object]'
-  );
+  return isObject(value) && Object.prototype.toString.call(value) === '[object Object]';
 }
 
 /**
@@ -195,17 +190,8 @@ export function isUndefined(value: any): value is undefined {
  * @param prefix Prefix to start.
  * @param inDeep Serialize in deep properties
  */
-export function serializeParamsDatatable(
-  obj: any,
-  prefix: string = null,
-  inDeep: boolean = true
-): string {
-  if (
-    isArray(obj['order']) &&
-    obj['order']?.length &&
-    isArray(obj['columns']) &&
-    obj['columns']?.length
-  ) {
+export function serializeParamsDatatable(obj: any, prefix: string = null, inDeep: boolean = true): string {
+  if (isArray(obj['order']) && obj['order']?.length && isArray(obj['columns']) && obj['columns']?.length) {
     let columnOrder = obj?.order[0]?.column;
     if (obj?.columns[columnOrder]?.name === 'dt-responsive') {
       columnOrder++;
@@ -230,9 +216,7 @@ export function serializeParamsDatatable(
         !isNullOrUndefined(v) && isObject(v)
           ? inDeep && Array.isArray(v)
             ? serializeParamsDatatable(v, k, false)
-            : `${encodeURIComponent(k)}=${encodeURIComponent(
-                isDate(v) ? v.toISOString() : JSON.stringify(v)
-              )}`
+            : `${encodeURIComponent(k)}=${encodeURIComponent(isDate(v) ? v.toISOString() : JSON.stringify(v))}`
           : `${encodeURIComponent(k)}=${encodeURIComponent(v)}`
       );
 
@@ -317,3 +301,11 @@ export function removeEmptyValues(obj: any): void {
     });
   }
 }
+
+export const minLengthArray = (min: number) => {
+  return (c: AbstractControl): { [key: string]: any } => {
+    if (c.value.filter(Boolean).length >= min) return null;
+
+    return { MinLengthArray: true };
+  };
+};

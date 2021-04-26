@@ -14,6 +14,11 @@ import { ProgramsListComponent } from './list/programslist.component';
 import { ProgramsRoutingModule } from './programs-routing.module';
 import { PassiveEventComponent } from './add/step4/passive-event/passive-event.component';
 import { SensorsComponent } from './add/step4/sensors/sensors.component';
+import { TriggersComponent } from './add/step4/triggers/triggers.component';
+import { TriggerDailyComponent } from './add/step4/triggers/trigger-daily/trigger-daily.component';
+import { TriggerWeeklyComponent } from './add/step4/triggers/trigger-weekly/trigger-weekly.component';
+import { TriggerCustomComponent } from './add/step4/triggers/trigger-custom/trigger-custom.component';
+import { RowHourComponent } from './add/step4/triggers/trigger-custom/row-hour/row-hour.component';
 
 // imports from dependencies
 
@@ -29,6 +34,11 @@ import { SensorsComponent } from './add/step4/sensors/sensors.component';
     UserCheckBoxComponent,
     PassiveEventComponent,
     SensorsComponent,
+    TriggersComponent,
+    TriggerDailyComponent,
+    TriggerWeeklyComponent,
+    TriggerCustomComponent,
+    RowHourComponent,
   ],
   imports: [SharedModule, ComponentsModule, ProgramsRoutingModule, CommonModule],
   exports: [],

@@ -1,0 +1,65 @@
+<div class="col" [formGroup]="form">
+  <div class="form-group" formArrayName="days">
+    <div class="form-check mb-2" *ngFor="let weekDay of weeklyDays; index as i">
+      <input class="form-check-input" [formControlName]="i" type="checkbox" [id]="weekDay.alias" [name]="weekDay.alias" />
+      <label class="form-check-label" [for]="weekDay.alias">{{ weekDay.name }}</label>
+    </div>
+    <input-validations
+      *ngIf="form.controls['days'].invalid && form.controls['days'].touched"
+      [errors]="form.controls['days'].errors"
+      label="Dia da semana"
+    >
+    </input-validations>
+  </div>
+
+  <div class="form-group">
+    <label for="time">Horário:</label>
+    <timepicker formControlName="time"></timepicker>
+    <input-validations
+      *ngIf="form.controls['time'].invalid && form.controls['time'].touched"
+      [errors]="form.controls['time'].errors"
+      label="Horário"
+    >
+    </input-validations>
+  </div>
+
+  <div class="row">
+    <div class="col-4">
+      <div class="form-group">
+        <select class="w-100" formControlName="notificationType">
+          <option value="">Selecione o tipo do som</option>
+          <option [value]="notificationType.alias" *ngFor="let notificationType of notificationTypes">{{ notificationType.name }}</option>
+        </select>
+        <input-validations
+          *ngIf="form.controls['notificationType'].invalid && form.controls['notificationType'].touched"
+          [errors]="form.controls['notificationType'].errors"
+          label="Tipo de som"
+        >
+        </input-validations>
+      </div>
+
+      <div class="form-group">
+        <label for="timeout">Tempo de exibição do alerta:</label>
+        <input
+          type="number"
+          placeholder="Valor em minutos"
+          name="timeout"
+          formControlName="timeout"
+          class="form-control-plaintext border-bottom w-100"
+        />
+        <input-validations
+          *ngIf="form.controls['timeout'].invalid && form.controls['timeout'].touched"
+          [errors]="form.controls['timeout'].errors"
+          label="Tempo de exibição do alerta"
+        >
+        </input-validations>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row justify-content-end mt-5">
+  <div class="col-auto">
+    <button type="submit" name="saveButton" class="btn btn-primary min-100" (click)="submit()">ADICIONAR DISPARO</button>
+  </div>
+</div>

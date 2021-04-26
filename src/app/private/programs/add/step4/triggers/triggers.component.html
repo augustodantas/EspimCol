@@ -1,0 +1,35 @@
+<div class="card">
+  <div class="card-body" [formGroup]="form">
+    <div class="row">
+      <div class="col-auto">
+        <p>Adicionar disparo:</p>
+        <div class="form-check mb-2" *ngFor="let choice of choices">
+          <input
+            class="form-check-input"
+            formControlName="selectedChoice"
+            [value]="choice"
+            type="radio"
+            [id]="choice.alias"
+            name="selectedChoice"
+          />
+          <label class="form-check-label" [for]="choice.alias">{{ choice.name }}</label>
+        </div>
+      </div>
+      <div class="col" *ngIf="form.get('selectedChoice').value.alias">
+        <div class="py-4 px-3 holder-boxes">
+          <div class="box-daily" *ngIf="form.get('selectedChoice').value.alias == 'daily'">
+            <esm-trigger-daily></esm-trigger-daily>
+          </div>
+
+          <div class="box-weekly" *ngIf="form.get('selectedChoice').value.alias == 'weekly'">
+            <esm-trigger-weekly></esm-trigger-weekly>
+          </div>
+
+          <div class="box-custom" *ngIf="form.get('selectedChoice').value.alias == 'custom'">
+            <esm-trigger-custom></esm-trigger-custom>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

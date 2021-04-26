@@ -1,0 +1,49 @@
+<div class="row" [formGroup]="form">
+  <div class="col form-group">
+    <label for="time">Horário:</label>
+    <timepicker formControlName="time"></timepicker>
+    <input-validations
+      *ngIf="form.controls['time'].invalid && form.controls['time'].touched"
+      [errors]="form.controls['time'].errors"
+      label="Horário"
+    >
+    </input-validations>
+  </div>
+
+  <div class="col form-group">
+    <label for="notificationType">Tipo de som:</label>
+
+    <select class="w-100" formControlName="notificationType">
+      <option value="">Selecione o tipo do som</option>
+      <option [value]="notificationType.alias" *ngFor="let notificationType of notificationTypes">
+        {{ notificationType.name }}
+      </option>
+    </select>
+    <input-validations
+      *ngIf="form.controls['notificationType'].invalid && form.controls['notificationType'].touched"
+      [errors]="form.controls['notificationType'].errors"
+      label="Tipo de som"
+    >
+    </input-validations>
+  </div>
+
+  <div class="col form-group">
+    <label for="timeout">Tempo de exibição do alerta:</label>
+    <input
+      type="number"
+      formControlName="timeout"
+      placeholder="Valor em minutos"
+      name="timeout"
+      class="form-control-plaintext border-bottom w-100"
+    />
+    <input-validations
+      *ngIf="form.controls['timeout'].invalid && form.controls['timeout'].touched"
+      [errors]="form.controls['timeout'].errors"
+      label="Tempo de exibição do alerta"
+    >
+    </input-validations>
+  </div>
+  <div class="col col-auto">
+    <a (click)="remove()" href="javascript:" class="btn btn-sm btn-danger"><i class="fas fa-times"></i></a>
+  </div>
+</div>
