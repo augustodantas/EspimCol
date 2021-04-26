@@ -1,8 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { Event } from 'src/app/private/models/event.model';
 import { Sensor } from 'src/app/private/models/sensor.model';
+import { Trigger } from 'src/app/private/models/trigger.model';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -20,6 +21,7 @@ export class PassiveEventComponent implements OnInit {
     title: ['', Validators.required],
     description: this.formBuilder.control(''),
     sensors: this.formBuilder.control([]),
+    triggers: this.formBuilder.array([]),
   });
 
   constructor(private formBuilder: FormBuilder) {}
@@ -28,12 +30,22 @@ export class PassiveEventComponent implements OnInit {
     if (!this.event.id) {
       this.isOpen = true;
     }
-
-    console.log(this.form);
   }
 
   updateFormSensors(sensors: Sensor[]) {
     this.form.get('sensors').setValue(sensors);
+  }
+
+  adicionarTrigger(value: Trigger): void {
+    this.triggerFormArray.push(this.formBuilder.control(value));
+  }
+
+  removerTrigger(index: number): void {
+    this.triggerFormArray.removeAt(index);
+  }
+
+  get triggerFormArray(): FormArray {
+    return this.form.get('triggers') as FormArray;
   }
 
   deleteEvent() {

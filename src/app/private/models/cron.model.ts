@@ -1,3 +1,5 @@
+import { Day } from './date.model';
+
 export class Cron {
   private seconds: string;
   private minutes: string;
@@ -19,19 +21,29 @@ export class Cron {
     this.year = cronArray[6];
   }
 
-  getMinute() { return this.minutes; }
-  setMinute(minute: string) { this.minutes = minute; }
-  getHours() { return this.hours; }
-  setHour(hours: string) { this.hours = hours; }
-  getDow() { return this.dow; }
+  getMinute() {
+    return this.minutes;
+  }
+  setMinute(minute: string) {
+    this.minutes = minute;
+  }
+  getHours() {
+    return this.hours;
+  }
+  setHour(hours: string) {
+    this.hours = hours;
+  }
+  getDow() {
+    return this.dow;
+  }
 
   isDayActive(day?: string) {
-    if (day) return !!this.dow.find(value => value === day);
+    if (day) return !!this.dow.find((value) => value === day);
     else return this.dow.length === 7;
   }
   actOrDeactivateDay(day?: string) {
     if (day) {
-      const dayIndex = this.dow.findIndex(value => value === day);
+      const dayIndex = this.dow.findIndex((value) => value === day);
       if (dayIndex === -1) {
         this.dow.push(day);
         this.dow.sort();
@@ -43,5 +55,28 @@ export class Cron {
     }
   }
 
-  toString() { return `${this.seconds} ${this.minutes} ${this.hours} ${this.dom} ${this.month} ${this.dow} ${this.year}`; }
+  activeDay(day?: Day) {
+    const dayIndex = this.dow.findIndex((value) => value === day.cronName);
+    if (dayIndex === -1) {
+      this.dow.push(day.cronName);
+      this.dow.sort();
+    }
+  }
+
+  convertFromForm(time: Date, days: Day[] = []) {
+    if (!time || !(time instanceof Date)) {
+      return '';
+    }
+
+    this.setHour(time.getHours().toString());
+    this.setMinute(time.getMinutes().toString());
+
+    days.forEach((day: Day) => {
+      this.activeDay(day);
+    });
+  }
+
+  toString() {
+    return `${this.seconds} ${this.minutes} ${this.hours} ${this.dom} ${this.month} ${this.dow} ${this.year}`;
+  }
 }

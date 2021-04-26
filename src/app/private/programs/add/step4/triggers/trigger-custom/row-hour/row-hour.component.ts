@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Hour } from 'src/app/private/models/hour.model';
+import { Day, Hour } from 'src/app/private/models/date.model';
 import { NOTIFICATIONS_TYPES } from 'src/app/private/programs/constants';
 
 @Component({
@@ -9,8 +9,8 @@ import { NOTIFICATIONS_TYPES } from 'src/app/private/programs/constants';
   styleUrls: ['./row-hour.component.scss'],
 })
 export class RowHourComponent implements OnInit {
-  @Input() weekDay: any;
-  @Input() hour: any;
+  @Input() weekDay: Day;
+  @Input() hour: Hour;
   @Input() index: number;
   @Output() removeHour: EventEmitter<number> = new EventEmitter<number>();
   @Output() response: EventEmitter<Hour> = new EventEmitter<Hour>();
@@ -39,5 +39,9 @@ export class RowHourComponent implements OnInit {
     this.form.markAllAsTouched();
 
     return this.form.valid;
+  }
+
+  resetForm(): void {
+    this.form.reset();
   }
 }

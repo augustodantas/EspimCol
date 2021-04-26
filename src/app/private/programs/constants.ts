@@ -1,3 +1,5 @@
+import { Day } from '../models/date.model';
+
 export const LETRAS_FILTRO: string[] = [
   '*',
   'A',
@@ -68,39 +70,46 @@ export const NOTIFICATIONS_TYPES: any[] = [
   },
 ];
 
-export const WEEKLY_DAYS: any[] = [
+export const WEEKLY_DAYS: Day[] = [
   {
     alias: 'sunday',
+    cronName: 'SUN',
     name: 'Domingo',
     hours: [],
   },
   {
     alias: 'monday',
+    cronName: 'MON',
     name: 'Segunda',
     hours: [],
   },
   {
     alias: 'tuesday',
+    cronName: 'TUE',
     name: 'Terça-feira',
     hours: [],
   },
   {
     alias: 'wednesday',
+    cronName: 'WED',
     name: 'Quarta-feira',
     hours: [],
   },
   {
     alias: 'thursday',
+    cronName: 'THU',
     name: 'Quinta-feira',
     hours: [],
   },
   {
     alias: 'friday',
+    cronName: 'FRI',
     name: 'Sexta-feira',
     hours: [],
   },
   {
     alias: 'saturday',
+    cronName: 'SAT',
     name: 'Sábado',
     hours: [],
   },

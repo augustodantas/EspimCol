@@ -18,15 +18,15 @@
       <div class="col" *ngIf="form.get('selectedChoice').value.alias">
         <div class="py-4 px-3 holder-boxes">
           <div class="box-daily" *ngIf="form.get('selectedChoice').value.alias == 'daily'">
-            <esm-trigger-daily></esm-trigger-daily>
+            <esm-trigger-daily (response)="addTrigger($event)"></esm-trigger-daily>
           </div>
 
           <div class="box-weekly" *ngIf="form.get('selectedChoice').value.alias == 'weekly'">
-            <esm-trigger-weekly></esm-trigger-weekly>
+            <esm-trigger-weekly (response)="addTrigger($event)"></esm-trigger-weekly>
           </div>
 
           <div class="box-custom" *ngIf="form.get('selectedChoice').value.alias == 'custom'">
-            <esm-trigger-custom></esm-trigger-custom>
+            <esm-trigger-custom (response)="addTriggers($event)"></esm-trigger-custom>
           </div>
         </div>
       </div>

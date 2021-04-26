@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NOTIFICATIONS_TYPES } from 'src/app/private/programs/constants';
+import { Cron } from 'src/app/private/models/cron.model';
+import { Trigger } from 'src/app/private/models/trigger.model';
+import { NOTIFICATIONS_TYPES, WEEKLY_DAYS } from 'src/app/private/programs/constants';
 import { minLengthArray } from 'src/app/util/functions';
 
 @Component({
@@ -9,6 +11,8 @@ import { minLengthArray } from 'src/app/util/functions';
   styleUrls: ['./trigger-weekly.component.scss'],
 })
 export class TriggerWeeklyComponent {
+  @Output() response: EventEmitter<Trigger> = new EventEmitter<Trigger>();
+
   form: FormGroup = this.formBuilder.group({
     time: ['', Validators.required],
     notificationType: ['', Validators.required],
@@ -16,36 +20,7 @@ export class TriggerWeeklyComponent {
     days: this.formBuilder.array([], minLengthArray(1)),
   });
 
-  weeklyDays: any[] = [
-    {
-      alias: 'sunday',
-      name: 'Domingo',
-    },
-    {
-      alias: 'monday',
-      name: 'Segunda',
-    },
-    {
-      alias: 'tuesday',
-      name: 'Terça-feira',
-    },
-    {
-      alias: 'wednesday',
-      name: 'Quarta-feira',
-    },
-    {
-      alias: 'thursday',
-      name: 'Quinta-feira',
-    },
-    {
-      alias: 'friday',
-      name: 'Sexta-feira',
-    },
-    {
-      alias: 'saturday',
-      name: 'Sábado',
-    },
-  ];
+  weeklyDays: any[] = WEEKLY_DAYS;
   notificationTypes: any[] = NOTIFICATIONS_TYPES;
 
   constructor(private formBuilder: FormBuilder) {
@@ -55,11 +30,21 @@ export class TriggerWeeklyComponent {
   }
 
   submit(): void {
-    let diasSelecionados = this.weeklyDays.filter((v, i) => this.form.controls.days.value[i]);
     this.form.markAllAsTouched();
 
-    this.form.valid;
+    if (this.form.valid) {
+      let diasSelecionados = this.weeklyDays.filter((v, i) => this.form.controls.days.value[i]);
+      let cron = new Cron();
+      cron.convertFromForm(this.form.get('time').value, diasSelecionados);
 
-    console.log(this.form);
+      this.form.reset();
+
+      let trigger = ({
+        condition: cron.toString(),
+        priority: this.form.get('notificationType').value,
+        timeout: this.form.get('timeout').value,
+      } as unknown) as Trigger;
+      this.response.emit(trigger);
+    }
   }
 }

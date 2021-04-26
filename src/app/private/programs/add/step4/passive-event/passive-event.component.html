@@ -57,7 +57,11 @@
       <div class="col form-group">
         <p class="font-weight-bold">Disparos cadastrados</p>
 
-        <esm-triggers></esm-triggers>
+        <div *ngFor="let trigger of form.get('triggers').value">
+          {{ trigger }}
+        </div>
+
+        <esm-triggers (response)="adicionarTrigger($event)"></esm-triggers>
       </div>
     </div>
   </form>

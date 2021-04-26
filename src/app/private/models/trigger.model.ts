@@ -1,30 +1,19 @@
 import { Cron } from './cron.model';
 
 export class Trigger {
-  private id: number;
-  private triggerType: string;
-  private triggerCondition: Cron | string;
-  private priority: string;
-  private timeOut: number;
+  id: number;
+  condition: Cron | string;
+  priority: string;
+  timeOut: number;
 
-  constructor(trigger: any = {}) {
-    this.id = trigger.id || -1;
-
-    this.triggerType = trigger.triggerType || 'time';
-
-    if (this.triggerType === 'time') this.triggerCondition = new Cron(trigger.triggerCondition);
-    else this.triggerCondition = trigger.triggerCondition;
-
-    this.priority = trigger.priority;
-    this.timeOut = trigger.timeOut;
-  }
+  constructor(trigger: any = {}) {}
 
   getDescription() {
     const dowNames = ['', 'domingos', 'segundas', 'terças', 'quartas', 'quintas', 'sextas', 'sábados'];
     let ans;
 
-    if (this.triggerCondition instanceof Cron) {
-      const dow = this.triggerCondition.getDow();
+    if (this.condition instanceof Cron) {
+      const dow = this.condition.getDow();
       if (dow.length === 0) return 'Nenhum dia selecionado. Antes de modificar selecione ao menos algum dia.';
       else if (dow.length < 7) {
         if (dow[0] === '1' || dow[0] === '7') ans = 'Todas os ';
@@ -50,7 +39,7 @@ export class Trigger {
       else if (this.priority === 'NL') ans += 'uma notificação longa ';
       else if (this.priority === 'AL') ans += 'um alarme ';
 
-      if (this.getHour() && this.getMinutes()) ans += 'às ' + this.triggerCondition.getHours() + ':' + this.triggerCondition.getMinute();
+      if (this.getHour() && this.getMinutes()) ans += 'às ' + this.condition.getHours() + ':' + this.condition.getMinute();
     } else ans = 'Manual';
 
     return ans;
@@ -58,11 +47,9 @@ export class Trigger {
   getId() {
     return this.id;
   }
-  getTriggerType() {
-    return this.triggerType;
-  }
+
   getTriggerCondition() {
-    return this.triggerCondition;
+    return this.condition;
   }
   getPriority() {
     return this.priority;
@@ -82,37 +69,22 @@ export class Trigger {
   }
 
   isDayActive(day?: string) {
-    if (this.triggerCondition instanceof Cron) return this.triggerCondition.isDayActive(day);
+    if (this.condition instanceof Cron) return this.condition.isDayActive(day);
   }
   actOrDeactivateDay(day?: string) {
-    if (this.triggerCondition instanceof Cron) this.triggerCondition.actOrDeactivateDay(day);
+    if (this.condition instanceof Cron) this.condition.actOrDeactivateDay(day);
   }
 
   getMinutes() {
-    if (this.triggerCondition instanceof Cron) return Number.parseInt(this.triggerCondition.getMinute());
+    if (this.condition instanceof Cron) return Number.parseInt(this.condition.getMinute());
   }
   setMinute(minutes: number) {
-    if (this.triggerCondition instanceof Cron && minutes) this.triggerCondition.setMinute(minutes.toString());
+    if (this.condition instanceof Cron && minutes) this.condition.setMinute(minutes.toString());
   }
   getHour() {
-    if (this.triggerCondition instanceof Cron) return Number.parseInt(this.triggerCondition.getHours());
+    if (this.condition instanceof Cron) return Number.parseInt(this.condition.getHours());
   }
   setHour(hour: number) {
-    if (this.triggerCondition instanceof Cron && hour) this.triggerCondition.setHour(hour.toString());
-  }
-
-  changeType() {
-    console.log('Begin changeType');
-    if (this.triggerType === 'time') {
-      this.triggerType = 'manual';
-      this.triggerCondition = 'manual';
-      this.priority = 'manual';
-      this.timeOut = 0;
-    } else {
-      this.triggerType = 'time';
-      this.triggerCondition = new Cron();
-      this.priority = '';
-    }
-    console.log('End changeType');
+    if (this.condition instanceof Cron && hour) this.condition.setHour(hour.toString());
   }
 }

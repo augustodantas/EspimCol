@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Cron } from 'src/app/private/models/cron.model';
+import { Trigger } from 'src/app/private/models/trigger.model';
 import { NOTIFICATIONS_TYPES } from 'src/app/private/programs/constants';
 
 @Component({
@@ -8,6 +10,8 @@ import { NOTIFICATIONS_TYPES } from 'src/app/private/programs/constants';
   styleUrls: ['./trigger-daily.component.scss'],
 })
 export class TriggerDailyComponent implements OnInit {
+  @Output() response: EventEmitter<Trigger> = new EventEmitter<Trigger>();
+
   form: FormGroup = this.formBuilder.group({
     time: ['', Validators.required],
     notificationType: ['', Validators.required],
@@ -22,8 +26,19 @@ export class TriggerDailyComponent implements OnInit {
 
   submit(): void {
     this.form.markAllAsTouched();
+
     if (this.form.valid) {
-      console.log('DISPAROU');
+      let cron = new Cron();
+      cron.convertFromForm(this.form.get('time').value);
+
+      this.form.reset();
+
+      let trigger = ({
+        condition: cron.toString(),
+        priority: this.form.get('notificationType').value,
+        timeout: this.form.get('timeout').value,
+      } as unknown) as Trigger;
+      this.response.emit(trigger);
     }
   }
 }
