@@ -4,14 +4,13 @@ export class Trigger {
   id: number;
   condition: Cron;
   priority: string;
-  timeOut: number;
+  timeout: number;
 
   constructor(trigger: any = {}) {
     this.id = trigger.id || null;
     this.condition = new Cron(trigger.condition);
     this.priority = trigger.priority;
-    this.timeOut = trigger.timeOut;
-    console.log(trigger);
+    this.timeout = trigger.timeout;
   }
 
   getDescription() {
@@ -63,14 +62,14 @@ export class Trigger {
     this.priority = priority;
   }
   getTimeOut() {
-    return this.timeOut;
+    return this.timeout;
   }
   getTimeOutInMinutes() {
-    return this.timeOut / 60000;
+    return this.timeout / 60000;
   }
-  setTimeOutInMinutes(timeOut: number | string) {
-    if (typeof timeOut === 'string') timeOut = Number.parseInt(timeOut);
-    this.timeOut = timeOut * 60000;
+  setTimeOutInMinutes(timeout: number | string) {
+    if (typeof timeout === 'string') timeout = Number.parseInt(timeout);
+    this.timeout = timeout * 60000;
   }
 
   isDayActive(day?: string) {

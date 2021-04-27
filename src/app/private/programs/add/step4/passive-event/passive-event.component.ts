@@ -19,8 +19,9 @@ export class PassiveEventComponent implements OnInit {
 
   form: FormGroup = this.formBuilder.group({
     title: ['', Validators.required],
+    color: this.formBuilder.control(''),
     description: this.formBuilder.control(''),
-    sensors: this.formBuilder.control([]),
+    sensors: this.formBuilder.array([]),
     triggers: this.formBuilder.array([]),
   });
 
@@ -33,11 +34,20 @@ export class PassiveEventComponent implements OnInit {
 
     if (this.event) {
       this.form.patchValue(this.event);
+      // Adiciona as triggers e sensors ao evento
+      this.event.triggers.forEach((it) => this.adicionarTrigger(new Trigger(it)));
+      console.log(this.event);
+      this.event.sensors.forEach((it) => this.adicionarSensor(it as Sensor));
     }
   }
 
   updateFormSensors(sensors: Sensor[]) {
-    this.form.get('sensors').setValue(sensors);
+    this.sensorFormArray.clear();
+    sensors.forEach((it) => this.adicionarSensor(it));
+  }
+
+  adicionarSensor(sensor: Sensor) {
+    this.sensorFormArray.push(this.formBuilder.control(sensor));
   }
 
   adicionarTrigger(value: Trigger): void {
@@ -50,6 +60,14 @@ export class PassiveEventComponent implements OnInit {
 
   get triggerFormArray(): FormArray {
     return this.form.get('triggers') as FormArray;
+  }
+
+  get sensorFormArray(): FormArray {
+    return this.form.get('sensors') as FormArray;
+  }
+
+  get formValue(): any {
+    return this.form.value;
   }
 
   deleteEvent() {

@@ -1,15 +1,20 @@
 <div class="row justify-content-between">
   <div class="col form-group" *ngFor="let sensor of sensors; index as i">
     <p>{{ sensor.name }}</p>
-    <div class="form-check" *ngFor="let collector of colletors">
+    <div class="form-check" *ngFor="let collector of collectors">
       <input
         class="form-check-input"
         type="radio"
-        (change)="changeSensor(sensor, collector)"
+        (change)="changeSensor()"
+        [(ngModel)]="sensor.value"
+        [value]="collector.alias"
         [id]="sensor.alias + collector.name + uid"
-        [name]="sensor.alias"
+        [name]="sensor.alias + uid"
       />
       <label class="form-check-label" [for]="sensor.alias + collector.name + uid">{{ collector.name }}</label>
+    </div>
+    <div class="clearfix mt-2">
+      <a (click)="clearValue(sensor)" href="javascript:" class="primary" *ngIf="sensor.value">limpar</a>
     </div>
   </div>
 </div>

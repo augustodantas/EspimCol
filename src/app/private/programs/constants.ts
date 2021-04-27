@@ -29,18 +29,21 @@ export const LETRAS_FILTRO: string[] = [
   'Z',
 ];
 
-export const SENSORS: any[] = [
+export const SENSORS_LIST: any[] = [
   {
     alias: 'activity',
     name: 'Atividades',
+    value: null,
   },
   {
     alias: 'location',
     name: 'Localização',
+    value: null,
   },
   {
     alias: 'measure_use',
     name: 'Utilização do dispositivo',
+    value: null,
   },
 ];
 

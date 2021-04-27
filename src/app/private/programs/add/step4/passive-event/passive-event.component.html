@@ -1,6 +1,6 @@
 <div class="card box-event mt-4">
-  <div class="card-header box-header justify-content-between d-flex bg-primary" [ngStyle]="{ 'background-color': event.color }">
-    {{ event.title ? event.title : 'Nova Coleta por Sensor' }}
+  <div class="card-header box-header justify-content-between d-flex bg-primary" [ngStyle]="{ 'background-color': formValue.color }">
+    {{ formValue.title ? formValue.title : 'Nova Coleta por Sensor' }}
     <div class="box-buttons">
       <a class="btn btn-default btn-sm text-white" (click)="loadDetail()"><i class="fas fa-edit"></i></a>
       <a class="btn btn-default btn-sm text-white" (click)="deleteEvent()"><i class="fas fa-trash-alt"></i></a>
@@ -10,11 +10,20 @@
     <div class="row">
       <div class="col">
         Disparos:
-        <span *ngIf="form.get('triggers').value.length == 0" class="text-danger">Não há disparos adicionados.</span>
+        <span *ngIf="formValue.triggers.length == 0" class="text-danger">Não há disparos adicionados.</span>
+        <span *ngIf="formValue.triggers.length > 0">
+          {{ formValue.triggers[0].getDescription() }}
+          <span *ngIf="formValue.triggers.length > 1"
+            >e mais {{ formValue.triggers.length - 1 }} disparo<span *ngIf="formValue.triggers.length > 2">s</span></span
+          >
+        </span>
       </div>
       <div class="col">
         Sensores:
         <span *ngIf="form.get('sensors').value.length == 0" class="text-danger">Não há sensores adicionados.</span>
+        <span *ngIf="formValue.sensors.length > 0">
+          {{ formValue.sensors.length }} cadastrado<span *ngIf="formValue.sensors.length > 1">s</span>
+        </span>
       </div>
       <a href="javascript:" class="link-abs" (click)="loadDetail()">{{ event.title }}</a>
     </div>
@@ -63,7 +72,7 @@
 
     <div class="clearfix mt-4 mb-4">
       <p class="font-weight-bold">Coletas</p>
-      <esm-sensors (response)="updateFormSensors($event)"></esm-sensors>
+      <esm-sensors [eventSensors]="event.sensors" (response)="updateFormSensors($event)"></esm-sensors>
     </div>
     <div class="row">
       <div class="col form-group">

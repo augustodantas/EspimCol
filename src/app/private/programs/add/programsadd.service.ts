@@ -26,6 +26,7 @@ export class ProgramsAddService {
     this._loaderService.show();
     let params = new HttpParams()
       .append('include[]', 'passiveEvents')
+      .append('include[]', 'passiveEvents.sensors')
       .append('include[]', 'activeEvents')
       .append('include[]', 'users')
       .append('include[]', 'observers.user');
@@ -34,11 +35,6 @@ export class ProgramsAddService {
       .getObject(this.urlPrograms, id, params)
       .pipe(finalize(() => this._loaderService.hide()))
       .subscribe((response) => {
-        // response.data.observers = response.data.observers.data;
-        // response.data.users = response.data.users.data;
-        // response.data.passiveEvents = response.data.passiveEvents.data;
-        // response.data.activeEvents = response.data.activeEvents.data;
-
         this._currentProgramSubject.next(response.data);
       });
   }

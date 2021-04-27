@@ -6,5 +6,4 @@ export class Sensor {
   id: number;
   sensor: string;
   collector: string;
-  sensorType: number;
 }
