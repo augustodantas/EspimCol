@@ -8,17 +8,17 @@ import { StepPanelComponent } from './add/step-panel/step-panel.component';
 import { Step1Component } from './add/step1/step1.component';
 import { Step2Component } from './add/step2/step2.component';
 import { Step3Component } from './add/step3/step3.component';
+import { PassiveEventComponent } from './add/step4/passive-event/passive-event.component';
+import { SensorsComponent } from './add/step4/sensors/sensors.component';
 import { Step4Component } from './add/step4/step4.component';
+import { RowHourComponent } from './add/step4/triggers/trigger-custom/row-hour/row-hour.component';
+import { TriggerCustomComponent } from './add/step4/triggers/trigger-custom/trigger-custom.component';
+import { TriggerDailyComponent } from './add/step4/triggers/trigger-daily/trigger-daily.component';
+import { TriggerWeeklyComponent } from './add/step4/triggers/trigger-weekly/trigger-weekly.component';
+import { TriggersComponent } from './add/step4/triggers/triggers.component';
 import { UserCheckBoxComponent } from './add/user-checkbox/user-checkbox.component';
 import { ProgramsListComponent } from './list/programslist.component';
 import { ProgramsRoutingModule } from './programs-routing.module';
-import { PassiveEventComponent } from './add/step4/passive-event/passive-event.component';
-import { SensorsComponent } from './add/step4/sensors/sensors.component';
-import { TriggersComponent } from './add/step4/triggers/triggers.component';
-import { TriggerDailyComponent } from './add/step4/triggers/trigger-daily/trigger-daily.component';
-import { TriggerWeeklyComponent } from './add/step4/triggers/trigger-weekly/trigger-weekly.component';
-import { TriggerCustomComponent } from './add/step4/triggers/trigger-custom/trigger-custom.component';
-import { RowHourComponent } from './add/step4/triggers/trigger-custom/row-hour/row-hour.component';
 
 // imports from dependencies
 

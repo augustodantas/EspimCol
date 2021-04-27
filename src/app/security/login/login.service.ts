@@ -62,7 +62,7 @@ export class LoginService {
     return this._observerService.fetchUser(ESPIM_REST_Observers + 'me', params).pipe(
       map((response) => {
         this._currentUserSubject.next(response.data);
-        this.userObserver = response.data.observer.data;
+        this.userObserver = response.data.observer;
         return response.data;
       })
     );
@@ -71,7 +71,7 @@ export class LoginService {
   handleAuth(response: any) {
     this.accessToken = response.token;
     this._currentUserSubject.next(response.user);
-    this.userObserver = response.user.observer.data;
+    this.userObserver = response.user.observer;
     this._localStorageService.Set(this._propertyName, response.token);
 
     this.router.navigate(['/private']);

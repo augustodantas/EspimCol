@@ -30,6 +30,10 @@ export class PassiveEventComponent implements OnInit {
     if (!this.event.id) {
       this.isOpen = true;
     }
+
+    if (this.event) {
+      this.form.patchValue(this.event);
+    }
   }
 
   updateFormSensors(sensors: Sensor[]) {
@@ -37,7 +41,6 @@ export class PassiveEventComponent implements OnInit {
   }
 
   adicionarTrigger(value: Trigger): void {
-    console.log(value);
     this.triggerFormArray.push(this.formBuilder.control(value));
   }
 
@@ -64,6 +67,7 @@ export class PassiveEventComponent implements OnInit {
   }
 
   loadDetail() {
+    this.isOpen = !this.isOpen;
     console.log('carregar');
   }
 }

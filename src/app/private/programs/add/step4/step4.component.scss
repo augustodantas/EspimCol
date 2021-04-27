@@ -1,9 +1,25 @@
 .box-event {
   .box-header {
+    position: relative;
     font-weight: bold;
     color: #fff;
     .box-buttons {
+      position: relative;
       margin: -6px -8px -6px;
+      z-index: 1;
+      .btn {
+        &:hover {
+          color: #0a467f !important;
+          background-color: #fff;
+        }
+      }
+    }
+  }
+  .box-link {
+    position: relative;
+    cursor: pointer;
+    &:hover {
+      background-color: #f5f5f5;
     }
   }
 }

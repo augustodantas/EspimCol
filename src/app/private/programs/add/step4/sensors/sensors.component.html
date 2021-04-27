@@ -6,10 +6,10 @@
         class="form-check-input"
         type="radio"
         (change)="changeSensor(sensor, collector)"
-        [id]="sensor.alias + collector.name"
+        [id]="sensor.alias + collector.name + uid"
         [name]="sensor.alias"
       />
-      <label class="form-check-label" [for]="sensor.alias + collector.name">{{ collector.name }}</label>
+      <label class="form-check-label" [for]="sensor.alias + collector.name + uid">{{ collector.name }}</label>
     </div>
   </div>
 </div>

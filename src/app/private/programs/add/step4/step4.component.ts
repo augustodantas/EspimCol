@@ -29,7 +29,6 @@ export class Step4Component implements OnInit {
     this.programAddService.program.subscribe((programInstance: Program) => {
       this.passiveEvents = programInstance.passiveEvents;
       this.activeEvents = programInstance.activeEvents;
-      this.passiveEvents.push(new Event());
     });
   }
 

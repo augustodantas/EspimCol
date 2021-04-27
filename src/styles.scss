@@ -1,6 +1,7 @@
 @import './app/stylesheets/_reset.scss';
 
 @import './app/stylesheets/_labels.scss';
+@import './app/stylesheets/_typography.scss';
 @import './app/stylesheets/_toastr.scss';
 @import './app/stylesheets/_forms.scss';
 @import './app/stylesheets/_buttons.scss';
@@ -154,26 +155,6 @@ table {
   z-index: 2;
   top: 60px;
   left: 49%;
-}
-/* -- Typography -- */
-.text-primary {
-  color: #0a467f !important;
-}
-
-.text-large {
-  font-size: 200%;
-}
-
-.text-nowrap {
-  white-space: nowrap;
-}
-
-.text-black {
-  color: black;
-}
-
-.text-color-inherit {
-  color: inherit;
 }
 
 .medium {

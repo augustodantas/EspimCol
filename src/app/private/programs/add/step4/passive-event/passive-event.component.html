@@ -2,19 +2,33 @@
   <div class="card-header box-header justify-content-between d-flex bg-primary" [ngStyle]="{ 'background-color': event.color }">
     {{ event.title ? event.title : 'Nova Coleta por Sensor' }}
     <div class="box-buttons">
-      <a class="btn btn-default btn-sm"><i class="fas fa-edit text-white"></i></a>
-      <a class="btn btn-default btn-sm" (click)="deleteEvent()"><i class="fas fa-trash-alt text-white"></i></a>
+      <a class="btn btn-default btn-sm text-white" (click)="loadDetail()"><i class="fas fa-edit"></i></a>
+      <a class="btn btn-default btn-sm text-white" (click)="deleteEvent()"><i class="fas fa-trash-alt"></i></a>
     </div>
   </div>
+  <div class="card-body box-link" [collapse]="isOpen">
+    <div class="row">
+      <div class="col">
+        Disparos:
+        <span *ngIf="form.get('triggers').value.length == 0" class="text-danger">Não há disparos adicionados.</span>
+      </div>
+      <div class="col">
+        Sensores:
+        <span *ngIf="form.get('sensors').value.length == 0" class="text-danger">Não há sensores adicionados.</span>
+      </div>
+      <a href="javascript:" class="link-abs" (click)="loadDetail()">{{ event.title }}</a>
+    </div>
+  </div>
+
   <form class="card-body box-body" [formGroup]="form" [collapse]="!isOpen">
     <div class="row">
       <div class="col-6 form-group">
-        <label class="form-label" for="name">Título <b class="text-danger">*</b>:</label>
+        <label class="form-label" [for]="'title' + index">Título <b class="text-danger">*</b>:</label>
         <input
           class="form-control-plaintext border-bottom"
-          name="title"
-          id="title"
+          [id]="'title' + index"
           formControlName="title"
+          focusInput
           type="text"
           placeholder="Título"
         />
@@ -29,11 +43,10 @@
 
     <div class="row">
       <div class="col-12 form-group">
-        <label for="program-description"> Descrição do programa </label>
+        <label [for]="'program-description' + index"> Descrição do programa </label>
         <textarea
           class="form-control-plaintext border-bottom w-100 resize-none"
-          name="program-description"
-          id="program-description"
+          [id]="'program-description' + index"
           rows="2"
           maxlength="200"
           placeholder="Descrição do evento"
@@ -50,7 +63,6 @@
 
     <div class="clearfix mt-4 mb-4">
       <p class="font-weight-bold">Coletas</p>
-
       <esm-sensors (response)="updateFormSensors($event)"></esm-sensors>
     </div>
     <div class="row">

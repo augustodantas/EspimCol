@@ -10,7 +10,7 @@ export class Event {
   type: string = '';
   sensors: Array<Sensor> = [];
   complexConditions;
-  triggers: Array<Trigger>;
+  triggers: Array<Trigger> = [];
 
   constructor(event: any = {}) {}
 }

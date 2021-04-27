@@ -24,16 +24,21 @@ export class ProgramsAddService {
 
   fetchData(id: string) {
     this._loaderService.show();
-    let params = new HttpParams().append('include[]', 'passiveEvents').append('include[]', 'activeEvents').append('include[]', 'users');
+    let params = new HttpParams()
+      .append('include[]', 'passiveEvents')
+      .append('include[]', 'activeEvents')
+      .append('include[]', 'users')
+      .append('include[]', 'observers.user');
 
     this._daoService
       .getObject(this.urlPrograms, id, params)
       .pipe(finalize(() => this._loaderService.hide()))
       .subscribe((response) => {
-        response.data.observers = response.data.observers.data;
-        response.data.users = response.data.users.data;
-        response.data.passiveEvents = response.data.passiveEvents.data;
-        response.data.activeEvents = response.data.activeEvents.data;
+        // response.data.observers = response.data.observers.data;
+        // response.data.users = response.data.users.data;
+        // response.data.passiveEvents = response.data.passiveEvents.data;
+        // response.data.activeEvents = response.data.activeEvents.data;
+
         this._currentProgramSubject.next(response.data);
       });
   }

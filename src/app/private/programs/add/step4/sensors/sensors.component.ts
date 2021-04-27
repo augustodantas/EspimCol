@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { Sensor } from 'src/app/private/models/sensor.model';
+import { v4 as uuid } from 'uuid';
 
 import { COLLECTORS, SENSORS } from '../../../constants';
 
@@ -12,6 +13,7 @@ export class SensorsComponent {
   sensors: any[] = SENSORS;
   colletors: any[] = COLLECTORS;
   selectedSensors: Sensor[] = [];
+  uid: string = uuid();
   @Output() response: EventEmitter<Sensor[]> = new EventEmitter<Sensor[]>();
 
   changeSensor(newSensor: any, collector: any) {

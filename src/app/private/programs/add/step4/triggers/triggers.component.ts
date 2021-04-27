@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Trigger } from 'src/app/private/models/trigger.model';
 
@@ -7,7 +7,7 @@ import { Trigger } from 'src/app/private/models/trigger.model';
   templateUrl: './triggers.component.html',
   styleUrls: ['./triggers.component.scss'],
 })
-export class TriggersComponent implements OnInit {
+export class TriggersComponent {
   @Output() response: EventEmitter<Trigger> = new EventEmitter<Trigger>();
 
   choices: any[] = [
@@ -30,8 +30,6 @@ export class TriggersComponent implements OnInit {
   });
 
   constructor(private formBuilder: FormBuilder) {}
-
-  ngOnInit(): void {}
 
   addTriggers(triggers: Trigger[]): void {
     triggers.forEach((trigger: Trigger) => {
