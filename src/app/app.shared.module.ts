@@ -1,9 +1,9 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
 
 import { FocusInput } from './directives/focus-input';
-import { FormDirective } from './directives/focus-invalid-input';
+import { FocusInvalidInputDirective } from './directives/focus-invalid-input';
 
-const components = [FormDirective, FocusInput];
+const components = [FocusInvalidInputDirective, FocusInput];
 
 @NgModule({
   declarations: [...components],

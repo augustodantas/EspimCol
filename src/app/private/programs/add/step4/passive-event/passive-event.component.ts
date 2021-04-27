@@ -15,6 +15,7 @@ export class PassiveEventComponent implements OnInit {
   @Input() event: Event;
   @Input() events: Event[];
   @Input() index: number;
+
   isOpen: boolean = false;
 
   form: FormGroup = this.formBuilder.group({
@@ -86,6 +87,10 @@ export class PassiveEventComponent implements OnInit {
 
   loadDetail() {
     this.isOpen = !this.isOpen;
-    console.log('carregar');
+  }
+
+  validateForm(): boolean {
+    this.form.markAllAsTouched();
+    return this.form.valid;
   }
 }

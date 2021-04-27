@@ -1,139 +1,85 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntilDestroy } from '@ngneat/until-destroy';
+import { Event } from 'src/app/private/models/event.model';
+import { Trigger } from 'src/app/private/models/trigger.model';
 
-import { ESPIM_REST_Events, ESPIM_REST_Programs } from '../../../../../app.api';
-import { DAOService } from '../../../../dao/dao.service';
-import { ActiveEvent } from '../../../../models/event.model';
-import { Trigger } from '../../../../models/trigger.model';
-import { InterventionService } from '../../../intervention/intervention.service';
-import { ProgramsAddService } from '../../programsadd.service';
-
+@UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'esm-active-event',
   templateUrl: './active-event.component.html',
+  styleUrls: ['./active-event.component.scss', './../step4.component.scss'],
 })
 export class ActiveEventComponent implements OnInit {
-  @Input() event: ActiveEvent;
+  @Input() event: Event;
+  @Input() events: Event[];
+  @Input() index: number;
+  isOpen: boolean = false;
 
-  isOpen = false;
-  isAddEvent = false; // This is only true if this instance is gonna be the one to add
+  form: FormGroup = this.formBuilder.group({
+    title: ['', Validators.required],
+    color: this.formBuilder.control(''),
+    description: this.formBuilder.control(''),
+    triggers: this.formBuilder.array([]),
+  });
 
-  constructor(
-    private programsAddService: ProgramsAddService,
-    private interventionService: InterventionService,
-    private dao: DAOService,
-    private router: Router,
-    private route: ActivatedRoute
-  ) {}
+  constructor(private formBuilder: FormBuilder) {}
 
-  ngOnInit() {
-    if (!this.event) {
-      this.resetEvent();
-      this.isAddEvent = true;
+  ngOnInit(): void {
+    if (!this.event.id) {
+      this.isOpen = true;
+    }
+
+    if (this.event) {
+      this.form.patchValue(this.event);
+      // Adiciona as triggers e sensors ao evento
+      this.event.triggers.forEach((it) => this.adicionarTrigger(new Trigger(it)));
     }
   }
 
-  resetEvent() {
-    this.event = new ActiveEvent();
-    this.event.setType('active');
-    this.isAddEvent = true;
+  adicionarTrigger(value: Trigger): void {
+    this.triggerFormArray.push(this.formBuilder.control(value));
   }
 
-  addEvent() {
-    if (this.isOpen && !this.event.getTitle()) {
-      new SwalComponent({
-        type: 'warning',
-        title: 'Adicione um título',
-      }).show();
-      return;
-    }
-
-    if (this.isOpen)
-      this.dao.postObject(ESPIM_REST_Events, this.event).subscribe((data) => {
-        const event = new ActiveEvent(data);
-
-        this.programsAddService.getEventsId().push(event.getId());
-        this.programsAddService.getEventsInstance().push(event);
-
-        this.dao
-          .patchObject(ESPIM_REST_Programs, {
-            id: this.programsAddService.program.getId(),
-            events: this.programsAddService.getEventsId(),
-          })
-          .subscribe((_) => {
-            this.resetEvent();
-            this.isOpen = !this.isOpen;
-          });
-      });
-    else this.isOpen = !this.isOpen;
+  removerTrigger(index: number): void {
+    this.triggerFormArray.removeAt(index);
   }
-  getEventDetails() {
-    this.requestInterventions();
-    this.requestTriggers();
+
+  get triggerFormArray(): FormArray {
+    return this.form.get('triggers') as FormArray;
   }
-  delete_event() {
-    if (this.isAddEvent) {
+
+  get formValue(): any {
+    return this.form.value;
+  }
+
+  deleteEvent() {
+    if (this.event.id) {
+    } else {
       this.isOpen = !this.isOpen;
-      this.resetEvent();
+      this.form.reset();
+      this.removeEvent(this.event);
       return;
     }
-
-    new SwalComponent({
-      title: 'Deletar evento?',
-      text: `Você tem certeza que deseja deletar ${this.event.getTitle()}?`,
-      type: 'question',
-      showCancelButton: true,
-      confirmButtonText: 'Sim',
-      cancelButtonText: 'Não',
-    })
-      .show()
-      .then((result) => {
-        if (result.value === true) this.programsAddService.delete_event(this.event.getId());
-      });
-  }
-  updateEvent(eventChanges: any) {
-    eventChanges.id = this.event.getId();
-
-    if (!this.isAddEvent) this.dao.patchObject(ESPIM_REST_Events, eventChanges).subscribe();
   }
 
-  addTrigger(trigger: Trigger) {
-    this.event.getTriggersId().push(trigger.getId());
-
-    if (!this.isAddEvent)
-      this.dao
-        .patchObject(ESPIM_REST_Events, {
-          id: this.event.getId(),
-          triggers: this.event.getTriggersId(),
-        })
-        .subscribe(
-          (response) => {
-            this.event.getTriggersInstances().push(trigger);
-          },
-          (error) => {
-            // TODO - Deletar o trigger caso esse patch falhe
-          }
-        );
-    else this.event.getTriggersInstances().push(trigger);
+  removeEvent(event: Event) {
+    this.events.splice(this.index, 1);
   }
 
-  requestInterventions() {
-    if (this.event.getInterventionsId().length === this.event.getInterventionsInstances().length)
-      return this.event.getInterventionsInstances();
-    const interventionsInstances = this.programsAddService.requestInterventions(this.event.getInterventionsId());
-    this.event.setInterventionsInstances(interventionsInstances);
-    return interventionsInstances;
-  }
-  requestTriggers() {
-    if (this.event.getTriggersId().length === this.event.getTriggersInstances().length) return this.event.getTriggersInstances();
-    const triggersInstances = this.programsAddService.requestTriggers(this.event.getTriggersId());
-    this.event.setTriggerInstance(triggersInstances);
-    return triggersInstances;
+  loadDetail() {
+    this.isOpen = !this.isOpen;
+    console.log('carregar');
   }
 
-  goToInterventions() {
-    this.interventionService.init(this.programsAddService.program.id, this.event, this.event.getInterventionsInstances());
-    this.router.navigate([this.event.getId(), 'interventions'], { relativeTo: this.route });
+  validateForm(): boolean {
+    this.form.markAllAsTouched();
+    return this.form.valid;
   }
+
+  updateColor(color: string): void {
+    this.form.get('color').setValue(color);
+  }
+
+  goToInterventions(): void {}
 }

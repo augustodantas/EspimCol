@@ -3,9 +3,10 @@ import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { DAOService } from '../../../dao/dao.service';
-import { Event } from '../../../models/event.model';
+import { ActiveEvent, Event } from '../../../models/event.model';
 import { Program } from '../../../models/program.model';
 import { ProgramsAddService } from '../programsadd.service';
+import { ActiveEventComponent } from './active-event/active-event.component';
 import { PassiveEventComponent } from './passive-event/passive-event.component';
 
 @Component({
@@ -17,6 +18,7 @@ export class Step4Component implements OnInit {
   passiveEvents: Array<Event>;
   activeEvents: Array<Event>;
   @ViewChildren(PassiveEventComponent) passiveEventsComponents: PassiveEventComponent[];
+  @ViewChildren(ActiveEventComponent) activeEventsComponents: ActiveEventComponent[];
 
   constructor(
     private programAddService: ProgramsAddService,
@@ -36,14 +38,29 @@ export class Step4Component implements OnInit {
     this.passiveEvents.push(new Event());
   }
 
+  addActiveEvent() {
+    this.activeEvents.push(new ActiveEvent());
+  }
+
   submit() {
+    let valid = true;
+
     const dados = {
-      activeEvents: [],
+      activeEvents: this.activeEventsComponents.map((eventComponent) => {
+        if (!eventComponent.validateForm()) {
+          valid = false;
+        }
+        return eventComponent.form.value;
+      }),
       passiveEvents: this.passiveEventsComponents.map((eventComponent) => {
+        if (!eventComponent.validateForm()) {
+          valid = false;
+        }
         return eventComponent.form.value;
       }),
     };
 
+    console.log(valid);
     console.log(dados);
 
     // const dados = SENSORS.filter((v, i) => this.passiveEvents.sensors.value[i]).join('; ');

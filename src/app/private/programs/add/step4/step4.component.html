@@ -1,13 +1,22 @@
-<h1>Adicionar eventos</h1>
+<div class="clearfix mt-5">
+  <h1>Adicionar eventos</h1>
+  <div class="clearfix" *ngFor="let event of activeEvents; index as i">
+    <esm-active-event [event]="event" [index]="i" [events]="activeEvents"></esm-active-event>
+  </div>
 
-<div class="mt-4 clearfix" *ngFor="let event of activeEvents; index as i">
-  <!-- <esm-active-event [event]="event" *ngIf="event.getType() === 'active'"></esm-active-event> -->
+  <div class="card box-event mt-4" *ngIf="activeEvents.length == 0">
+    <div class="card-header box-header justify-content-between d-flex bg-primary">Não há eventos cadastrados.</div>
+  </div>
+
+  <div class="clearfix mt-2">
+    <button name="saveButton" class="btn btn-white btn-shadow min-100" (click)="addActiveEvent()">ADICIONAR EVENTO</button>
+  </div>
 </div>
 
 <div class="clearfix mt-5">
   <h1>Adicionar coleta por sensores</h1>
   <div class="clearfix" *ngFor="let event of passiveEvents; index as i">
-    <esm-passive-event #event [event]="event" [index]="i" [events]="passiveEvents"></esm-passive-event>
+    <esm-passive-event [event]="event" [index]="i" [events]="passiveEvents"></esm-passive-event>
   </div>
 
   <div class="card box-event mt-4" *ngIf="passiveEvents.length == 0">

@@ -1,24 +1,31 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
 
-import { ESPIM_REST_Events, ESPIM_REST_Programs, ESPIM_REST_Sensors } from '../../../../../app.api';
+import { ESPIM_REST_Events, ESPIM_REST_Programs } from '../../../../../app.api';
 import { DAOService } from '../../../../dao/dao.service';
-import { Event } from '../../../../models/event.model';
-import { Sensor } from '../../../../models/sensor.model';
+import { ActiveEvent } from '../../../../models/event.model';
 import { Trigger } from '../../../../models/trigger.model';
+import { InterventionService } from '../../../intervention/intervention.service';
 import { ProgramsAddService } from '../../programsadd.service';
 
 @Component({
-  selector: 'esm-event',
-  templateUrl: './event.component.html',
+  selector: 'esm-active-event',
+  templateUrl: './active-event.component.html',
 })
-export class EventComponent implements OnInit {
-  @Input() event: Event;
+export class ActiveEventComponent implements OnInit {
+  @Input() event: ActiveEvent;
 
   isOpen = false;
   isAddEvent = false; // This is only true if this instance is gonna be the one to add
 
-  constructor(private dao: DAOService, private programsAddService: ProgramsAddService) {}
+  constructor(
+    private programsAddService: ProgramsAddService,
+    private interventionService: InterventionService,
+    private dao: DAOService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit() {
     if (!this.event) {
@@ -28,8 +35,8 @@ export class EventComponent implements OnInit {
   }
 
   resetEvent() {
-    this.event = new Event();
-    this.event.setType('passive');
+    this.event = new ActiveEvent();
+    this.event.setType('active');
     this.isAddEvent = true;
   }
 
@@ -44,7 +51,7 @@ export class EventComponent implements OnInit {
 
     if (this.isOpen)
       this.dao.postObject(ESPIM_REST_Events, this.event).subscribe((data) => {
-        const event = new Event(data);
+        const event = new ActiveEvent(data);
 
         this.programsAddService.getEventsId().push(event.getId());
         this.programsAddService.getEventsInstance().push(event);
@@ -61,7 +68,10 @@ export class EventComponent implements OnInit {
       });
     else this.isOpen = !this.isOpen;
   }
-
+  getEventDetails() {
+    this.requestInterventions();
+    this.requestTriggers();
+  }
   delete_event() {
     if (this.isAddEvent) {
       this.isOpen = !this.isOpen;
@@ -82,42 +92,10 @@ export class EventComponent implements OnInit {
         if (result.value === true) this.programsAddService.delete_event(this.event.getId());
       });
   }
-
-  getActivitySensorCollector(): string {
-    const activitySensor = this.event.getSensorOfType('activity');
-    if (activitySensor) return activitySensor.getCollector();
-  }
-  getLocationSensorCollector(): string {
-    const locationSensor = this.event.getSensorOfType('location');
-    if (locationSensor) return locationSensor.getCollector();
-  }
-  getMeasureUseSensorCollector(): string {
-    // tslint:disable-next-line:variable-name
-    const measure_useSensor = this.event.getSensorOfType('measure_use');
-    if (measure_useSensor) return measure_useSensor.getCollector();
-  }
-
-  getEventDetails() {
-    this.requestTriggers();
-    this.requestSensors();
-  }
   updateEvent(eventChanges: any) {
     eventChanges.id = this.event.getId();
 
     if (!this.isAddEvent) this.dao.patchObject(ESPIM_REST_Events, eventChanges).subscribe();
-  }
-  updateSensor(sensorType: string, collector: string) {
-    const sensor = this.event.getSensorOfType(sensorType);
-    if (sensor) {
-      if (sensor.getCollector() === collector)
-        this.dao.deleteObject(ESPIM_REST_Sensors, sensor.getId().toString()).subscribe((_) => this.event.removeCollectorOfType(sensorType));
-      else this.dao.patchObject(ESPIM_REST_Sensors, { id: sensor.getId(), collector }).subscribe((_) => sensor.setCollector(collector));
-    } else
-      this.dao.postObject(ESPIM_REST_Sensors, { sensor: sensorType, collector, sensorType: 0 }).subscribe((data) => {
-        this.event.addSensor(new Sensor(data));
-        if (!this.isAddEvent)
-          this.dao.patchObject(ESPIM_REST_Events, { id: this.event.getId(), sensors: this.event.getSensorsId() }).subscribe();
-      });
   }
 
   addTrigger(trigger: Trigger) {
@@ -140,16 +118,22 @@ export class EventComponent implements OnInit {
     else this.event.getTriggersInstances().push(trigger);
   }
 
+  requestInterventions() {
+    if (this.event.getInterventionsId().length === this.event.getInterventionsInstances().length)
+      return this.event.getInterventionsInstances();
+    const interventionsInstances = this.programsAddService.requestInterventions(this.event.getInterventionsId());
+    this.event.setInterventionsInstances(interventionsInstances);
+    return interventionsInstances;
+  }
   requestTriggers() {
     if (this.event.getTriggersId().length === this.event.getTriggersInstances().length) return this.event.getTriggersInstances();
     const triggersInstances = this.programsAddService.requestTriggers(this.event.getTriggersId());
     this.event.setTriggerInstance(triggersInstances);
     return triggersInstances;
   }
-  requestSensors() {
-    if (this.event.getSensorsId().length === this.event.getSensorsInstance().length) return this.event.getSensorsInstance();
-    const sensorsInstance = this.programsAddService.requestSensors(this.event.getSensorsId());
-    this.event.setSensorsInstances(sensorsInstance);
-    return sensorsInstance;
+
+  goToInterventions() {
+    this.interventionService.init(this.programsAddService.program.id, this.event, this.event.getInterventionsInstances());
+    this.router.navigate([this.event.getId(), 'interventions'], { relativeTo: this.route });
   }
 }

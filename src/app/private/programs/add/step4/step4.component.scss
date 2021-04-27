@@ -1,8 +1,11 @@
 .box-event {
+  box-shadow: 1px 1px 4px rgb(0 0 0 / 40%);
+
   .box-header {
     position: relative;
     font-weight: bold;
     color: #fff;
+    background-color: #0a467f;
     .box-buttons {
       position: relative;
       margin: -6px -8px -6px;
