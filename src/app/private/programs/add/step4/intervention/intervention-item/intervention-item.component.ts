@@ -10,6 +10,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { isNullOrUndefined } from 'src/app/util/functions';
 
 import { HTMLInterventionElement, InterventionService } from '../intervention.service';
 
@@ -37,7 +38,7 @@ export class InterventionItemComponent implements OnInit, AfterViewInit, AfterCo
   constructor(private interventionService: InterventionService) {}
 
   ngOnInit(): void {
-    this.nextInterventionSelect = '0';
+    this.nextInterventionSelect = null;
     this.interventionService.firstInterventionChange$.subscribe((value) => {
       if (this.graphIndex !== value) this.interventionCoordinate.first = false;
     });
@@ -70,7 +71,7 @@ export class InterventionItemComponent implements OnInit, AfterViewInit, AfterCo
     this.nextInterventions = this.interventionService.graphElements;
     // If this intervention isn't of "unique-choice", this intervention will connect to only one other, that's why we only need to take the first connection (interventionElementsGraph[this.graphIndex][0]),
     // if there is no connection, 0. If it is unique-choice, "nextInterventionSelect" will not be used so it doesn't matter
-    this.nextInterventionSelect = this.interventionService.interventionElementsGraph[this.graphIndex][0]?.toString() || '0';
+    this.nextInterventionSelect = this.interventionService.interventionElementsGraph[this.graphIndex][0]?.toString() || null;
   }
 
   interventionCurrentCoordinate() {
@@ -96,10 +97,11 @@ export class InterventionItemComponent implements OnInit, AfterViewInit, AfterCo
 
   setNextTo() {
     const from = this.graphIndex;
-    if (this.nextInterventionSelect === '0') {
+    if (isNullOrUndefined(this.nextInterventionSelect)) {
       this.interventionService.removeEdges(from);
       return;
     }
+
     const to = Number.parseInt(this.nextInterventionSelect);
     this.interventionService.removeEdges(from, false);
     this.interventionService.setNextFromTo(from, to);

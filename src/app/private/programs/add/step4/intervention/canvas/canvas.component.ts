@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { isNullOrUndefined } from 'src/app/util/functions';
 
 import { HTMLInterventionElement, InterventionService } from '../intervention.service';
 
@@ -26,9 +27,7 @@ export class CanvasComponent implements OnInit, AfterViewInit {
   resizeCanvas() {
     var tiledBackground = document.getElementsByClassName('tiled-background')[0];
     this.canvasRef.nativeElement.width = tiledBackground.scrollWidth;
-
     this.canvasRef.nativeElement.height = tiledBackground.scrollHeight - 5;
-    // Canvas get cleared automatically when resized
     // this.clearCanvas();
   }
 
@@ -46,11 +45,13 @@ export class CanvasComponent implements OnInit, AfterViewInit {
     const already_drew: boolean[] = new Array<boolean>(this.interventionService.graphElements.length);
     // Here we make a BFS
     const queue: { intervention: number; orderPosition: number }[] = [];
+
     queue.push({ intervention: this.interventionService.firstIntervention, orderPosition: 1 });
+
     while (queue.length > 0) {
       const { intervention, orderPosition } = queue[0];
       queue.splice(0, 1);
-      if (intervention === undefined || intervention === 0 || intervention === -1) continue;
+      if (isNullOrUndefined(intervention) || intervention === -1) continue;
 
       // Cycle on the BFS
       if (already_drew[intervention]) {
@@ -58,11 +59,14 @@ export class CanvasComponent implements OnInit, AfterViewInit {
         continue;
       }
 
+      console.log(intervention);
+
       this.interventionService.graphElement(intervention).orderPosition = orderPosition;
       already_drew[intervention] = true;
 
       for (const destination of this.interventionService.interventionElementsGraph[intervention]) {
         queue.push({ intervention: destination, orderPosition: orderPosition + 1 });
+        console.log(intervention + '->' + destination);
         this.drawArrow(this.interventionService.graphElement(intervention), this.interventionService.graphElement(destination), true);
       }
 
@@ -85,8 +89,6 @@ export class CanvasComponent implements OnInit, AfterViewInit {
   }
 
   drawArrow(origin: HTMLInterventionElement, destination: HTMLInterventionElement, main: boolean = true) {
-    console.log(origin);
-    console.log(destination);
     if (!origin || !destination) return;
 
     const x_difference = destination.x - origin.x,

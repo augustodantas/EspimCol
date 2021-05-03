@@ -43,8 +43,8 @@ export class InterventionComponent implements OnInit {
     }, 0);
     this.interventionService.newInterventions$.subscribe((add) => this.createIntervention(add.intervention, add.graphIndex));
     this.interventionService.removeIntervention$.subscribe((index) => {
-      this.interventionComponents[index - 1].destroy();
-      this.interventionComponents.splice(index - 1, 1);
+      this.interventionComponents[index].destroy();
+      this.interventionComponents.splice(index, 1);
     });
   }
 

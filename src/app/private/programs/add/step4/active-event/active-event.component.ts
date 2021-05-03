@@ -51,6 +51,8 @@ export class ActiveEventComponent implements OnInit {
       // Adiciona as triggers e sensors ao evento
       this.event.triggers.forEach((it) => this.adicionarTrigger(new Trigger(it)));
     }
+
+    this.goToInterventions();
   }
 
   adicionarTrigger(value: Trigger): void {

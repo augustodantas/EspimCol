@@ -114,7 +114,7 @@ export function isNull(value: any): value is null {
  * @param value Reference to check.
  */
 export function isNullOrUndefined(value: any): value is null {
-  return isNull(value) || isUndefined(value);
+  return isNull(value) || isUndefined(value) || value == 'null' || value == 'undefined';
 }
 
 /**
