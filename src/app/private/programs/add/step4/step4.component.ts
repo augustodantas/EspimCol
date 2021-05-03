@@ -60,9 +60,6 @@ export class Step4Component implements OnInit {
       }),
     };
 
-    console.log(valid);
-    console.log(dados);
-
     // const dados = SENSORS.filter((v, i) => this.passiveEvents.sensors.value[i]).join('; ');
 
     // if (this.programsAddService.getParticipantsInstance() && this.programsAddService.getParticipantsInstance().length > 0) {

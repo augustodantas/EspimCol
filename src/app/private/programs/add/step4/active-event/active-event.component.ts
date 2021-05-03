@@ -1,8 +1,14 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { Event } from 'src/app/private/models/event.model';
+import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
+import { ActiveEvent, Event } from 'src/app/private/models/event.model';
 import { Trigger } from 'src/app/private/models/trigger.model';
+
+import { ProgramsAddService } from '../../programsadd.service';
+import { InterventionComponent } from '../intervention/intervention.component';
+import { InterventionService } from '../intervention/intervention.service';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -11,10 +17,12 @@ import { Trigger } from 'src/app/private/models/trigger.model';
   styleUrls: ['./active-event.component.scss', './../step4.component.scss'],
 })
 export class ActiveEventComponent implements OnInit {
-  @Input() event: Event;
+  @Input() event: ActiveEvent;
   @Input() events: Event[];
   @Input() index: number;
   isOpen: boolean = false;
+  private _modalInterventionRef: BsModalRef;
+  showIntervention: boolean = false;
 
   form: FormGroup = this.formBuilder.group({
     title: ['', Validators.required],
@@ -23,7 +31,15 @@ export class ActiveEventComponent implements OnInit {
     triggers: this.formBuilder.array([]),
   });
 
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private readonly programAddService: ProgramsAddService,
+    private readonly _modalService: BsModalService,
+    private readonly interventionService: InterventionService,
+    private activatedRoute: ActivatedRoute,
+    private chRef: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     if (!this.event.id) {
@@ -81,5 +97,34 @@ export class ActiveEventComponent implements OnInit {
     this.form.get('color').setValue(color);
   }
 
-  goToInterventions(): void {}
+  goToInterventions(): void {
+    const config: ModalOptions<InterventionComponent> = {
+      class: 'modal-fullscreen modal-intervention',
+      keyboard: false,
+      ignoreBackdropClick: true,
+      initialState: {},
+    };
+
+    this.interventionService.init(this.programAddService.programValue.id, this.event, this.event.interventions);
+
+    this._modalInterventionRef = this._modalService.show(InterventionComponent, config);
+
+    // this._modalRef.content.response.pipe(take(1)).subscribe((value: boolean) => {
+    //   if (value) {
+    //     this._loaderService.show();
+    //     this.daoService
+    //       .deleteObject(this.urlParticipants, participant.id.toString())
+    //       .pipe(finalize(() => this._loaderService.hide()))
+    //       .subscribe((resp) => {
+    //         this.handleChange(resp);
+    //         this._toastr.success(resp.message);
+    //       });
+    //   }
+    // });
+  }
+
+  // closeIntervention(): void {
+  //   this.showIntervention = false;
+  //   this.chRef.detectChanges();
+  // }
 }

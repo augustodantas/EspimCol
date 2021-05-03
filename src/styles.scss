@@ -6,6 +6,35 @@
 @import './app/stylesheets/_forms.scss';
 @import './app/stylesheets/_buttons.scss';
 
+// Modal fullscreen
+.modal-fullscreen {
+  max-width: 100% !important;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  .modal-content {
+    height: 100%;
+    width: 100%;
+  }
+}
+
+.modal-intervention {
+  esm-intervention,
+  .tiled-background,
+  .holder-tiled-background,
+  esm-canvas {
+    width: 100%;
+    height: 100%;
+  }
+
+  .tiled-background {
+    position: relative;
+    overflow: auto;
+  }
+}
+
+// Tables
 table {
   td {
     position: relative;

@@ -16,7 +16,7 @@ export class Event {
 }
 
 export class ActiveEvent extends Event {
-  interventions: Array<Intervention>;
+  interventions: Array<Intervention> = [];
 
   constructor(event: any = {}) {
     super(event);

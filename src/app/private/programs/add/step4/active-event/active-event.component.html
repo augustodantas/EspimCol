@@ -25,10 +25,10 @@
   <form focusInvalidInput class="card-body box-body" [formGroup]="form" [collapse]="!isOpen">
     <div class="row">
       <div class="col-6 form-group">
-        <label class="form-label" [for]="'title' + index">Título <b class="text-danger">*</b>:</label>
+        <label class="form-label" [for]="'title-active' + index">Título <b class="text-danger">*</b>:</label>
         <input
           class="form-control-plaintext border-bottom"
-          [id]="'title' + index"
+          [id]="'title-active' + index"
           formControlName="title"
           focusInput
           type="text"
@@ -45,10 +45,10 @@
 
     <div class="row">
       <div class="col-12 form-group">
-        <label [for]="'program-description' + index"> Descrição do programa </label>
+        <label [for]="'program-description-active' + index"> Descrição do programa </label>
         <textarea
           class="form-control-plaintext border-bottom w-100 resize-none"
-          [id]="'program-description' + index"
+          [id]="'program-description-active' + index"
           rows="2"
           maxlength="200"
           placeholder="Descrição do evento"
