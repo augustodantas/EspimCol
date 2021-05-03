@@ -40,7 +40,6 @@ export class CanvasComponent implements OnInit, AfterViewInit {
 
   drawAllArrows() {
     this.resizeCanvas();
-
     // An array to keep control of which interventions had its arrows drew
     const already_drew: boolean[] = new Array<boolean>(this.interventionService.graphElements.length);
     // Here we make a BFS
@@ -51,15 +50,17 @@ export class CanvasComponent implements OnInit, AfterViewInit {
     while (queue.length > 0) {
       const { intervention, orderPosition } = queue[0];
       queue.splice(0, 1);
-      if (isNullOrUndefined(intervention) || intervention === -1) continue;
+
+      console.log(intervention);
+      if (isNullOrUndefined(intervention) || intervention === -1) {
+        continue;
+      }
 
       // Cycle on the BFS
       if (already_drew[intervention]) {
         this.interventionService.warnCycle(intervention);
         continue;
       }
-
-      console.log(intervention);
 
       this.interventionService.graphElement(intervention).orderPosition = orderPosition;
       already_drew[intervention] = true;
@@ -77,7 +78,7 @@ export class CanvasComponent implements OnInit, AfterViewInit {
 
     let ascii: number = 'a'.charCodeAt(0);
     // Draws the remaining interventions which are not linked with the first one (skips index 1 since it is invalid)
-    for (let i = 1; i < already_drew.length; i++)
+    for (let i = 0; i < already_drew.length; i++)
       if (!already_drew[i]) {
         this.interventionService.hasMultiplePaths = true;
         // Sets orderPosition to a ascii number (negative means it is a character)

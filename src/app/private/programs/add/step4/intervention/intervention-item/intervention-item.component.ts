@@ -40,10 +40,14 @@ export class InterventionItemComponent implements OnInit, AfterViewInit, AfterCo
   ngOnInit(): void {
     this.nextInterventionSelect = null;
     this.interventionService.firstInterventionChange$.subscribe((value) => {
-      if (this.graphIndex !== value) this.interventionCoordinate.first = false;
+      if (this.graphIndex !== value) {
+        this.interventionCoordinate.first = false;
+      }
     });
     this.interventionService.removeIntervention$.subscribe((index) => {
-      if (this.graphIndex > index) this.graphIndex -= 1;
+      if (this.graphIndex > index) {
+        this.graphIndex -= 1;
+      }
     });
   }
 
@@ -76,7 +80,7 @@ export class InterventionItemComponent implements OnInit, AfterViewInit, AfterCo
 
   interventionCurrentCoordinate() {
     const position = this.interventionDiv.nativeElement.style.transform
-      .match(/\d+px/g)
+      .match(/-?\d+px/g)
       .map((value) => Number.parseInt(value.substring(0, value.length - 2)));
     return { x: position[0], y: position[1] };
   }
@@ -87,6 +91,10 @@ export class InterventionItemComponent implements OnInit, AfterViewInit, AfterCo
 
   moving() {
     const currentPosition = this.interventionCurrentCoordinate();
+    if (currentPosition.y < 0) {
+      this.interventionDiv.nativeElement.style.transform = 'translate3d(' + currentPosition.x + 'px, 0px, 0px) ';
+      currentPosition.y = 0;
+    }
     const movement = { x: currentPosition.x - this.previousPosition.x, y: currentPosition.y - this.previousPosition.y };
     this.interventionCoordinate.x = this.interventionCoordinate.x + movement.x;
     this.interventionCoordinate.y = this.interventionCoordinate.y + movement.y;

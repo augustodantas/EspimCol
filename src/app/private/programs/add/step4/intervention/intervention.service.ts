@@ -141,17 +141,30 @@ export class InterventionService {
   }
 
   removeIntervention(graphIndex: number) {
+    let currentGraphElement = this.graphElement(graphIndex);
+
+    if (currentGraphElement.intervention.first) {
+      this.firstIntervention = -1;
+    }
+
+    if (graphIndex < this.firstIntervention) {
+      this.firstIntervention -= 1;
+    }
+
     this.graphElements.splice(graphIndex, 1);
     this.interventionElementsGraph.splice(graphIndex, 1);
 
     for (const intervention of this.interventionElementsGraph) {
       let i = 0;
       while (i < intervention.length) {
-        if (intervention[i] === graphIndex) intervention[i] = null;
-        else if (intervention[i] > graphIndex) {
+        if (intervention[i] === graphIndex) {
+          intervention[i] = null;
+        } else if (intervention[i] > graphIndex) {
           intervention[i]--;
           i++;
-        } else i++;
+        } else {
+          i++;
+        }
       }
     }
 
@@ -188,10 +201,18 @@ export class InterventionService {
     // alert('Intervenção ' + intervention + ' resulta em um ciclo');
   }
 
-  setFirst(vertice: number) {
-    this.firstIntervention = vertice;
+  setFirst(graphIndex: number) {
+    // // Remove o first da intervenção atual
+    // if (this.firstIntervention != -1) {
+    //   this.graphElements[this.firstIntervention].first = false;
+    // }
+    this.firstIntervention = graphIndex;
     this.redrawGraph$.next();
-    this.firstInterventionChange$.next(vertice);
+    this.firstInterventionChange$.next(graphIndex);
+
+    console.log('graphElements', this.graphElements);
+    console.log('interventionElementsGraph', this.interventionElementsGraph);
+    console.log('firstIntervention', this.firstIntervention);
   }
 }
 

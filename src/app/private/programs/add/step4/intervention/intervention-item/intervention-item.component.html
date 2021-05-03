@@ -6,7 +6,6 @@
   [cdkDragFreeDragPosition]="offset"
   (cdkDragStarted)="onDragStart()"
   (cdkDragMoved)="moving()"
-  cdkDragBoundary=".interventionBoundary"
 >
   <div class="d-flex align-items-center justify-content-between bg-primary text-white w-100 p-2" cdkDragHandle>
     <span class="font-weight-bold"
@@ -42,7 +41,7 @@
       <hr style="border-top: 2px dashed #e8e8e8" />
       <select class="w-100" [(ngModel)]="nextInterventionSelect" (change)="setNextTo()">
         <option disabled>Próxima intervenção</option>
-        <option *ngFor="let intervention of nextInterventions.slice(1); index as i" [value]="i + 1" [disabled]="i + 1 === graphIndex">
+        <option *ngFor="let intervention of nextInterventions; index as i" [value]="i" [disabled]="i === graphIndex">
           {{ intervention.orderPosition < 0 ? toChar(intervention.orderPosition * -1) : intervention.orderPosition }} -
           {{ intervention.typeDescription }}
         </option>
