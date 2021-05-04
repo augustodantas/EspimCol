@@ -18,11 +18,11 @@
         (change)="setNextTo()"
       >
         <option disabled>Próxima intervenção</option>
-        <option *ngFor="let intervention of nextInterventions.slice(1); index as i" [value]="i" [disabled]="i === graphIndex">
+        <option *ngFor="let intervention of nextInterventions; index as i" [value]="i" [disabled]="i === graphIndex">
           {{ intervention.orderPosition < 0 ? toChar(intervention.orderPosition * -1) : intervention.orderPosition }} -
           {{ intervention.typeDescription }}
         </option>
-        <option [value]="0">Finalizar</option>
+        <option [value]="null">Finalizar</option>
       </select>
     </div>
     <i class="fas fa-minus-circle text-primary pr-1 pl-3" (click)="removeChoice(i)" style="font-size: 1.3em"></i>

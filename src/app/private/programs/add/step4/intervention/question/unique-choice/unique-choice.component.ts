@@ -1,5 +1,6 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { QuestionIntervention } from 'src/app/private/models/intervention.model';
+import { isNullOrUndefined } from 'src/app/util/functions';
 
 import { HTMLInterventionElement, InterventionService } from '../../intervention.service';
 
@@ -24,37 +25,48 @@ export class UniqueChoiceComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.intervention = this.interventionService.graphElement(this.graphIndex).intervention as QuestionIntervention;
+
     this.interventionService.newInterventions$.subscribe((value) => {
       if (this.interventionService.lastInteractedIntervention === this.graphIndex) {
         let change = false;
-        for (const alternative of this.alternatives)
-          if (this.conditions[alternative] === 0) {
+        for (const alternative of this.alternatives) {
+          if (isNullOrUndefined(this.conditions[alternative])) {
             this.conditions[alternative] = value.graphIndex;
             change = true;
           }
-        if (!change) this.addChoice(value.graphIndex);
+        }
+
+        if (!change) {
+          this.addChoice(value.graphIndex);
+        }
       }
     });
+
     this.interventionService.removeIntervention$.subscribe((value) => {
       for (const alternative of this.alternatives) {
-        if (this.conditions[alternative] === value) this.conditions[alternative] = 0;
-        if (this.conditions[alternative] > value) this.conditions[alternative]--;
+        if (this.conditions[alternative] == value) {
+          this.conditions[alternative] = null;
+        }
+
+        if (this.conditions[alternative] > value) {
+          this.conditions[alternative]--;
+        }
       }
-      if (this.graphIndex > value) this.graphIndex -= 1;
     });
   }
 
   ngOnChanges(changes: SimpleChanges) {
     // graphIndex only changes when removing an intervention and unique-choice needs special treatment so graphIndex gets updated in a subscription in ngInit()
-    // if (changes.graphIndex) this.graphIndex = changes.graphIndex.currentValue;
-    if (changes.nextInterventions) this.nextInterventions = changes.nextInterventions.currentValue;
+    if (changes.nextInterventions) {
+      this.nextInterventions = changes.nextInterventions.currentValue;
+    }
   }
 
   toChar(num: number) {
     return String.fromCharCode(num);
   }
 
-  addChoice(nextIndex: number = 0) {
+  addChoice(nextIndex: number = null) {
     const text = `Alternativa ${this.alternatives.length + 1}`;
     this.alternatives.push(text);
     this.conditions[text] = nextIndex;
@@ -68,8 +80,9 @@ export class UniqueChoiceComponent implements OnInit, OnChanges {
   updateEdges() {
     this.interventionService.removeEdges(this.graphIndex);
     for (const alternative of this.alternatives)
-      if (this.conditions[alternative] !== 0)
+      if (!isNullOrUndefined(this.conditions[alternative])) {
         this.interventionService.setNextFromTo(this.graphIndex, Number.parseInt(this.conditions[alternative]));
+      }
   }
 
   setNextTo() {
@@ -83,6 +96,6 @@ export class UniqueChoiceComponent implements OnInit, OnChanges {
   }
 
   onNextChange(alternative: string, nextSelected: string) {
-    this.conditions[alternative] = Number.parseInt(nextSelected);
+    this.conditions[alternative] = nextSelected;
   }
 }

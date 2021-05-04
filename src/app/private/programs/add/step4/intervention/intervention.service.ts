@@ -13,7 +13,6 @@ export class InterventionService {
   program_id: number;
   event: ActiveEvent;
 
-  firstIntervention: number;
   lastInteractedIntervention: number;
 
   hasMultiplePaths: boolean = false;
@@ -30,10 +29,8 @@ export class InterventionService {
 
   constructor(private router: Router, private route: ActivatedRoute, private http: HttpClient) {}
 
-  set first(first: number) {
-    this.firstIntervention = first;
-    this.redrawGraph$.next();
-    this.firstInterventionChange$.next(first);
+  get firstIntervention(): number {
+    return this.graphElements.findIndex((value) => value.first === true);
   }
 
   init(program_id: number, event: ActiveEvent, interventions: Intervention[]) {
@@ -41,23 +38,28 @@ export class InterventionService {
     this.event = event;
 
     interventions.sort((a, b) => {
-      if (a.orderPosition < b.orderPosition) return -1;
-      else if (a.orderPosition > b.orderPosition) return 1;
-      else return 0;
+      if (a.orderPosition < b.orderPosition) {
+        return -1;
+      } else if (a.orderPosition > b.orderPosition) {
+        return 1;
+      } else {
+        return 0;
+      }
     });
+
     // Old espim did not save order position correctly, so here we have to correct
     const orderPositions = {};
     for (let i = 0; i < interventions.length; i++) orderPositions[interventions[i].orderPosition] = i + 1;
     orderPositions[0] = 0;
 
-    // makes the first element invalid since index "0" is finish
     this.graphElements = interventions.map((value) => {
       const intervention = new HTMLInterventionElement(value);
       intervention.onChange$.subscribe((_) => this.redrawGraph$.next());
       return intervention;
     });
 
-    this.firstIntervention = this.graphElements.findIndex((value) => value.first === true);
+    // this.firstIntervention = this.graphElements.findIndex((value) => value.first === true);
+
     // Not needed since lastInteractedIntervention gets update on the BFS of the canvas
     // this.lastInteractedIntervention = interventions.length;
     this.interventionElementsGraph = interventions.map((value) => {
@@ -116,15 +118,15 @@ export class InterventionService {
     if (this.graphElements.length > 0 && !isNullOrUndefined(this.lastInteractedIntervention)) {
       if (
         this.graphElements[this.lastInteractedIntervention] instanceof QuestionIntervention &&
-        (this.graphElement[this.lastInteractedIntervention] as QuestionIntervention).questionType === 1
+        (this.graphElement[this.lastInteractedIntervention] as QuestionIntervention).questionType == 1
       ) {
         this.interventionElementsGraph[this.lastInteractedIntervention].push(this.interventionElementsGraph.length);
-      } else {
+      } else if (!isNullOrUndefined(this.interventionElementsGraph[this.lastInteractedIntervention])) {
         this.interventionElementsGraph[this.lastInteractedIntervention] = [this.interventionElementsGraph.length];
       }
     } else {
       intervention.first = true;
-      this.firstIntervention = 0;
+      this.firstInterventionChange$.next(0);
     }
 
     this.interventionElementsGraph.push([null]);
@@ -141,15 +143,9 @@ export class InterventionService {
   }
 
   removeIntervention(graphIndex: number) {
-    let currentGraphElement = this.graphElement(graphIndex);
-
-    if (currentGraphElement.intervention.first) {
-      this.firstIntervention = -1;
-    }
-
-    if (graphIndex < this.firstIntervention) {
-      this.firstIntervention -= 1;
-    }
+    // if (graphIndex < this.firstIntervention) {
+    //   this.firstInterventionChange$.next(this.firstIntervention - 1);
+    // }
 
     this.graphElements.splice(graphIndex, 1);
     this.interventionElementsGraph.splice(graphIndex, 1);
@@ -169,26 +165,28 @@ export class InterventionService {
     }
 
     if (this.interventionElementsGraph.length == 0) {
-      this.firstIntervention = -1;
       this.lastInteractedIntervention = null;
     }
-
-    // console.log(this.graphElements);
-    // console.log(this.interventionElementsGraph);
 
     this.removeIntervention$.next(graphIndex);
     this.redrawGraph$.next();
   }
 
   setNextFromTo(from: number, to: number) {
-    if (this.hasArrow(from, to)) return;
+    if (this.hasArrow(from, to)) {
+      return;
+    }
 
     this.interventionElementsGraph[from].push(to);
     this.redrawGraph$.next();
   }
 
   private hasArrow(from: number, to: number) {
-    for (const intervention of this.interventionElementsGraph[from]) if (intervention === to) return true;
+    for (const intervention of this.interventionElementsGraph[from]) {
+      if (intervention === to) {
+        return true;
+      }
+    }
     return false;
   }
 
@@ -202,17 +200,8 @@ export class InterventionService {
   }
 
   setFirst(graphIndex: number) {
-    // // Remove o first da intervenção atual
-    // if (this.firstIntervention != -1) {
-    //   this.graphElements[this.firstIntervention].first = false;
-    // }
-    this.firstIntervention = graphIndex;
-    this.redrawGraph$.next();
     this.firstInterventionChange$.next(graphIndex);
-
-    console.log('graphElements', this.graphElements);
-    console.log('interventionElementsGraph', this.interventionElementsGraph);
-    console.log('firstIntervention', this.firstIntervention);
+    this.redrawGraph$.next();
   }
 }
 

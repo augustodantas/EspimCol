@@ -1,14 +1,4 @@
-import {
-  AfterContentInit,
-  AfterViewInit,
-  Component,
-  ElementRef,
-  EventEmitter,
-  OnDestroy,
-  OnInit,
-  Output,
-  ViewChild,
-} from '@angular/core';
+import { AfterContentInit, AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { isNullOrUndefined } from 'src/app/util/functions';
 
@@ -31,8 +21,6 @@ export class InterventionItemComponent implements OnInit, AfterViewInit, AfterCo
 
   redrawGraphSubscription: Subscription;
 
-  @Output() interventionMoved = new EventEmitter<HTMLInterventionElement>();
-
   @ViewChild('interventionDiv') interventionDiv: ElementRef;
 
   constructor(private interventionService: InterventionService) {}
@@ -42,6 +30,8 @@ export class InterventionItemComponent implements OnInit, AfterViewInit, AfterCo
     this.interventionService.firstInterventionChange$.subscribe((value) => {
       if (this.graphIndex !== value) {
         this.interventionCoordinate.first = false;
+      } else {
+        this.interventionCoordinate.first = true;
       }
     });
     this.interventionService.removeIntervention$.subscribe((index) => {
@@ -99,7 +89,9 @@ export class InterventionItemComponent implements OnInit, AfterViewInit, AfterCo
     this.interventionCoordinate.x = this.interventionCoordinate.x + movement.x;
     this.interventionCoordinate.y = this.interventionCoordinate.y + movement.y;
 
-    this.interventionMoved.emit(this.interventionCoordinate);
+    this.offset.y = currentPosition.y;
+    this.offset.x = currentPosition.x;
+
     this.previousPosition = currentPosition;
   }
 
