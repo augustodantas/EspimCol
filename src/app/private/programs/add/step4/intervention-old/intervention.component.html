@@ -1,0 +1,12 @@
+<esm-navbar></esm-navbar>
+<div class="holder-tiled-background">
+  <div
+    #main_div
+    class="tiled-background"
+    (mousedown)="onMiddleClickDown($event)"
+    (mouseup)="onMiddleClickUp($event)"
+    (mousemove)="MiddleClickScroll($event)"
+  >
+    <esm-canvas #container></esm-canvas>
+  </div>
+</div>

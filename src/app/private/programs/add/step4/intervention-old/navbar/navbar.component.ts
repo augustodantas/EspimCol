@@ -53,10 +53,10 @@ export class NavbarComponent implements OnInit {
   }
 
   finish() {
-    // this.interventionService.finish();
+    this.interventionService.finish();
   }
 
   debug() {
-    // console.log('interventionElementsGraph', this.interventionService.interventionElementsGraph);
+    console.log('interventionElementsGraph', this.interventionService.interventionElementsGraph);
   }
 }

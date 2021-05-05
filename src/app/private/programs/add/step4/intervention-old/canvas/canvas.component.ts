@@ -1,5 +1,4 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { isNullOrUndefined } from 'src/app/util/functions';
 
 import { HTMLInterventionElement, InterventionService } from '../intervention.service';
 
@@ -27,6 +26,7 @@ export class CanvasComponent implements OnInit, AfterViewInit {
     var tiledBackground = document.getElementsByClassName('tiled-background')[0];
     this.canvasRef.nativeElement.width = tiledBackground.scrollWidth;
     this.canvasRef.nativeElement.height = tiledBackground.scrollHeight - 5;
+    // this.clearCanvas();
   }
 
   clearCanvas() {
@@ -37,46 +37,44 @@ export class CanvasComponent implements OnInit, AfterViewInit {
   }
 
   drawAllArrows() {
-    this.resizeCanvas();
+    // this.resizeCanvas();
     // // An array to keep control of which interventions had its arrows drew
-    const already_drew: boolean[] = new Array<boolean>(this.interventionService.interventionComponents.length);
+    // const already_drew: boolean[] = new Array<boolean>(this.interventionService.interventionComponents.length);
     // // Here we make a BFS
-    const queue: { intervention: number; orderPosition: number }[] = [];
-    queue.push({ intervention: this.interventionService.firstIntervention, orderPosition: 1 });
-
-    while (queue.length > 0) {
-      const { intervention, orderPosition } = queue[0];
-      queue.splice(0, 1);
-      if (isNullOrUndefined(intervention) || intervention === -1) {
-        continue;
-      }
-      // Cycle on the BFS
-      if (already_drew[intervention]) {
-        this.interventionService.warnCycle(intervention);
-        continue;
-      }
-      this.interventionService.graphElement(intervention).orderPosition = orderPosition;
-      already_drew[intervention] = true;
-      for (const destination of this.interventionService.interventionElementsGraph[intervention]) {
-        queue.push({ intervention: destination, orderPosition: orderPosition + 1 });
-        // console.log(intervention + '->' + destination);
-        this.drawArrow(this.interventionService.graphElement(intervention), this.interventionService.graphElement(destination), true);
-      }
-      this.interventionService.lastInteractedIntervention = intervention;
-    }
-    this.interventionService.hasMultiplePaths = false;
-    let ascii: number = 'a'.charCodeAt(0);
-
-    // Draws the remaining interventions which are not linked with the first one (skips index 1 since it is invalid)
-    for (let i = 0; i < already_drew.length; i++)
-      if (!already_drew[i]) {
-        this.interventionService.hasMultiplePaths = true;
-        // Sets orderPosition to a ascii number (negative means it is a character)
-        this.interventionService.graphElement(i).orderPosition = ascii * -1;
-        for (const destination of this.interventionService.interventionElementsGraph[i])
-          this.drawArrow(this.interventionService.graphElement(i), this.interventionService.graphElement(destination), false);
-        ascii++;
-      }
+    // const queue: { intervention: number; orderPosition: number }[] = [];
+    // queue.push({ intervention: this.interventionService.firstIntervention, orderPosition: 1 });
+    // while (queue.length > 0) {
+    //   const { intervention, orderPosition } = queue[0];
+    //   queue.splice(0, 1);
+    //   if (isNullOrUndefined(intervention) || intervention === -1) {
+    //     continue;
+    //   }
+    //   // Cycle on the BFS
+    //   if (already_drew[intervention]) {
+    //     this.interventionService.warnCycle(intervention);
+    //     continue;
+    //   }
+    //   this.interventionService.graphElement(intervention).orderPosition = orderPosition;
+    //   already_drew[intervention] = true;
+    //   for (const destination of this.interventionService.interventionElementsGraph[intervention]) {
+    //     queue.push({ intervention: destination, orderPosition: orderPosition + 1 });
+    //     // console.log(intervention + '->' + destination);
+    //     this.drawArrow(this.interventionService.graphElement(intervention), this.interventionService.graphElement(destination), true);
+    //   }
+    //   this.interventionService.lastInteractedIntervention = intervention;
+    // }
+    // this.interventionService.hasMultiplePaths = false;
+    // let ascii: number = 'a'.charCodeAt(0);
+    // // Draws the remaining interventions which are not linked with the first one (skips index 1 since it is invalid)
+    // for (let i = 0; i < already_drew.length; i++)
+    //   if (!already_drew[i]) {
+    //     this.interventionService.hasMultiplePaths = true;
+    //     // Sets orderPosition to a ascii number (negative means it is a character)
+    //     this.interventionService.graphElement(i).orderPosition = ascii * -1;
+    //     for (const destination of this.interventionService.interventionElementsGraph[i])
+    //       this.drawArrow(this.interventionService.graphElement(i), this.interventionService.graphElement(destination), false);
+    //     ascii++;
+    //   }
   }
 
   drawArrow(origin: HTMLInterventionElement, destination: HTMLInterventionElement, main: boolean = true) {

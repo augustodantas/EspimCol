@@ -107,7 +107,7 @@ export class ActiveEventComponent implements OnInit {
       initialState: {},
     };
 
-    this.interventionService.init(this.programAddService.programValue.id, this.event, this.event.interventions);
+    // this.interventionService.init(this.programAddService.programValue.id, this.event, this.event.interventions);
 
     this._modalInterventionRef = this._modalService.show(InterventionComponent, config);
 

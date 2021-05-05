@@ -27,6 +27,6 @@ import { UniqueChoiceComponent } from './question/unique-choice/unique-choice.co
     MultipleChoiceComponent,
   ],
   imports: [CommonModule, DragDropModule, SharedModule, ComponentsModule],
-  exports: [InterventionComponent],
+  exports: [InterventionComponent, NavbarComponent, CanvasComponent, InterventionItemComponent, UniqueChoiceComponent],
 })
 export class InterventionModule {}

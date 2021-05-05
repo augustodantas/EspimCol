@@ -1,5 +1,8 @@
+import { HttpClient } from '@angular/common/http';
 import { ComponentFactoryResolver, ComponentRef, ElementRef, Injectable, ViewContainerRef } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
+import { ActiveEvent } from 'src/app/private/models/event.model';
 import { Intervention, QuestionIntervention } from 'src/app/private/models/intervention.model';
 import { isNullOrUndefined, toChar } from 'src/app/util/functions';
 
@@ -9,128 +12,113 @@ import { InterventionItemComponent } from './intervention-item/intervention-item
   providedIn: 'root',
 })
 export class InterventionService {
+  program_id: number;
+  event: ActiveEvent;
+
   lastInteractedIntervention: number;
   interventionsContainer: ViewContainerRef;
-  interventionElementsGraph: number[][] = [];
-  interventionComponents: ComponentRef<InterventionItemComponent>[] = [];
   mainDiv: ElementRef;
 
-  redrawGraph$: Subject<void> = new Subject<void>();
-  removeIntervention$: Subject<number> = new Subject<number>();
   hasMultiplePaths: boolean = false;
-
-  // interventionElementsGraph: number[][];
+  interventionComponents: ComponentRef<InterventionItemComponent>[] = [];
+  interventionElementsGraph: number[][];
   newInterventions$: Subject<{ graphIndex: number; intervention: HTMLInterventionElement }> = new Subject<{
     graphIndex: number;
     intervention: HTMLInterventionElement;
   }>();
-  // removeIntervention$: Subject<number> = new Subject<number>();
+  removeIntervention$: Subject<number> = new Subject<number>();
+  redrawGraph$: Subject<void> = new Subject<void>();
   firstInterventionChange$: Subject<number> = new Subject<number>();
 
-  constructor(private componentFactoryResolver: ComponentFactoryResolver) {}
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private http: HttpClient,
+    private componentFactoryResolver: ComponentFactoryResolver
+  ) {}
 
   get firstIntervention(): number {
     return this.interventionComponents.findIndex((value) => value.instance.interventionCoordinate.first === true);
   }
 
-  // init(program_id: number, event: ActiveEvent, interventions: Intervention[]) {
-  //   this.program_id = program_id;
-  //   this.event = event;
+  get graphElements(): HTMLInterventionElement[] {
+    return this.interventionComponents.map((i) => i.instance.interventionCoordinate);
+  }
 
-  //   interventions.sort((a, b) => {
-  //     if (a.orderPosition < b.orderPosition) {
-  //       return -1;
-  //     } else if (a.orderPosition > b.orderPosition) {
-  //       return 1;
-  //     } else {
-  //       return 0;
-  //     }
-  //   });
+  init(program_id: number, event: ActiveEvent, interventions: Intervention[]) {
+    this.program_id = program_id;
+    this.event = event;
 
-  //   // Old espim did not save order position correctly, so here we have to correct
-  //   const orderPositions = {};
-  //   for (let i = 0; i < interventions.length; i++) orderPositions[interventions[i].orderPosition] = i + 1;
-  //   orderPositions[0] = 0;
+    interventions.sort((a, b) => {
+      if (a.orderPosition < b.orderPosition) {
+        return -1;
+      } else if (a.orderPosition > b.orderPosition) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
 
-  //   // Not needed since lastInteractedIntervention gets update on the BFS of the canvas
-  //   // this.lastInteractedIntervention = interventions.length;
-  //   this.interventionElementsGraph = interventions.map((value) => {
-  //     if (value.type === 'question' && (value as QuestionIntervention).questionType === 1)
-  //       return Object.keys((value as QuestionIntervention).conditions).map(
-  //         (alternative) => orderPositions[(value as QuestionIntervention).conditions[alternative]]
-  //       );
-  //     else return [orderPositions[value.next]];
-  //   });
-  // }
+    // Old espim did not save order position correctly, so here we have to correct
+    const orderPositions = {};
+    for (let i = 0; i < interventions.length; i++) orderPositions[interventions[i].orderPosition] = i + 1;
+    orderPositions[0] = 0;
 
-  // finish() {
-  //   if (this.hasMultiplePaths) {
-  //     // new SwalComponent({
-  //     //   title: 'Há intervenções desconectadas',
-  //     //   text:
-  //     //     'Encontramos intervenções que não estão ligadas à primeira. Por favor, é necessário deleta-las ou liga-las ao caminho principal',
-  //     // })
-  //     //   .show()
-  //     //   .then();
-  //     return;
-  //   }
+    // Not needed since lastInteractedIntervention gets update on the BFS of the canvas
+    // this.lastInteractedIntervention = interventions.length;
+    this.interventionElementsGraph = interventions.map((value) => {
+      if (value.type === 'question' && (value as QuestionIntervention).questionType === 1)
+        return Object.keys((value as QuestionIntervention).conditions).map(
+          (alternative) => orderPositions[(value as QuestionIntervention).conditions[alternative]]
+        );
+      else return [orderPositions[value.next]];
+    });
+  }
 
-  //   // it is not necessary to update orderPosition since it gets updated together with the canvas (arrows)
+  finish() {
+    if (this.hasMultiplePaths) {
+      // new SwalComponent({
+      //   title: 'Há intervenções desconectadas',
+      //   text:
+      //     'Encontramos intervenções que não estão ligadas à primeira. Por favor, é necessário deleta-las ou liga-las ao caminho principal',
+      // })
+      //   .show()
+      //   .then();
+      return;
+    }
 
-  //   // this.event.interventions = this.event.interventions.map((value) => value.id);
+    // it is not necessary to update orderPosition since it gets updated together with the canvas (arrows)
 
-  //   this.router.navigateByUrl(`private/programs/add/${this.program_id}/fourth`).then();
-  // }
+    // this.event.interventions = this.event.interventions.map((value) => value.id);
+
+    this.router.navigateByUrl(`private/programs/add/${this.program_id}/fourth`).then();
+  }
+
+  graphElement(i: number) {
+    return this.graphElements[i];
+  }
 
   addIntervention(intervention: HTMLInterventionElement) {
-    console.log(this.lastInteractedIntervention);
-    if (!isNullOrUndefined(this.lastInteractedIntervention)) {
+    if (this.graphElements.length > 0 && !isNullOrUndefined(this.lastInteractedIntervention)) {
       if (
-        this.graphElement(this.lastInteractedIntervention).intervention instanceof QuestionIntervention &&
-        (this.graphElement(this.lastInteractedIntervention).intervention as QuestionIntervention).questionType == 1
+        this.graphElements[this.lastInteractedIntervention] instanceof QuestionIntervention &&
+        (this.graphElement[this.lastInteractedIntervention] as QuestionIntervention).questionType == 1
       ) {
         this.interventionElementsGraph[this.lastInteractedIntervention].push(this.interventionElementsGraph.length);
       } else if (!isNullOrUndefined(this.interventionElementsGraph[this.lastInteractedIntervention])) {
         this.interventionElementsGraph[this.lastInteractedIntervention] = [this.interventionElementsGraph.length];
       }
-    }
-
-    if (this.interventionComponents.length == 0) {
+    } else {
       intervention.first = true;
+      this.firstInterventionChange$.next(0);
     }
 
     this.interventionElementsGraph.push([null]);
     this.createIntervention(intervention);
-  }
-
-  createIntervention(intervention: HTMLInterventionElement) {
-    const interventionComponent: ComponentRef<InterventionItemComponent> = this.interventionsContainer.createComponent(
-      this.componentFactoryResolver.resolveComponentFactory(InterventionItemComponent)
-    );
-
-    let goodSpaceBetween = 50;
-    let offsetX = goodSpaceBetween;
-
-    // Pega o maior Offset dos componentes
-    this.interventionComponents.forEach((interventionComponent) => {
-      let componentOffsetX = interventionComponent.instance.offset.x + interventionComponent.instance.interventionCoordinate.width;
-      if (componentOffsetX > offsetX) {
-        offsetX = componentOffsetX;
-      }
-    });
-
-    interventionComponent.instance.offset = { x: offsetX + goodSpaceBetween, y: goodSpaceBetween };
-    interventionComponent.instance.interventionCoordinate = intervention;
-    this.interventionComponents.push(interventionComponent);
-
-    this.newInterventions$.next({ graphIndex: interventionComponent.instance.graphIndex, intervention });
 
     this.redrawGraph$.next();
 
-    setTimeout(() => {
-      this.redrawGraph$.next();
-      this.mainDiv.nativeElement.scrollTo({ top: 0, left: offsetX, behavior: 'smooth' });
-    });
+    intervention.onChange$.subscribe((_) => this.redrawGraph$.next());
   }
 
   removeIntervention(graphIndex: number) {
@@ -151,19 +139,44 @@ export class InterventionService {
         }
       }
     }
+
     if (this.interventionElementsGraph.length == 0) {
       this.lastInteractedIntervention = null;
     }
 
     this.removeIntervention$.next(graphIndex);
     this.redrawGraph$.next();
+
+    console.log(this.interventionElementsGraph);
   }
 
-  graphElement(i: number) {
-    if (isNullOrUndefined(i)) {
-      return null;
-    }
-    return this.interventionComponents[i]?.instance?.interventionCoordinate;
+  createIntervention(intervention: HTMLInterventionElement) {
+    const interventionComponent: ComponentRef<InterventionItemComponent> = this.interventionsContainer.createComponent(
+      this.componentFactoryResolver.resolveComponentFactory(InterventionItemComponent)
+    );
+
+    let goodSpaceBetween = 50;
+    let offsetX = goodSpaceBetween;
+
+    // Pega o maior Offset dos componentes
+    this.interventionComponents.forEach((interventionComponent) => {
+      let componentOffsetX = interventionComponent.instance.offset.x + interventionComponent.instance.interventionCoordinate.width;
+      if (componentOffsetX > offsetX) {
+        offsetX = componentOffsetX;
+      }
+    });
+
+    interventionComponent.instance.offset = { x: offsetX + goodSpaceBetween, y: goodSpaceBetween };
+    interventionComponent.instance.interventionCoordinate = intervention;
+    // interventionComponent.instance.graphIndex = graphIndex;
+    this.interventionComponents.push(interventionComponent);
+
+    this.newInterventions$.next({ graphIndex: interventionComponent.instance.graphIndex, intervention });
+
+    setTimeout((_) => {
+      this.redrawGraph$.next();
+      this.mainDiv.nativeElement.scrollTo({ top: 0, left: offsetX, behavior: 'smooth' });
+    }, 250);
   }
 
   setNextFromTo(from: number, to: number) {

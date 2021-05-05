@@ -12,6 +12,7 @@
     <i class="fas fa-times pointer" (click)="remove()"></i>
   </div>
   <div class="w-100 p-3">
+    {{ uuid }}
     <div class="w-100 mb-3">
       <input type="radio" [checked]="interventionCoordinate.first" name="first" [id]="graphIndex + '-first'" (click)="setFirst()" />
       <label [for]="graphIndex + '-first'">1ª Intervenção</label>

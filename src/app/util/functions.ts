@@ -117,6 +117,9 @@ export function isNullOrUndefined(value: any): value is null {
   return isNull(value) || isUndefined(value) || value == 'null' || value == 'undefined';
 }
 
+export function toChar(num: number) {
+  return String.fromCharCode(num);
+}
 /**
  * Determines if a reference is a `Number`.
  *

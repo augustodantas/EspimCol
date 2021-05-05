@@ -28,8 +28,6 @@ export class UniqueChoiceComponent implements OnInit {
 
   ngOnInit(): void {
     this.interventionService.newInterventions$.subscribe((value) => {
-      console.log(this.graphIndex);
-      console.log(this.interventionService.lastInteractedIntervention);
       if (this.interventionService.lastInteractedIntervention === this.graphIndex) {
         let change = false;
         for (const alternative of this.alternatives) {

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterContentInit, AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { isNullOrUndefined } from 'src/app/util/functions';
 import { v4 as uuid } from 'uuid';
@@ -10,19 +10,17 @@ import { HTMLInterventionElement, InterventionService } from '../intervention.se
   templateUrl: './intervention-item.component.html',
   styleUrls: ['./intervention-item.component.scss'],
 })
-export class InterventionItemComponent implements OnInit, AfterViewInit {
+export class InterventionItemComponent implements OnInit, AfterViewInit, AfterContentInit, OnDestroy {
   uuid: string = uuid();
+  offset: { x: number; y: number } = { x: 0, y: 0 };
   interventionCoordinate: HTMLInterventionElement;
+  previousPosition: { x: number; y: number };
+
   nextInterventionSelect: string;
+
   redrawGraphSubscription: Subscription;
 
-  previousPosition: { x: number; y: number };
-  offset: { x: number; y: number } = { x: 0, y: 0 };
   @ViewChild('interventionDiv') interventionDiv: ElementRef;
-
-  get graphIndex(): number {
-    return this.interventionService.interventionComponents.findIndex((value) => value.instance.uuid === this.uuid);
-  }
 
   get interventionComponentsInstance(): InterventionItemComponent[] {
     return this.interventionService.interventionComponents.map((interventionComponent) => interventionComponent.instance);
@@ -31,6 +29,7 @@ export class InterventionItemComponent implements OnInit, AfterViewInit {
   constructor(private interventionService: InterventionService) {}
 
   ngOnInit(): void {
+    this.nextInterventionSelect = null;
     this.interventionService.firstInterventionChange$.subscribe((value) => {
       if (this.graphIndex !== value) {
         this.interventionCoordinate.first = false;
@@ -38,6 +37,17 @@ export class InterventionItemComponent implements OnInit, AfterViewInit {
         this.interventionCoordinate.first = true;
       }
     });
+  }
+
+  get graphIndex(): number {
+    return this.interventionService.interventionComponents.findIndex((value) => value.instance.uuid === this.uuid);
+  }
+
+  ngAfterViewInit(): void {
+    this.interventionCoordinate.width = this.interventionDiv.nativeElement.clientWidth;
+    this.interventionCoordinate.height = this.interventionDiv.nativeElement.clientHeight;
+    this.interventionCoordinate.x = this.offset.x + this.interventionCoordinate.width / 2;
+    this.interventionCoordinate.y = this.offset.y + this.interventionCoordinate.height / 2;
   }
 
   ngAfterContentInit(): void {
@@ -50,14 +60,9 @@ export class InterventionItemComponent implements OnInit, AfterViewInit {
   }
 
   updateNextInterventions() {
+    // If this intervention isn't of "unique-choice", this intervention will connect to only one other, that's why we only need to take the first connection (interventionElementsGraph[this.graphIndex][0]),
+    // if there is no connection, 0. If it is unique-choice, "nextInterventionSelect" will not be used so it doesn't matter
     this.nextInterventionSelect = this.interventionService.interventionElementsGraph[this.graphIndex][0]?.toString() || null;
-  }
-
-  ngAfterViewInit(): void {
-    this.interventionCoordinate.width = this.interventionDiv.nativeElement.clientWidth;
-    this.interventionCoordinate.height = this.interventionDiv.nativeElement.clientHeight;
-    this.interventionCoordinate.x = this.offset.x + this.interventionCoordinate.width / 2;
-    this.interventionCoordinate.y = this.offset.y + this.interventionCoordinate.height / 2;
   }
 
   interventionCurrentCoordinate() {
@@ -85,18 +90,6 @@ export class InterventionItemComponent implements OnInit, AfterViewInit {
     this.offset.x = currentPosition.x;
 
     this.previousPosition = currentPosition;
-
-    this.interventionService.redrawGraph$.next();
-  }
-
-  remove() {
-    this.interventionService.removeIntervention(this.graphIndex);
-  }
-
-  setFirst() {
-    if (!this.interventionCoordinate.first) {
-      this.interventionService.setFirst(this.graphIndex);
-    }
   }
 
   setNextTo() {
@@ -109,5 +102,16 @@ export class InterventionItemComponent implements OnInit, AfterViewInit {
     const to = Number.parseInt(this.nextInterventionSelect);
     this.interventionService.removeEdges(from, false);
     this.interventionService.setNextFromTo(from, to);
+  }
+
+  setFirst() {
+    if (!this.interventionCoordinate.first) {
+      this.interventionCoordinate.first = true;
+      this.interventionService.setFirst(this.graphIndex);
+    }
+  }
+
+  remove() {
+    this.interventionService.removeIntervention(this.graphIndex);
   }
 }
