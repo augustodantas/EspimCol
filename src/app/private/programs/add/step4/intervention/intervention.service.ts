@@ -1,9 +1,8 @@
-import { ComponentFactoryResolver, ComponentRef, ElementRef, Injectable, ViewContainerRef } from '@angular/core';
+import { ComponentFactoryResolver, ElementRef, Injectable, ViewContainerRef } from '@angular/core';
 import { Subject } from 'rxjs';
 import { Intervention, QuestionIntervention } from 'src/app/private/models/intervention.model';
 import { isNullOrUndefined, toChar } from 'src/app/util/functions';
-
-import { InterventionItemComponent } from './intervention-item/intervention-item.component';
+import { v4 as uuid } from 'uuid';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +11,7 @@ export class InterventionService {
   lastInteractedIntervention: number;
   interventionsContainer: ViewContainerRef;
   interventionElementsGraph: number[][] = [];
-  interventionComponents: ComponentRef<InterventionItemComponent>[] = [];
+  graphElements: HTMLInterventionElement[] = [];
   mainDiv: ElementRef;
 
   redrawGraph$: Subject<void> = new Subject<void>();
@@ -30,7 +29,7 @@ export class InterventionService {
   constructor(private componentFactoryResolver: ComponentFactoryResolver) {}
 
   get firstIntervention(): number {
-    return this.interventionComponents.findIndex((value) => value.instance.interventionCoordinate.first === true);
+    return this.graphElements.findIndex((value) => value.intervention.first === true);
   }
 
   // init(program_id: number, event: ActiveEvent, interventions: Intervention[]) {
@@ -63,27 +62,24 @@ export class InterventionService {
   //   });
   // }
 
-  // finish() {
-  //   if (this.hasMultiplePaths) {
-  //     // new SwalComponent({
-  //     //   title: 'Há intervenções desconectadas',
-  //     //   text:
-  //     //     'Encontramos intervenções que não estão ligadas à primeira. Por favor, é necessário deleta-las ou liga-las ao caminho principal',
-  //     // })
-  //     //   .show()
-  //     //   .then();
-  //     return;
-  //   }
+  finish() {
+    //   if (this.hasMultiplePaths) {
+    // new SwalComponent({
+    //   title: 'Há intervenções desconectadas',
+    //   text:
+    //     'Encontramos intervenções que não estão ligadas à primeira. Por favor, é necessário deleta-las ou liga-las ao caminho principal',
+    // })
+    //   .show()
+    //   .then();
+    //     return;
+    //   }
 
-  //   // it is not necessary to update orderPosition since it gets updated together with the canvas (arrows)
+    console.log(this.graphElements);
 
-  //   // this.event.interventions = this.event.interventions.map((value) => value.id);
-
-  //   this.router.navigateByUrl(`private/programs/add/${this.program_id}/fourth`).then();
-  // }
+    //   this.router.navigateByUrl(`private/programs/add/${this.program_id}/fourth`).then();
+  }
 
   addIntervention(intervention: HTMLInterventionElement) {
-    console.log(this.lastInteractedIntervention);
     if (!isNullOrUndefined(this.lastInteractedIntervention)) {
       if (
         this.graphElement(this.lastInteractedIntervention).intervention instanceof QuestionIntervention &&
@@ -95,48 +91,20 @@ export class InterventionService {
       }
     }
 
-    if (this.interventionComponents.length == 0) {
+    if (this.graphElements.length == 0) {
       intervention.first = true;
     }
 
     this.interventionElementsGraph.push([null]);
-    this.createIntervention(intervention);
-  }
+    this.graphElements.push(intervention);
 
-  createIntervention(intervention: HTMLInterventionElement) {
-    const interventionComponent: ComponentRef<InterventionItemComponent> = this.interventionsContainer.createComponent(
-      this.componentFactoryResolver.resolveComponentFactory(InterventionItemComponent)
-    );
-
-    let goodSpaceBetween = 50;
-    let offsetX = goodSpaceBetween;
-
-    // Pega o maior Offset dos componentes
-    this.interventionComponents.forEach((interventionComponent) => {
-      let componentOffsetX = interventionComponent.instance.offset.x + interventionComponent.instance.interventionCoordinate.width;
-      if (componentOffsetX > offsetX) {
-        offsetX = componentOffsetX;
-      }
-    });
-
-    interventionComponent.instance.offset = { x: offsetX + goodSpaceBetween, y: goodSpaceBetween };
-    interventionComponent.instance.interventionCoordinate = intervention;
-    this.interventionComponents.push(interventionComponent);
-
-    this.newInterventions$.next({ graphIndex: interventionComponent.instance.graphIndex, intervention });
-
+    this.newInterventions$.next({ graphIndex: this.graphElements.length - 1, intervention });
     this.redrawGraph$.next();
-
-    setTimeout(() => {
-      this.redrawGraph$.next();
-      this.mainDiv.nativeElement.scrollTo({ top: 0, left: offsetX, behavior: 'smooth' });
-    });
   }
 
   removeIntervention(graphIndex: number) {
     this.interventionElementsGraph.splice(graphIndex, 1);
-    this.interventionComponents[graphIndex].destroy();
-    this.interventionComponents.splice(graphIndex, 1);
+    this.graphElements.splice(graphIndex, 1);
 
     for (const intervention of this.interventionElementsGraph) {
       let i = 0;
@@ -160,10 +128,7 @@ export class InterventionService {
   }
 
   graphElement(i: number) {
-    if (isNullOrUndefined(i)) {
-      return null;
-    }
-    return this.interventionComponents[i]?.instance?.interventionCoordinate;
+    return this.graphElements[i];
   }
 
   setNextFromTo(from: number, to: number) {
@@ -202,33 +167,26 @@ export class InterventionService {
 }
 
 export class HTMLInterventionElement {
+  uuid: string = uuid();
   onChange$: Subject<HTMLInterventionElement> = new Subject<HTMLInterventionElement>();
 
-  constructor(
-    public intervention?: Intervention,
-    public _x?: number,
-    public _y?: number,
-    public _width?: number,
-    public _height?: number
-  ) {}
+  constructor(public intervention?: Intervention, public _width?: number, public _height?: number) {}
 
   get x() {
-    return this._x;
+    return this.intervention.x;
   }
   set x(x: number) {
-    if (x !== this._x) {
-      this._x = x;
-      this.onChange$.next(this);
+    if (x !== this.intervention.x) {
+      this.intervention.x = x;
     }
   }
 
   get y() {
-    return this._y;
+    return this.intervention.y;
   }
   set y(y: number) {
-    if (y !== this._y) {
-      this._y = y;
-      this.onChange$.next(this);
+    if (y !== this.intervention.y) {
+      this.intervention.y = y;
     }
   }
 

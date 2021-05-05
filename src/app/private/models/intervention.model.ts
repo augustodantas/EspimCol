@@ -6,6 +6,8 @@ export class Intervention {
   public first: boolean;
   public next: number;
   public obligatory: boolean;
+  public x: number;
+  public y: number;
 
   protected medias;
   protected complexConditions;
@@ -21,10 +23,15 @@ export class Intervention {
     this.medias = intervention.medias;
     this.complexConditions = intervention.complexConditions;
 
+    this.x = intervention.x;
+    this.y = intervention.y;
+
     this.type = 'empty';
   }
 
-  getTypeDescription() { return 'Mensagem'; }
+  getTypeDescription() {
+    return 'Mensagem';
+  }
 }
 
 export class MediaIntervention extends Intervention {
@@ -55,18 +62,12 @@ export class QuestionIntervention extends Intervention {
   }
 
   getTypeDescription() {
-    if (this.questionType === 0)
-      return 'Questão aberta';
-    if (this.questionType === 1)
-      return 'Escolha única';
-    if (this.questionType === 2)
-      return 'Múltipla escolha';
-    if (this.questionType === 3)
-      return 'Likert';
-    if (this.questionType === 4)
-      return 'Diferencial semântico';
-    if (this.questionType === 31)
-      return 'Likert personalizado';
+    if (this.questionType === 0) return 'Questão aberta';
+    if (this.questionType === 1) return 'Escolha única';
+    if (this.questionType === 2) return 'Múltipla escolha';
+    if (this.questionType === 3) return 'Likert';
+    if (this.questionType === 4) return 'Diferencial semântico';
+    if (this.questionType === 31) return 'Likert personalizado';
     return 'Mensagem';
   }
 }

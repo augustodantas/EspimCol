@@ -9,11 +9,8 @@ import { InterventionService } from '../../intervention.service';
 })
 export class LikertComponent implements OnInit {
   @Input() intervention: QuestionIntervention;
-  @Input() uuid: string;
+  @Input() graphIndex: number;
 
-  get graphIndex(): number {
-    return this.interventionService.interventionComponents.findIndex((value) => value.instance.uuid === this.uuid);
-  }
   // Normal Likert only has 1 scale
   get scale() {
     return this.intervention.scales[0];

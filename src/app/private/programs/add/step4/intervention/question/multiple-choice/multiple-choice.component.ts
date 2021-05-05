@@ -9,13 +9,13 @@ import { InterventionService } from '../../intervention.service';
 })
 export class MultipleChoiceComponent implements OnInit {
   @Input() intervention: QuestionIntervention;
-  @Input() uuid: string;
-
-  get graphIndex(): number {
-    return this.interventionService.interventionComponents.findIndex((value) => value.instance.uuid === this.uuid);
-  }
+  @Input() graphIndex: number;
 
   constructor(private interventionService: InterventionService) {}
+
+  trackByFn(index, item) {
+    return index;
+  }
 
   ngOnInit(): void {
     this.intervention.options.push('Alternativa 1');
@@ -23,6 +23,7 @@ export class MultipleChoiceComponent implements OnInit {
   }
 
   addChoice() {
+    console.log(this.intervention.options);
     this.intervention.options.push('Alternative ' + (this.intervention.options.length + 1));
   }
 

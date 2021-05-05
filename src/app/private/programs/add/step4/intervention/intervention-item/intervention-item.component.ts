@@ -1,7 +1,6 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { isNullOrUndefined } from 'src/app/util/functions';
-import { v4 as uuid } from 'uuid';
 
 import { HTMLInterventionElement, InterventionService } from '../intervention.service';
 
@@ -11,7 +10,6 @@ import { HTMLInterventionElement, InterventionService } from '../intervention.se
   styleUrls: ['./intervention-item.component.scss'],
 })
 export class InterventionItemComponent implements OnInit, AfterViewInit {
-  uuid: string = uuid();
   interventionCoordinate: HTMLInterventionElement;
   nextInterventionSelect: string;
   redrawGraphSubscription: Subscription;
@@ -21,11 +19,11 @@ export class InterventionItemComponent implements OnInit, AfterViewInit {
   @ViewChild('interventionDiv') interventionDiv: ElementRef;
 
   get graphIndex(): number {
-    return this.interventionService.interventionComponents.findIndex((value) => value.instance.uuid === this.uuid);
+    return this.interventionService.graphElements.findIndex((value) => value.uuid === this.interventionCoordinate.uuid);
   }
 
-  get interventionComponentsInstance(): InterventionItemComponent[] {
-    return this.interventionService.interventionComponents.map((interventionComponent) => interventionComponent.instance);
+  get interventionHtmlElements(): HTMLInterventionElement[] {
+    return this.interventionService.graphElements.map((htmlComponent) => htmlComponent);
   }
 
   constructor(private interventionService: InterventionService) {}

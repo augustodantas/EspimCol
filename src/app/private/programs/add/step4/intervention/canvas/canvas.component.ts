@@ -39,7 +39,7 @@ export class CanvasComponent implements OnInit, AfterViewInit {
   drawAllArrows() {
     this.resizeCanvas();
     // // An array to keep control of which interventions had its arrows drew
-    const already_drew: boolean[] = new Array<boolean>(this.interventionService.interventionComponents.length);
+    const already_drew: boolean[] = new Array<boolean>(this.interventionService.graphElements.length);
     // // Here we make a BFS
     const queue: { intervention: number; orderPosition: number }[] = [];
     queue.push({ intervention: this.interventionService.firstIntervention, orderPosition: 1 });

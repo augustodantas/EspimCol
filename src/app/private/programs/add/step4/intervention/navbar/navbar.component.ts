@@ -36,12 +36,6 @@ export class NavbarComponent implements OnInit {
     this.interventionService.addIntervention(new HTMLInterventionElement(intervention));
   }
 
-  // @HostListener('window:resize', ['$event'])
-  // onResize() {
-  //   this.over1200px = window.innerWidth > 950;
-  //   if (this.over1200px) this.mobileToggleActivated = false;
-  // }
-
   zoomPopUp() {
     // new SwalComponent({
     //   title: 'Zoom',
@@ -53,7 +47,7 @@ export class NavbarComponent implements OnInit {
   }
 
   finish() {
-    // this.interventionService.finish();
+    this.interventionService.finish();
   }
 
   debug() {

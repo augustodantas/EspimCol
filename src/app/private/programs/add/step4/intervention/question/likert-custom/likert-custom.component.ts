@@ -9,11 +9,7 @@ import { InterventionService } from '../../intervention.service';
 })
 export class LikertCustomComponent {
   @Input() intervention: QuestionIntervention;
-  @Input() uuid: string;
-
-  get graphIndex(): number {
-    return this.interventionService.interventionComponents.findIndex((value) => value.instance.uuid === this.uuid);
-  }
+  @Input() graphIndex: number;
 
   get scales() {
     return this.intervention.scales;

@@ -19,9 +19,9 @@
       >
         <option disabled>Próxima intervenção</option>
         <option *ngFor="let intervention of interventionComponentsInstance; index as i" [value]="i" [disabled]="i === graphIndex">
-          {{ intervention.interventionCoordinate.orderDescription }}
+          {{ intervention.orderDescription }}
           -
-          {{ intervention.interventionCoordinate.typeDescription }}
+          {{ intervention.typeDescription }}
         </option>
         <option [value]="null">Finalizar</option>
       </select>

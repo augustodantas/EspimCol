@@ -30,16 +30,16 @@
     <esm-question
       *ngIf="interventionCoordinate.type === 'question'"
       [intervention]="interventionCoordinate.intervention"
-      [uuid]="uuid"
+      [graphIndex]="graphIndex"
     ></esm-question>
     <div *ngIf="interventionCoordinate.type !== 'question' || interventionCoordinate.questionType !== 1">
       <hr style="border-top: 2px dashed #e8e8e8" />
       <select class="w-100" [(ngModel)]="nextInterventionSelect" (change)="setNextTo()">
         <option disabled>Próxima intervenção</option>
-        <option *ngFor="let intervention of interventionComponentsInstance; index as i" [value]="i" [disabled]="i === graphIndex">
-          {{ intervention.interventionCoordinate.orderDescription }}
+        <option *ngFor="let intervention of interventionHtmlElements; index as i" [value]="i" [disabled]="i === graphIndex">
+          {{ intervention.orderDescription }}
           -
-          {{ intervention.interventionCoordinate.typeDescription }}
+          {{ intervention.typeDescription }}
         </option>
         <option [value]="null">Finalizar</option>
       </select>

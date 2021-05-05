@@ -1,6 +1,7 @@
-import { Component, ComponentFactoryResolver, ElementRef, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ComponentFactoryResolver, ComponentRef, ElementRef, ViewChild, ViewContainerRef } from '@angular/core';
 
-import { InterventionService } from './intervention.service';
+import { InterventionItemComponent } from './intervention-item/intervention-item.component';
+import { HTMLInterventionElement, InterventionService } from './intervention.service';
 
 @Component({
   selector: 'esm-intervention',
@@ -10,6 +11,7 @@ import { InterventionService } from './intervention.service';
 export class InterventionComponent {
   previousPosition: { x?: number; y?: number } = {};
   offset: { x: number; y: number } = { x: 0, y: 0 };
+  interventionComponents: ComponentRef<InterventionItemComponent>[] = [];
 
   @ViewChild('container', { read: ViewContainerRef }) interventionsContainer;
   @ViewChild('main_div') mainDiv: ElementRef;
@@ -19,6 +21,38 @@ export class InterventionComponent {
   ngAfterViewInit(): void {
     this.interventionService.interventionsContainer = this.interventionsContainer;
     this.interventionService.mainDiv = this.mainDiv;
+
+    this.interventionService.newInterventions$.subscribe((add) => this.createIntervention(add.intervention));
+    this.interventionService.removeIntervention$.subscribe((index) => {
+      this.interventionComponents[index].destroy();
+      this.interventionComponents.splice(index, 1);
+    });
+  }
+
+  createIntervention(intervention: HTMLInterventionElement) {
+    const interventionComponent: ComponentRef<InterventionItemComponent> = this.interventionsContainer.createComponent(
+      this.componentFactoryResolver.resolveComponentFactory(InterventionItemComponent)
+    );
+
+    let goodSpaceBetween = 50;
+    let offsetX = goodSpaceBetween;
+
+    // Pega o maior Offset dos componentes
+    this.interventionComponents.forEach((interventionComponent) => {
+      let componentOffsetX = interventionComponent.instance.offset.x + interventionComponent.instance.interventionCoordinate.width;
+      if (componentOffsetX > offsetX) {
+        offsetX = componentOffsetX;
+      }
+    });
+
+    interventionComponent.instance.offset = { x: offsetX + goodSpaceBetween, y: goodSpaceBetween };
+    interventionComponent.instance.interventionCoordinate = intervention;
+    this.interventionComponents.push(interventionComponent);
+
+    setTimeout(() => {
+      this.interventionService.redrawGraph$.next();
+      this.mainDiv.nativeElement.scrollTo({ top: 0, left: offsetX, behavior: 'smooth' });
+    });
   }
 
   onMiddleClickDown(event: any) {

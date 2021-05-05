@@ -7,7 +7,7 @@ import { QuestionIntervention } from 'src/app/private/models/intervention.model'
 })
 export class QuestionComponent {
   @Input() intervention: QuestionIntervention;
-  @Input() uuid: string;
+  @Input() graphIndex: number;
 
   constructor() {}
 }

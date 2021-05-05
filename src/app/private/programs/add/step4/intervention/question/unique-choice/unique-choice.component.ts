@@ -2,8 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { QuestionIntervention } from 'src/app/private/models/intervention.model';
 import { isNullOrUndefined } from 'src/app/util/functions';
 
-import { InterventionItemComponent } from '../../intervention-item/intervention-item.component';
-import { InterventionService } from '../../intervention.service';
+import { HTMLInterventionElement, InterventionService } from '../../intervention.service';
 
 @Component({
   selector: 'esm-unique-choice',
@@ -11,18 +10,16 @@ import { InterventionService } from '../../intervention.service';
 })
 export class UniqueChoiceComponent implements OnInit {
   @Input() intervention: QuestionIntervention;
-  @Input() uuid: string;
+  @Input() graphIndex: number;
   get alternatives() {
     return this.intervention?.options;
   }
   get conditions() {
     return this.intervention?.conditions;
   }
-  get graphIndex(): number {
-    return this.interventionService.interventionComponents.findIndex((value) => value.instance.uuid === this.uuid);
-  }
-  get interventionComponentsInstance(): InterventionItemComponent[] {
-    return this.interventionService.interventionComponents.map((interventionComponent) => interventionComponent.instance);
+
+  get interventionComponentsInstance(): HTMLInterventionElement[] {
+    return this.interventionService.graphElements.map((interventionComponent) => interventionComponent);
   }
   constructor(private interventionService: InterventionService) {}
 
