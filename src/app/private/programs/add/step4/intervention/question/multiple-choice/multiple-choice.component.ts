@@ -11,10 +11,6 @@ export class MultipleChoiceComponent implements OnInit {
   @Input() intervention: QuestionIntervention;
   @Input() uuid: string;
 
-  get alternatives() {
-    return this.intervention.options;
-  }
-
   get graphIndex(): number {
     return this.interventionService.interventionComponents.findIndex((value) => value.instance.uuid === this.uuid);
   }
@@ -22,15 +18,15 @@ export class MultipleChoiceComponent implements OnInit {
   constructor(private interventionService: InterventionService) {}
 
   ngOnInit(): void {
-    this.alternatives.push('Alternativa 1');
-    this.alternatives.push('Alternativa 2');
+    this.intervention.options.push('Alternativa 1');
+    this.intervention.options.push('Alternativa 2');
   }
 
   addChoice() {
-    this.alternatives.push('Alternative ' + (this.alternatives.length + 1));
+    this.intervention.options.push('Alternative ' + (this.intervention.options.length + 1));
   }
 
   removeChoice(choiceIndex: number) {
-    this.alternatives.splice(choiceIndex, 1);
+    this.intervention.options.splice(choiceIndex, 1);
   }
 }
