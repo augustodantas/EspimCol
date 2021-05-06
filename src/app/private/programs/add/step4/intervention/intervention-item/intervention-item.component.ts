@@ -79,8 +79,8 @@ export class InterventionItemComponent implements OnInit, AfterViewInit {
     this.interventionCoordinate.x = this.interventionCoordinate.x + movement.x;
     this.interventionCoordinate.y = this.interventionCoordinate.y + movement.y;
 
-    this.offset.y = currentPosition.y;
-    this.offset.x = currentPosition.x;
+    this.interventionCoordinate.intervention.y = currentPosition.y;
+    this.interventionCoordinate.intervention.x = currentPosition.x;
 
     this.previousPosition = currentPosition;
 

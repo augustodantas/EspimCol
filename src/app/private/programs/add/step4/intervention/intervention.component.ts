@@ -1,4 +1,12 @@
-import { Component, ComponentFactoryResolver, ComponentRef, ElementRef, ViewChild, ViewContainerRef } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ComponentFactoryResolver,
+  ComponentRef,
+  ElementRef,
+  ViewChild,
+  ViewContainerRef,
+} from '@angular/core';
 
 import { InterventionItemComponent } from './intervention-item/intervention-item.component';
 import { HTMLInterventionElement, InterventionService } from './intervention.service';
@@ -8,7 +16,7 @@ import { HTMLInterventionElement, InterventionService } from './intervention.ser
   templateUrl: './intervention.component.html',
   styleUrls: ['./intervention.component.scss'],
 })
-export class InterventionComponent {
+export class InterventionComponent implements AfterViewInit {
   previousPosition: { x?: number; y?: number } = {};
   offset: { x: number; y: number } = { x: 0, y: 0 };
   interventionComponents: ComponentRef<InterventionItemComponent>[] = [];
@@ -27,6 +35,8 @@ export class InterventionComponent {
       this.interventionComponents[index].destroy();
       this.interventionComponents.splice(index, 1);
     });
+
+    this.interventionService.init();
   }
 
   createIntervention(intervention: HTMLInterventionElement) {
@@ -36,16 +46,27 @@ export class InterventionComponent {
 
     let goodSpaceBetween = 50;
     let offsetX = goodSpaceBetween;
+    let offsetY = goodSpaceBetween;
 
     // Pega o maior Offset dos componentes
     this.interventionComponents.forEach((interventionComponent) => {
-      let componentOffsetX = interventionComponent.instance.offset.x + interventionComponent.instance.interventionCoordinate.width;
+      let componentOffsetX =
+        interventionComponent.instance.offset.x + interventionComponent.instance.interventionCoordinate.width + goodSpaceBetween;
       if (componentOffsetX > offsetX) {
         offsetX = componentOffsetX;
       }
     });
 
-    interventionComponent.instance.offset = { x: offsetX + goodSpaceBetween, y: goodSpaceBetween };
+    // Se tiver gravado no banco o X e o Y,
+    // Recupera aqui
+    if (intervention.intervention.x) {
+      offsetX = intervention.intervention.x;
+    }
+    if (intervention.intervention.y) {
+      offsetY = intervention.intervention.y;
+    }
+
+    interventionComponent.instance.offset = { x: offsetX, y: offsetY };
     interventionComponent.instance.interventionCoordinate = intervention;
     this.interventionComponents.push(interventionComponent);
 
