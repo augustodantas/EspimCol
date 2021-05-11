@@ -1,4 +1,5 @@
-import { ComponentFactoryResolver, ElementRef, Injectable, ViewContainerRef } from '@angular/core';
+import { ElementRef, Injectable, ViewContainerRef } from '@angular/core';
+import cloneDeep from 'lodash/cloneDeep';
 import { Subject } from 'rxjs';
 import {
   Intervention,
@@ -6,6 +7,7 @@ import {
   QuestionIntervention,
   TaskIntervention,
 } from 'src/app/private/models/intervention.model';
+import { LocalStorageService } from 'src/app/security/login/local-storage.service';
 import { isNullOrUndefined, toChar } from 'src/app/util/functions';
 import { v4 as uuid } from 'uuid';
 
@@ -19,6 +21,7 @@ export class InterventionService {
   graphElements: HTMLInterventionElement[] = [];
   mainDiv: ElementRef;
 
+  clearBoard$: Subject<void> = new Subject<void>();
   redrawGraph$: Subject<void> = new Subject<void>();
   removeIntervention$: Subject<number> = new Subject<number>();
   hasMultiplePaths: boolean = false;
@@ -31,25 +34,65 @@ export class InterventionService {
   // removeIntervention$: Subject<number> = new Subject<number>();
   firstInterventionChange$: Subject<number> = new Subject<number>();
 
-  constructor(private componentFactoryResolver: ComponentFactoryResolver) {}
+  states: any[] = [];
+  currentState: number = -1;
+  constructor(private readonly _localStorageService: LocalStorageService) {}
 
   get firstIntervention(): number {
     return this.graphElements.findIndex((value) => value.intervention.first === true);
   }
 
   init() {
-    this.loadJson();
-  }
-
-  loadJson() {
     let interventions = JSON.parse(
       '[{"orderPosition":1,"first":true,"obligatory":false,"x":51,"y":41,"type":"question","questionType":1,"conditions":{"Alternativa 1":1,"Alternativa 2":null},"options":["Alternativa 1"],"scales":[]},{"orderPosition":2,"first":false,"next":2,"obligatory":false,"type":"empty"},{"orderPosition":3,"first":false,"obligatory":false,"type":"question","questionType":1,"conditions":{"Alternativa 1":"1"},"options":["Alternativa 1"],"scales":[]}]'
     );
 
     this.loadInterventions(interventions);
+    this.saveState();
   }
 
-  saveState() {}
+  nextState() {
+    if (this.currentState < this.states.length - 1) {
+      var state = this.states[++this.currentState];
+      this.loadState(state);
+    }
+  }
+
+  previousState() {
+    if (this.currentState > 0) {
+      var state = this.states[--this.currentState];
+      this.loadState(state);
+    }
+  }
+
+  saveState() {
+    let state = cloneDeep(this.getCurrentState());
+
+    if (this.currentState != this.states.length - 1) {
+      this.states.splice(this.currentState + 1);
+    }
+
+    if (this.states.length == 50) {
+      this.states.shift();
+    }
+
+    this.states.push(state);
+    this.currentState = this.states.length - 1;
+
+    var jsonState = JSON.stringify(state);
+    console.log(jsonState);
+    // localStorage.setItem('EDITOR_STATE', jsonState);
+  }
+
+  loadState(state: Intervention[]) {
+    let stateToLoad = cloneDeep(state);
+
+    this.clearBoard$.next();
+    this.graphElements = [];
+    this.interventionElementsGraph = [];
+
+    this.loadInterventions(stateToLoad);
+  }
 
   getCurrentState() {
     this.graphElements.forEach((element, index) => {
@@ -88,30 +131,6 @@ export class InterventionService {
     });
 
     this.redrawGraph$.next();
-
-    //   this.program_id = program_id;
-    //   this.event = event;
-    //   interventions.sort((a, b) => {
-    //     if (a.orderPosition < b.orderPosition) {
-    //       return -1;
-    //     } else if (a.orderPosition > b.orderPosition) {
-    //       return 1;
-    //     } else {
-    //       return 0;
-    //     }
-    //   });
-    // Old espim did not save order position correctly, so here we have to correct
-    //   const orderPositions = {};
-    //   for (let i = 0; i < interventions.length; i++) orderPositions[interventions[i].orderPosition] = i + 1;
-    //   orderPositions[0] = 0;
-
-    //   this.interventionElementsGraph = interventions.map((value) => {
-    //     if (value.type === 'question' && (value as QuestionIntervention).questionType === 1)
-    //       return Object.keys((value as QuestionIntervention).conditions).map(
-    //         (alternative) => orderPositions[(value as QuestionIntervention).conditions[alternative]]
-    //       );
-    //     else return [orderPositions[value.next]];
-    //   });
   }
 
   transformToClass(data: Intervention): HTMLInterventionElement {
@@ -124,6 +143,7 @@ export class InterventionService {
 
     return new HTMLInterventionElement(intervention);
   }
+
   finish() {
     //   if (this.hasMultiplePaths) {
     // new SwalComponent({
@@ -135,17 +155,12 @@ export class InterventionService {
     //   .then();
     //     return;
     //   }
-
-    console.log(this.interventionElementsGraph);
     /* Connection to server
     if (intervention.id)
       this.http.patch(`${ESPIM_REST_Interventions}${intervention.id}/`, intervention).subscribe(_ => {}, _ => console.log(`Failed to patch intervention of id ${intervention.id}, orderPosition ${intervention.orderPosition}`));
     else
       this.http.post(ESPIM_REST_Interventions, intervention).subscribe((data: any) => intervention.id = data.id, _ => console.log(`Failed to post intervention of orderPosition ${intervention.orderPosition}`));
     */
-
-    console.log(JSON.stringify(this.getCurrentState()));
-
     //   this.router.navigateByUrl(`private/programs/add/${this.program_id}/fourth`).then();
   }
 
@@ -170,6 +185,7 @@ export class InterventionService {
 
     this.newInterventions$.next({ graphIndex: this.graphElements.length - 1, intervention });
     this.redrawGraph$.next();
+    this.saveState();
   }
 
   removeIntervention(graphIndex: number) {
@@ -195,6 +211,8 @@ export class InterventionService {
 
     this.removeIntervention$.next(graphIndex);
     this.redrawGraph$.next();
+
+    this.saveState();
   }
 
   graphElement(i: number) {

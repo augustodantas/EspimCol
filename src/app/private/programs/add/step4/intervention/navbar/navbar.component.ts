@@ -36,7 +36,23 @@ export class NavbarComponent implements OnInit {
     this.interventionService.addIntervention(new HTMLInterventionElement(intervention));
   }
 
-  zoomPopUp() {
+  nextStateEnabled(): boolean {
+    return this.interventionService.states.length > 0 && this.interventionService.currentState > 0;
+  }
+
+  previousStateEnabled(): boolean {
+    return this.interventionService.currentState < this.interventionService.states.length - 1;
+  }
+
+  nextState() {
+    this.interventionService.nextState();
+  }
+
+  previousState() {
+    this.interventionService.previousState();
+  }
+
+  zoomIn() {
     // new SwalComponent({
     //   title: 'Zoom',
     //   text:
@@ -45,6 +61,8 @@ export class NavbarComponent implements OnInit {
     //   .show()
     //   .then();
   }
+
+  zoomOut() {}
 
   finish() {
     this.interventionService.finish();

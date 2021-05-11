@@ -30,6 +30,7 @@ export class InterventionComponent implements AfterViewInit {
     this.interventionService.interventionsContainer = this.interventionsContainer;
     this.interventionService.mainDiv = this.mainDiv;
 
+    this.interventionService.clearBoard$.subscribe((add) => this.clearBoard());
     this.interventionService.newInterventions$.subscribe((add) => this.createIntervention(add.intervention));
     this.interventionService.removeIntervention$.subscribe((index) => {
       this.interventionComponents[index].destroy();
@@ -37,6 +38,14 @@ export class InterventionComponent implements AfterViewInit {
     });
 
     this.interventionService.init();
+  }
+
+  clearBoard() {
+    this.interventionComponents.forEach((component) => {
+      component.destroy();
+    });
+
+    this.interventionComponents = [];
   }
 
   createIntervention(intervention: HTMLInterventionElement) {
