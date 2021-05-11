@@ -90,6 +90,7 @@ export class InterventionService {
     this.clearBoard$.next();
     this.graphElements = [];
     this.interventionElementsGraph = [];
+    this.lastInteractedIntervention = null;
 
     this.loadInterventions(stateToLoad);
   }
@@ -176,7 +177,7 @@ export class InterventionService {
       }
     }
 
-    if (this.graphElements.length == 0 && isNullOrUndefined(intervention.first)) {
+    if (this.graphElements.length == 0) {
       intervention.first = true;
     }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import {
   Intervention,
   MediaIntervention,
@@ -19,6 +19,9 @@ export class NavbarComponent implements OnInit {
   mobileToggleActivated: boolean;
   addInterventionPopUp = false;
   itensQuestion: any[] = ITENS_QUESTION;
+  zoom: number = 1;
+  @Output() updateZoom: EventEmitter<number> = new EventEmitter<number>();
+
   constructor(private interventionService: InterventionService) {}
 
   ngOnInit(): void {
@@ -53,16 +56,18 @@ export class NavbarComponent implements OnInit {
   }
 
   zoomIn() {
-    // new SwalComponent({
-    //   title: 'Zoom',
-    //   text:
-    //     'Utilize o zoom do navegador para controlar o zoom.\nNormalmente isso pode ser feito segurando a tecla "CTRL" e pressionando as teclas "+" ou "-"',
-    // })
-    //   .show()
-    //   .then();
+    if (this.zoom < 1) {
+      this.zoom += 0.1;
+      this.updateZoom.emit(this.zoom);
+    }
   }
 
-  zoomOut() {}
+  zoomOut() {
+    if (this.zoom >= 0.7) {
+      this.zoom -= 0.1;
+      this.updateZoom.emit(this.zoom);
+    }
+  }
 
   finish() {
     this.interventionService.finish();

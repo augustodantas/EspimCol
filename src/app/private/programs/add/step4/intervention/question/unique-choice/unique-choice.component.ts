@@ -11,6 +11,11 @@ import { HTMLInterventionElement, InterventionService } from '../../intervention
 export class UniqueChoiceComponent implements OnInit {
   @Input() intervention: QuestionIntervention;
   @Input() graphIndex: number;
+
+  trackByFn(index, item) {
+    return index;
+  }
+
   get alternatives() {
     return this.intervention?.options;
   }

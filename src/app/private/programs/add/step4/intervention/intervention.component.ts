@@ -20,6 +20,7 @@ export class InterventionComponent implements AfterViewInit {
   previousPosition: { x?: number; y?: number } = {};
   offset: { x: number; y: number } = { x: 0, y: 0 };
   interventionComponents: ComponentRef<InterventionItemComponent>[] = [];
+  zoomSize: number = 1;
 
   @ViewChild('container', { read: ViewContainerRef }) interventionsContainer;
   @ViewChild('main_div') mainDiv: ElementRef;

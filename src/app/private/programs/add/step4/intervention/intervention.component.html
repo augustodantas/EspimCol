@@ -1,8 +1,9 @@
-<esm-navbar></esm-navbar>
+<esm-navbar (updateZoom)="zoomSize = $event"></esm-navbar>
 <div class="holder-tiled-background">
   <div
     #main_div
     class="tiled-background"
+    [style]="{ zoom: zoomSize }"
     (mousedown)="onMiddleClickDown($event)"
     (mouseup)="onMiddleClickUp($event)"
     (mousemove)="MiddleClickScroll($event)"
