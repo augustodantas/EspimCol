@@ -11,6 +11,10 @@ export class LikertComponent implements OnInit {
   @Input() intervention: QuestionIntervention;
   @Input() graphIndex: number;
 
+  trackByFn(index, item) {
+    return index;
+  }
+
   // Normal Likert only has 1 scale
   get scale() {
     return this.intervention.scales[0];

@@ -15,6 +15,10 @@ export class LikertCustomComponent {
     return this.intervention.scales;
   }
 
+  trackByFn(index, item) {
+    return index;
+  }
+
   constructor(private interventionService: InterventionService) {}
 
   addChoice() {
