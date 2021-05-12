@@ -44,7 +44,9 @@ export class InterventionItemComponent implements OnInit, AfterViewInit {
   }
 
   ngOnDestroy() {
-    this.redrawGraphSubscription.unsubscribe();
+    if (this.redrawGraphSubscription) {
+      this.redrawGraphSubscription.unsubscribe();
+    }
   }
 
   updateNextInterventions() {

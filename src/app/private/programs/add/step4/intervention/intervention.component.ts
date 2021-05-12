@@ -4,9 +4,14 @@ import {
   ComponentFactoryResolver,
   ComponentRef,
   ElementRef,
+  EventEmitter,
+  Input,
+  Output,
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
+import { BsModalRef } from 'ngx-bootstrap/modal';
+import { Intervention } from 'src/app/private/models/intervention.model';
 
 import { InterventionItemComponent } from './intervention-item/intervention-item.component';
 import { HTMLInterventionElement, InterventionService } from './intervention.service';
@@ -22,10 +27,17 @@ export class InterventionComponent implements AfterViewInit {
   interventionComponents: ComponentRef<InterventionItemComponent>[] = [];
   zoomSize: number = 1;
 
+  @Output() response: EventEmitter<Intervention[]> = new EventEmitter<Intervention[]>();
+  @Input() interventionsToInit: Intervention[] = [];
+
   @ViewChild('container', { read: ViewContainerRef }) interventionsContainer;
   @ViewChild('main_div') mainDiv: ElementRef;
 
-  constructor(private interventionService: InterventionService, private componentFactoryResolver: ComponentFactoryResolver) {}
+  constructor(
+    public bsModalRef: BsModalRef,
+    private interventionService: InterventionService,
+    private componentFactoryResolver: ComponentFactoryResolver
+  ) {}
 
   ngAfterViewInit(): void {
     this.interventionService.interventionsContainer = this.interventionsContainer;
@@ -38,7 +50,7 @@ export class InterventionComponent implements AfterViewInit {
       this.interventionComponents.splice(index, 1);
     });
 
-    this.interventionService.init();
+    this.interventionService.init(this.interventionsToInit);
   }
 
   clearBoard() {
@@ -109,5 +121,10 @@ export class InterventionComponent implements AfterViewInit {
 
       this.previousPosition = currentPosition;
     }
+  }
+
+  finish() {
+    this.response.emit(this.interventionService.getCurrentState());
+    this.bsModalRef.hide();
   }
 }

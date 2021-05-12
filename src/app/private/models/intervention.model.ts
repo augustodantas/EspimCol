@@ -1,3 +1,5 @@
+import { toChar } from 'src/app/util/functions';
+
 export class Intervention {
   public id: number;
   public type: string;
@@ -31,6 +33,18 @@ export class Intervention {
 
   getTypeDescription() {
     return 'Mensagem';
+  }
+
+  getOrderDescription() {
+    return this.orderPosition < 0 ? toChar(this.orderPosition * -1) : this.orderPosition;
+  }
+
+  getDescription() {
+    if (this.statement) {
+      return this.statement;
+    } else {
+      return 'Sem descrição';
+    }
   }
 }
 

@@ -21,6 +21,7 @@ export class NavbarComponent implements OnInit {
   itensQuestion: any[] = ITENS_QUESTION;
   zoom: number = 1;
   @Output() updateZoom: EventEmitter<number> = new EventEmitter<number>();
+  @Output() finishIntervention: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   constructor(private interventionService: InterventionService) {}
 
@@ -57,20 +58,20 @@ export class NavbarComponent implements OnInit {
 
   zoomIn() {
     if (this.zoom < 1) {
-      this.zoom += 0.1;
+      this.zoom = +(this.zoom + 0.1).toFixed(1);
       this.updateZoom.emit(this.zoom);
     }
   }
 
   zoomOut() {
     if (this.zoom >= 0.7) {
-      this.zoom -= 0.1;
+      this.zoom = +(this.zoom - 0.1).toFixed(1);
       this.updateZoom.emit(this.zoom);
     }
   }
 
   finish() {
-    this.interventionService.finish();
+    this.finishIntervention.emit(true);
   }
 
   debug() {

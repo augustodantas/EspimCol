@@ -8,7 +8,7 @@ import {
   TaskIntervention,
 } from 'src/app/private/models/intervention.model';
 import { LocalStorageService } from 'src/app/security/login/local-storage.service';
-import { isNullOrUndefined, toChar } from 'src/app/util/functions';
+import { isNullOrUndefined } from 'src/app/util/functions';
 import { v4 as uuid } from 'uuid';
 
 @Injectable({
@@ -42,17 +42,15 @@ export class InterventionService {
     return this.graphElements.findIndex((value) => value.intervention.first === true);
   }
 
-  init() {
-    let interventions = JSON.parse(
-      '[{"orderPosition":1,"first":true,"obligatory":false,"x":51,"y":41,"type":"question","questionType":1,"conditions":{"Alternativa 1":1,"Alternativa 2":null},"options":["Alternativa 1"],"scales":[]},{"orderPosition":2,"first":false,"next":2,"obligatory":false,"type":"empty"},{"orderPosition":3,"first":false,"obligatory":false,"type":"question","questionType":1,"conditions":{"Alternativa 1":"1"},"options":["Alternativa 1"],"scales":[]}]'
-    );
-
-    this.loadInterventions(interventions);
+  init(interventions) {
+    this.loadState(interventions);
     this.saveState();
   }
 
   nextState() {
     if (this.currentState < this.states.length - 1) {
+      this.saveCurrentState();
+
       var state = this.states[++this.currentState];
       this.loadState(state);
     }
@@ -60,6 +58,8 @@ export class InterventionService {
 
   previousState() {
     if (this.currentState > 0) {
+      this.saveCurrentState();
+
       var state = this.states[--this.currentState];
       this.loadState(state);
     }
@@ -84,6 +84,13 @@ export class InterventionService {
     // localStorage.setItem('EDITOR_STATE', jsonState);
   }
 
+  // Salva o step atual antes dele excluir/adicionar
+  // Pra ficar salvo os dados gerais
+  saveCurrentState() {
+    let state = cloneDeep(this.getCurrentState());
+    this.states[this.currentState] = state;
+  }
+
   loadState(state: Intervention[]) {
     let stateToLoad = cloneDeep(state);
 
@@ -99,8 +106,9 @@ export class InterventionService {
     this.graphElements.forEach((element, index) => {
       // if the intervention is of unique choice, it is already up to date (it gets updated in unique-choice.component.ts)
       // else we must updated intervention.next to the first and only intervention it points
-      if (element.intervention.type !== 'question' && (element.intervention as QuestionIntervention).questionType !== 1)
+      if ((element.intervention as QuestionIntervention).questionType !== 1) {
         element.intervention.next = this.interventionElementsGraph[index][0];
+      }
     });
 
     return this.graphElements.map((value) => value.intervention);
@@ -115,7 +123,7 @@ export class InterventionService {
     // E adiciona os elementos
     interventions.forEach((i: HTMLInterventionElement, index) => {
       // Converte o .next ou o .conditions para o interventionElementsGraph
-      if (i.type !== 'question' && (i.intervention as QuestionIntervention).questionType !== 1) {
+      if ((i.intervention as QuestionIntervention).questionType !== 1) {
         this.interventionElementsGraph.push([i.intervention.next]);
       } else {
         let questionIntervention = i.intervention as QuestionIntervention;
@@ -166,6 +174,8 @@ export class InterventionService {
   }
 
   addIntervention(intervention: HTMLInterventionElement) {
+    this.saveCurrentState();
+
     if (!isNullOrUndefined(this.lastInteractedIntervention)) {
       if (
         this.graphElement(this.lastInteractedIntervention).intervention instanceof QuestionIntervention &&
@@ -190,6 +200,8 @@ export class InterventionService {
   }
 
   removeIntervention(graphIndex: number) {
+    this.saveCurrentState();
+
     this.interventionElementsGraph.splice(graphIndex, 1);
     this.graphElements.splice(graphIndex, 1);
 
@@ -328,7 +340,7 @@ export class HTMLInterventionElement {
     this.intervention.orderPosition = orderPosition;
   }
   get orderDescription() {
-    return this.orderPosition < 0 ? toChar(this.orderPosition * -1) : this.orderPosition;
+    return this.intervention.getOrderDescription();
   }
   get typeDescription() {
     return this.intervention?.getTypeDescription();

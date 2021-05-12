@@ -3,7 +3,9 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
+import { take } from 'rxjs/operators';
 import { ActiveEvent, Event } from 'src/app/private/models/event.model';
+import { Intervention } from 'src/app/private/models/intervention.model';
 import { Trigger } from 'src/app/private/models/trigger.model';
 
 import { ProgramsAddService } from '../../programsadd.service';
@@ -52,7 +54,7 @@ export class ActiveEventComponent implements OnInit {
       this.event.triggers.forEach((it) => this.adicionarTrigger(new Trigger(it)));
     }
 
-    this.goToInterventions();
+    // this.goToInterventions();
   }
 
   adicionarTrigger(value: Trigger): void {
@@ -104,25 +106,17 @@ export class ActiveEventComponent implements OnInit {
       class: 'modal-fullscreen modal-intervention',
       keyboard: false,
       ignoreBackdropClick: true,
-      initialState: {},
+      initialState: {
+        interventionsToInit: this.event.interventions,
+      },
     };
-
-    // this.interventionService.init(this.programAddService.programValue.id, this.event, this.event.interventions);
 
     this._modalInterventionRef = this._modalService.show(InterventionComponent, config);
 
-    // this._modalRef.content.response.pipe(take(1)).subscribe((value: boolean) => {
-    //   if (value) {
-    //     this._loaderService.show();
-    //     this.daoService
-    //       .deleteObject(this.urlParticipants, participant.id.toString())
-    //       .pipe(finalize(() => this._loaderService.hide()))
-    //       .subscribe((resp) => {
-    //         this.handleChange(resp);
-    //         this._toastr.success(resp.message);
-    //       });
-    //   }
-    // });
+    this._modalInterventionRef.content.response.pipe(take(1)).subscribe((value: Intervention[]) => {
+      console.log(value);
+      this.event.interventions = value;
+    });
   }
 
   // closeIntervention(): void {

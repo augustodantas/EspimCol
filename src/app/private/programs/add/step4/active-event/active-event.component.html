@@ -71,9 +71,22 @@
 
     <div class="row">
       <div class="col form-group text-center">
-        <a class="btn btn-primary py-2 px-4" (click)="goToInterventions()">ADICIONAR INTERVENÇÕES</a>
+        <a class="btn btn-primary py-2 px-4" href="javascript:" (click)="goToInterventions()">ADICIONAR INTERVENÇÕES</a>
       </div>
     </div>
+
+    <div class="row">
+      <div class="col form-group">
+        <p class="font-weight-bold">Intervenções cadastradas</p>
+
+        <ul>
+          <li *ngFor="let intervention of this.event.interventions">
+            {{ intervention.getOrderDescription() + ' - ' + intervention.getTypeDescription() + ' - ' + intervention.getDescription() }}
+          </li>
+        </ul>
+      </div>
+    </div>
+
     <div class="row">
       <div class="col form-group">
         <p class="font-weight-bold">Disparos cadastrados</p>

@@ -18,12 +18,13 @@ export class MultipleChoiceComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.intervention.options.push('Alternativa 1');
-    this.intervention.options.push('Alternativa 2');
+    if (this.intervention.options.length == 0) {
+      this.addChoice();
+      this.addChoice();
+    }
   }
 
   addChoice() {
-    console.log(this.intervention.options);
     this.intervention.options.push('Alternative ' + (this.intervention.options.length + 1));
   }
 
