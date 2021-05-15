@@ -58,7 +58,7 @@ export class LoginService {
   }
 
   fetchUser(): Observable<SocialUser> {
-    let params = new HttpParams().set('include', 'observer');
+    let params = new HttpParams().set('include', 'observer.user');
     return this._observerService.fetchUser(ESPIM_REST_Observers + 'me', params).pipe(
       map((response) => {
         this._currentUserSubject.next(response.data);

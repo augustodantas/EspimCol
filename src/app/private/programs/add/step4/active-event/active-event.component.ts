@@ -1,6 +1,5 @@
-import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
 import { take } from 'rxjs/operators';
@@ -8,9 +7,7 @@ import { ActiveEvent, Event } from 'src/app/private/models/event.model';
 import { Intervention } from 'src/app/private/models/intervention.model';
 import { Trigger } from 'src/app/private/models/trigger.model';
 
-import { ProgramsAddService } from '../../programsadd.service';
 import { InterventionComponent } from '../intervention/intervention.component';
-import { InterventionService } from '../intervention/intervention.service';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -31,17 +28,10 @@ export class ActiveEventComponent implements OnInit {
     color: this.formBuilder.control(''),
     description: this.formBuilder.control(''),
     triggers: this.formBuilder.array([]),
+    interventions: this.formBuilder.control([]),
   });
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private router: Router,
-    private readonly programAddService: ProgramsAddService,
-    private readonly _modalService: BsModalService,
-    private readonly interventionService: InterventionService,
-    private activatedRoute: ActivatedRoute,
-    private chRef: ChangeDetectorRef
-  ) {}
+  constructor(private formBuilder: FormBuilder, private readonly _modalService: BsModalService) {}
 
   ngOnInit(): void {
     if (!this.event.id) {
@@ -89,7 +79,6 @@ export class ActiveEventComponent implements OnInit {
 
   loadDetail() {
     this.isOpen = !this.isOpen;
-    console.log('carregar');
   }
 
   validateForm(): boolean {
@@ -107,20 +96,14 @@ export class ActiveEventComponent implements OnInit {
       keyboard: false,
       ignoreBackdropClick: true,
       initialState: {
-        interventionsToInit: this.event.interventions,
+        interventionsToInit: this.form.get('interventions').value,
       },
     };
 
     this._modalInterventionRef = this._modalService.show(InterventionComponent, config);
 
     this._modalInterventionRef.content.response.pipe(take(1)).subscribe((value: Intervention[]) => {
-      console.log(value);
-      this.event.interventions = value;
+      this.form.get('interventions').setValue(value);
     });
   }
-
-  // closeIntervention(): void {
-  //   this.showIntervention = false;
-  //   this.chRef.detectChanges();
-  // }
 }

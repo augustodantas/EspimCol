@@ -80,7 +80,7 @@
         <p class="font-weight-bold">Intervenções cadastradas</p>
 
         <ul>
-          <li *ngFor="let intervention of this.event.interventions">
+          <li *ngFor="let intervention of this.form.get('interventions').value">
             {{ intervention.getOrderDescription() + ' - ' + intervention.getTypeDescription() + ' - ' + intervention.getDescription() }}
           </li>
         </ul>

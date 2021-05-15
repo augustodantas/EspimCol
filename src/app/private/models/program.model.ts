@@ -4,15 +4,15 @@ import { User } from './user.model';
 
 export class Program {
   id: number;
-  title: string;
-  description: string;
-  starts: string;
-  ends: string;
-  updateDate: string;
-  hasPhases: boolean;
-  isPublic: boolean;
-  beingEdited: boolean;
-  beingDuplicated: boolean;
+  title: string = '';
+  description: string = '';
+  starts: string = '';
+  ends: string = '';
+  updateDate: string = '';
+  hasPhases: boolean = false;
+  isPublic: boolean = false;
+  beingEdited: boolean = false;
+  beingDuplicated: boolean = false;
   // composed entities
   observer: Observer;
   observers: Array<Observer> = [];

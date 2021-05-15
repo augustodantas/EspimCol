@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChildren } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ESPIM_REST_Programs } from 'src/app/app.api';
+import { LoaderService } from 'src/app/services/loader.service';
 
 import { DAOService } from '../../../dao/dao.service';
 import { ActiveEvent, Event } from '../../../models/event.model';
@@ -17,15 +17,11 @@ import { PassiveEventComponent } from './passive-event/passive-event.component';
 export class Step4Component implements OnInit {
   passiveEvents: Array<Event>;
   activeEvents: Array<Event>;
+  urlPrograms: string = ESPIM_REST_Programs;
   @ViewChildren(PassiveEventComponent) passiveEventsComponents: PassiveEventComponent[];
   @ViewChildren(ActiveEventComponent) activeEventsComponents: ActiveEventComponent[];
 
-  constructor(
-    private programAddService: ProgramsAddService,
-    private formbuilder: FormBuilder,
-    private router: Router,
-    private dao: DAOService
-  ) {}
+  constructor(private programAddService: ProgramsAddService, private _daoService: DAOService, private _loaderService: LoaderService) {}
 
   ngOnInit() {
     this.programAddService.program.subscribe((programInstance: Program) => {
@@ -59,6 +55,10 @@ export class Step4Component implements OnInit {
         return eventComponent.form.value;
       }),
     };
+
+    this.programAddService.saveLocalStep(dados);
+
+    this.programAddService.saveProgram();
 
     // const dados = SENSORS.filter((v, i) => this.passiveEvents.sensors.value[i]).join('; ');
 

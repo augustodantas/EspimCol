@@ -1,5 +1,6 @@
 import { HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import cloneDeep from 'lodash/cloneDeep';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import { LoaderService } from 'src/app/services/loader.service';
@@ -51,7 +52,7 @@ export class ProgramsAddService {
   saveStep(dados: any) {
     let id = this.programValue.id;
     if (id) {
-      let programUpdated = ({ ...this.programValue, ...dados } as unknown) as Program;
+      let programUpdated = { ...this.programValue, ...dados } as unknown as Program;
       this._loaderService.show();
 
       this._daoService
@@ -66,8 +67,37 @@ export class ProgramsAddService {
   }
 
   saveLocalStep(dados: any) {
-    let programUpdated = ({ ...this.programValue, ...dados } as unknown) as Program;
+    let programUpdated = { ...this.programValue, ...dados } as unknown as Program;
     this._currentProgramSubject.next(programUpdated);
+  }
+
+  /**
+   * Saves an step patching "programs". Patching results in updating the attributes specified in programs
+   */
+  saveProgram() {
+    let id = this.programValue.id;
+    let program = cloneDeep(this.programValue);
+
+    program.observers = program.observers.map((item) => item.id);
+    program.users = program.users.map((item) => item.id);
+
+    this._loaderService.show();
+
+    if (id) {
+      this._daoService
+        .putObject(ESPIM_REST_Programs, id)
+        .pipe(finalize(() => this._loaderService.hide()))
+        .subscribe((resp) => {
+          console.log('salvouu');
+        });
+    } else {
+      this._daoService
+        .postObject(ESPIM_REST_Programs, program)
+        .pipe(finalize(() => this._loaderService.hide()))
+        .subscribe((resp) => {
+          console.log('salvouu');
+        });
+    }
   }
 
   public get programValue(): Program {
