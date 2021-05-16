@@ -166,9 +166,9 @@ export class InterventionService {
     //   }
     /* Connection to server
     if (intervention.id)
-      this.http.patch(`${ESPIM_REST_Interventions}${intervention.id}/`, intervention).subscribe(_ => {}, _ => console.log(`Failed to patch intervention of id ${intervention.id}, orderPosition ${intervention.orderPosition}`));
+      this.http.patch(`${ESPIM_REST_Interventions}${intervention.id}/`, intervention).subscribe(_ => {}, _ => console.log(`Failed to patch intervention of id ${intervention.id}, order_position ${intervention.order_position}`));
     else
-      this.http.post(ESPIM_REST_Interventions, intervention).subscribe((data: any) => intervention.id = data.id, _ => console.log(`Failed to post intervention of orderPosition ${intervention.orderPosition}`));
+      this.http.post(ESPIM_REST_Interventions, intervention).subscribe((data: any) => intervention.id = data.id, _ => console.log(`Failed to post intervention of order_position ${intervention.order_position}`));
     */
     //   this.router.navigateByUrl(`private/programs/add/${this.program_id}/fourth`).then();
   }
@@ -333,11 +333,11 @@ export class HTMLInterventionElement {
   set statement(statement: string) {
     this.intervention.statement = statement;
   }
-  get orderPosition() {
-    return this.intervention?.orderPosition;
+  get order_position() {
+    return this.intervention?.order_position;
   }
-  set orderPosition(orderPosition: number) {
-    this.intervention.orderPosition = orderPosition;
+  set order_position(order_position: number) {
+    this.intervention.order_position = order_position;
   }
   get orderDescription() {
     return this.intervention.getOrderDescription();
@@ -351,11 +351,11 @@ export class HTMLInterventionElement {
   set first(first: boolean) {
     this.intervention.first = first;
   }
-  get obligatory() {
-    return this.intervention?.obligatory;
+  get obrigatory() {
+    return this.intervention?.obrigatory;
   }
-  set obligatory(obligatory) {
-    this.intervention.obligatory = obligatory;
+  set obrigatory(obrigatory) {
+    this.intervention.obrigatory = obrigatory;
   }
 
   get top() {

@@ -1,6 +1,6 @@
 <div class="clearfix mt-5">
   <h1>Adicionar eventos</h1>
-  <div class="clearfix" *ngFor="let event of activeEvents; index as i">
+  <div class="clearfix" *ngFor="let event of activeEvents; index as i; trackBy: trackByFn">
     <esm-active-event [event]="event" [index]="i" [events]="activeEvents"></esm-active-event>
   </div>
 
@@ -15,7 +15,7 @@
 
 <div class="clearfix mt-5">
   <h1>Adicionar coleta por sensores</h1>
-  <div class="clearfix" *ngFor="let event of passiveEvents; index as i">
+  <div class="clearfix" *ngFor="let event of passiveEvents; index as i; trackBy: trackByFn">
     <esm-passive-event [event]="event" [index]="i" [events]="passiveEvents"></esm-passive-event>
   </div>
 

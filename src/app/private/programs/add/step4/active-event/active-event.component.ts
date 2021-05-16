@@ -25,6 +25,7 @@ export class ActiveEventComponent implements OnInit {
 
   form: FormGroup = this.formBuilder.group({
     title: ['', Validators.required],
+    type: this.formBuilder.control(''),
     color: this.formBuilder.control(''),
     description: this.formBuilder.control(''),
     triggers: this.formBuilder.array([]),
@@ -34,7 +35,14 @@ export class ActiveEventComponent implements OnInit {
   constructor(private formBuilder: FormBuilder, private readonly _modalService: BsModalService) {}
 
   ngOnInit(): void {
-    if (!this.event.id) {
+    // Verifica se é um "NOVO EVENTO"
+    if (
+      !this.event.title &&
+      !this.event.id &&
+      this.event.triggers.length == 0 &&
+      !this.event.color &&
+      this.event.interventions.length == 0
+    ) {
       this.isOpen = true;
     }
 

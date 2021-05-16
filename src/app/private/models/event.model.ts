@@ -7,7 +7,7 @@ export class Event {
   title: string = '';
   description: string = '';
   color: string = '';
-  type: string = '';
+  type: string = 'passive';
   sensors: Array<Sensor> = [];
   complexConditions;
   triggers: Array<Trigger> = [];
@@ -17,8 +17,8 @@ export class Event {
 
 export class ActiveEvent extends Event {
   interventions: Array<Intervention> = [];
-
   constructor(event: any = {}) {
     super(event);
+    this.type = 'active';
   }
 }

@@ -23,11 +23,28 @@ export class Step4Component implements OnInit {
 
   constructor(private programAddService: ProgramsAddService, private _daoService: DAOService, private _loaderService: LoaderService) {}
 
+  trackByFn(index, item) {
+    return index;
+  }
+
   ngOnInit() {
     this.programAddService.program.subscribe((programInstance: Program) => {
       this.passiveEvents = programInstance.passiveEvents;
       this.activeEvents = programInstance.activeEvents;
     });
+  }
+
+  ngOnDestroy(): void {
+    const dados = {
+      activeEvents: this.activeEventsComponents.map((eventComponent) => {
+        return eventComponent.form.value;
+      }),
+      passiveEvents: this.passiveEventsComponents.map((eventComponent) => {
+        return eventComponent.form.value;
+      }),
+    };
+
+    this.programAddService.saveLocalStep(dados);
   }
 
   addPassiveEvent() {

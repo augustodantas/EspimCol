@@ -1,13 +1,13 @@
-import { toChar } from 'src/app/util/functions';
+import { isNullOrUndefined, toChar } from 'src/app/util/functions';
 
 export class Intervention {
   public id: number;
   public type: string;
   public statement: string;
-  public orderPosition: number;
+  public order_position: number;
   public first: boolean;
   public next: number;
-  public obligatory: boolean;
+  public obrigatory: boolean = false;
   public x: number;
   public y: number;
 
@@ -17,10 +17,10 @@ export class Intervention {
   constructor(intervention: any = {}) {
     this.id = intervention.id;
     this.statement = intervention.statement;
-    this.orderPosition = intervention.orderPosition;
-    this.first = intervention.first !== undefined ? intervention.first : false;
+    this.order_position = intervention.order_position;
+    this.first = !isNullOrUndefined(intervention.first) ? intervention.first : false;
     this.next = intervention.next;
-    this.obligatory = intervention.obligatory !== undefined ? intervention.obligatory : false;
+    this.obrigatory = !isNullOrUndefined(intervention.obrigatory) ? intervention.obrigatory : false;
 
     this.medias = intervention.medias;
     this.complexConditions = intervention.complexConditions;
@@ -36,7 +36,7 @@ export class Intervention {
   }
 
   getOrderDescription() {
-    return this.orderPosition < 0 ? toChar(this.orderPosition * -1) : this.orderPosition;
+    return this.order_position < 0 ? toChar(this.order_position * -1) : this.order_position;
   }
 
   getDescription() {

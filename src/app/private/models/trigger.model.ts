@@ -8,7 +8,7 @@ export class Trigger {
 
   constructor(trigger: any = {}) {
     this.id = trigger.id || null;
-    this.condition = new Cron(trigger.condition);
+    this.condition = trigger.condition instanceof Cron ? trigger.condition : new Cron(trigger.condition);
     this.priority = trigger.priority;
     this.timeout = trigger.timeout;
   }

@@ -81,6 +81,15 @@ export class ProgramsAddService {
     program.observers = program.observers.map((item) => item.id);
     program.users = program.users.map((item) => item.id);
 
+    // Converte o cron para string
+    program.activeEvents.map((item) => {
+      item.triggers.map((trigger) => {
+        trigger.condition = trigger.condition.toString();
+        return trigger;
+      });
+      return item;
+    });
+
     this._loaderService.show();
 
     if (id) {

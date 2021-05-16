@@ -41,11 +41,11 @@ export class CanvasComponent implements OnInit, AfterViewInit {
     // // An array to keep control of which interventions had its arrows drew
     const already_drew: boolean[] = new Array<boolean>(this.interventionService.graphElements.length);
     // // Here we make a BFS
-    const queue: { intervention: number; orderPosition: number }[] = [];
-    queue.push({ intervention: this.interventionService.firstIntervention, orderPosition: 1 });
+    const queue: { intervention: number; order_position: number }[] = [];
+    queue.push({ intervention: this.interventionService.firstIntervention, order_position: 1 });
 
     while (queue.length > 0) {
-      const { intervention, orderPosition } = queue[0];
+      const { intervention, order_position } = queue[0];
       queue.splice(0, 1);
       if (isNullOrUndefined(intervention) || intervention === -1) {
         continue;
@@ -55,10 +55,10 @@ export class CanvasComponent implements OnInit, AfterViewInit {
         this.interventionService.warnCycle(intervention);
         continue;
       }
-      this.interventionService.graphElement(intervention).orderPosition = orderPosition;
+      this.interventionService.graphElement(intervention).order_position = order_position;
       already_drew[intervention] = true;
       for (const destination of this.interventionService.interventionElementsGraph[intervention]) {
-        queue.push({ intervention: destination, orderPosition: orderPosition + 1 });
+        queue.push({ intervention: destination, order_position: order_position + 1 });
         // console.log(intervention + '->' + destination);
         this.drawArrow(this.interventionService.graphElement(intervention), this.interventionService.graphElement(destination), true);
       }
@@ -71,8 +71,8 @@ export class CanvasComponent implements OnInit, AfterViewInit {
     for (let i = 0; i < already_drew.length; i++)
       if (!already_drew[i]) {
         this.interventionService.hasMultiplePaths = true;
-        // Sets orderPosition to a ascii number (negative means it is a character)
-        this.interventionService.graphElement(i).orderPosition = ascii * -1;
+        // Sets order_position to a ascii number (negative means it is a character)
+        this.interventionService.graphElement(i).order_position = ascii * -1;
         for (const destination of this.interventionService.interventionElementsGraph[i])
           this.drawArrow(this.interventionService.graphElement(i), this.interventionService.graphElement(destination), false);
         ascii++;
