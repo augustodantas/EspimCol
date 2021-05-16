@@ -106,7 +106,7 @@ export class InterventionService {
     this.graphElements.forEach((element, index) => {
       // if the intervention is of unique choice, it is already up to date (it gets updated in unique-choice.component.ts)
       // else we must updated intervention.next to the first and only intervention it points
-      if ((element.intervention as QuestionIntervention).questionType !== 1) {
+      if ((element.intervention as QuestionIntervention).question_type !== 1) {
         element.intervention.next = this.interventionElementsGraph[index][0];
       }
     });
@@ -123,7 +123,7 @@ export class InterventionService {
     // E adiciona os elementos
     interventions.forEach((i: HTMLInterventionElement, index) => {
       // Converte o .next ou o .conditions para o interventionElementsGraph
-      if ((i.intervention as QuestionIntervention).questionType !== 1) {
+      if ((i.intervention as QuestionIntervention).question_type !== 1) {
         this.interventionElementsGraph.push([i.intervention.next]);
       } else {
         let questionIntervention = i.intervention as QuestionIntervention;
@@ -179,7 +179,7 @@ export class InterventionService {
     if (!isNullOrUndefined(this.lastInteractedIntervention)) {
       if (
         this.graphElement(this.lastInteractedIntervention).intervention instanceof QuestionIntervention &&
-        (this.graphElement(this.lastInteractedIntervention).intervention as QuestionIntervention).questionType == 1
+        (this.graphElement(this.lastInteractedIntervention).intervention as QuestionIntervention).question_type == 1
       ) {
         this.interventionElementsGraph[this.lastInteractedIntervention].push(this.interventionElementsGraph.length);
       } else if (!isNullOrUndefined(this.interventionElementsGraph[this.lastInteractedIntervention])) {
@@ -323,8 +323,8 @@ export class HTMLInterventionElement {
   get type() {
     return this.intervention?.type;
   }
-  get questionType() {
-    if (this.intervention instanceof QuestionIntervention) return (this.intervention as QuestionIntervention).questionType;
+  get question_type() {
+    if (this.intervention instanceof QuestionIntervention) return (this.intervention as QuestionIntervention).question_type;
     return undefined;
   }
   get statement() {

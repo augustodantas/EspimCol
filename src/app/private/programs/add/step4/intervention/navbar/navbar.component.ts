@@ -34,7 +34,7 @@ export class NavbarComponent implements OnInit {
     let intervention: Intervention;
     if (type === 'empty') intervention = new Intervention();
     else if (type === 'media') intervention = new MediaIntervention();
-    else if (type === 'question') intervention = new QuestionIntervention({ questionType: subtype });
+    else if (type === 'question') intervention = new QuestionIntervention({ question_type: subtype });
     else if (type === 'task') intervention = new TaskIntervention();
 
     this.interventionService.addIntervention(new HTMLInterventionElement(intervention));

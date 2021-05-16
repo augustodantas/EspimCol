@@ -60,7 +60,7 @@ export class MediaIntervention extends Intervention {
 }
 
 export class QuestionIntervention extends Intervention {
-  public questionType: number;
+  public question_type: number;
   public conditions: {};
   public options: string[];
   public scales: string[];
@@ -68,7 +68,7 @@ export class QuestionIntervention extends Intervention {
   constructor(intervention: any = {}) {
     super(intervention);
 
-    this.questionType = intervention.questionType;
+    this.question_type = intervention.question_type;
     this.conditions = intervention.conditions || {};
     this.options = intervention.options || [];
     this.scales = intervention?.scales || [];
@@ -76,12 +76,12 @@ export class QuestionIntervention extends Intervention {
   }
 
   getTypeDescription() {
-    if (this.questionType === 0) return 'Questão aberta';
-    if (this.questionType === 1) return 'Escolha única';
-    if (this.questionType === 2) return 'Múltipla escolha';
-    if (this.questionType === 3) return 'Likert';
-    if (this.questionType === 4) return 'Diferencial semântico';
-    if (this.questionType === 31) return 'Likert personalizado';
+    if (this.question_type === 0) return 'Questão aberta';
+    if (this.question_type === 1) return 'Escolha única';
+    if (this.question_type === 2) return 'Múltipla escolha';
+    if (this.question_type === 3) return 'Likert';
+    if (this.question_type === 4) return 'Diferencial semântico';
+    if (this.question_type === 31) return 'Likert personalizado';
     return 'Mensagem';
   }
 }

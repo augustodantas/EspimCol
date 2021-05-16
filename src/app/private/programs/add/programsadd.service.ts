@@ -82,10 +82,23 @@ export class ProgramsAddService {
     program.users = program.users.map((item) => item.id);
 
     // Converte o cron para string
+    // Converte conditions,scales,options para string
     program.activeEvents.map((item) => {
       item.triggers.map((trigger) => {
         trigger.condition = trigger.condition.toString();
         return trigger;
+      });
+      item.interventions.map((intervention) => {
+        if (intervention.conditions) {
+          intervention.conditions = JSON.stringify(intervention.conditions);
+        }
+        if (intervention.scales) {
+          intervention.scales = JSON.stringify(intervention.scales);
+        }
+        if (intervention.options) {
+          intervention.options = JSON.stringify(intervention.options);
+        }
+        return intervention;
       });
       return item;
     });

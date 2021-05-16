@@ -1,4 +1,4 @@
-<div *ngIf="intervention.questionType === 1">
+<div *ngIf="intervention.question_type === 1">
   <esm-unique-choice
     class="d-flex flex-column justify-content-center"
     [intervention]="intervention"
@@ -6,7 +6,7 @@
   ></esm-unique-choice>
 </div>
 
-<div *ngIf="intervention.questionType === 2">
+<div *ngIf="intervention.question_type === 2">
   <esm-multiple-choice
     class="d-flex flex-column justify-content-center"
     [intervention]="intervention"
@@ -14,10 +14,10 @@
   ></esm-multiple-choice>
 </div>
 
-<div *ngIf="intervention.questionType === 3">
+<div *ngIf="intervention.question_type === 3">
   <esm-likert class="d-flex flex-column justify-content-center" [intervention]="intervention" [graphIndex]="graphIndex"></esm-likert>
 </div>
-<div *ngIf="intervention.questionType === 31">
+<div *ngIf="intervention.question_type === 31">
   <esm-likert-custom
     class="d-flex flex-column justify-content-center"
     [intervention]="intervention"
