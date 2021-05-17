@@ -3,11 +3,15 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
 import { take } from 'rxjs/operators';
+import { DAOService } from 'src/app/private/dao/dao.service';
 import { ActiveEvent, Event } from 'src/app/private/models/event.model';
 import { Intervention } from 'src/app/private/models/intervention.model';
 import { Trigger } from 'src/app/private/models/trigger.model';
 
+import { ESPIM_REST_Programs } from '../../../../../app.api';
+import { ProgramsAddService } from '../../programsadd.service';
 import { InterventionComponent } from '../intervention/intervention.component';
+import { InterventionService } from '../intervention/intervention.service';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -16,12 +20,13 @@ import { InterventionComponent } from '../intervention/intervention.component';
   styleUrls: ['./active-event.component.scss', './../step4.component.scss'],
 })
 export class ActiveEventComponent implements OnInit {
+  urlPrograms: string = ESPIM_REST_Programs;
   @Input() event: ActiveEvent;
   @Input() events: Event[];
   @Input() index: number;
   isOpen: boolean = false;
   private _modalInterventionRef: BsModalRef;
-  showIntervention: boolean = false;
+  loadingInterventions: boolean = false;
 
   form: FormGroup = this.formBuilder.group({
     title: ['', Validators.required],
@@ -32,7 +37,13 @@ export class ActiveEventComponent implements OnInit {
     interventions: this.formBuilder.control([]),
   });
 
-  constructor(private formBuilder: FormBuilder, private readonly _modalService: BsModalService) {}
+  constructor(
+    private formBuilder: FormBuilder,
+    private readonly _modalService: BsModalService,
+    private _daoService: DAOService,
+    private readonly programAddService: ProgramsAddService,
+    private readonly interventionService: InterventionService
+  ) {}
 
   ngOnInit(): void {
     // Verifica se é um "NOVO EVENTO"
@@ -51,8 +62,6 @@ export class ActiveEventComponent implements OnInit {
       // Adiciona as triggers e sensors ao evento
       this.event.triggers.forEach((it) => this.adicionarTrigger(new Trigger(it)));
     }
-
-    // this.goToInterventions();
   }
 
   adicionarTrigger(value: Trigger): void {
@@ -88,6 +97,19 @@ export class ActiveEventComponent implements OnInit {
   loadDetail() {
     this.isOpen = !this.isOpen;
   }
+
+  // loadInterventions() {
+  //   this.loadingInterventions = true;
+  //   let programId = this.programAddService.programValue.id;
+
+  //   this._daoService
+  //     .getObjects(this.urlPrograms + programId + '/events/' + this.event.id + '/interventions')
+  //     .pipe(finalize(() => (this.loadingInterventions = false)))
+  //     .subscribe((response) => {
+  //       let interventions = response.data.map((intervention) => this.interventionService.getInterventionClass(intervention));
+  //       this.form.get('interventions').setValue(interventions);
+  //     });
+  // }
 
   validateForm(): boolean {
     this.form.markAllAsTouched();

@@ -143,6 +143,10 @@ export class InterventionService {
   }
 
   transformToClass(data: Intervention): HTMLInterventionElement {
+    return new HTMLInterventionElement(this.getInterventionClass(data));
+  }
+
+  getInterventionClass(data: Intervention): Intervention | MediaIntervention | QuestionIntervention | TaskIntervention {
     let intervention: Intervention;
 
     if (data.type === 'empty') intervention = new Intervention(data);
@@ -150,7 +154,7 @@ export class InterventionService {
     else if (data.type === 'question') intervention = new QuestionIntervention(data);
     else if (data.type === 'task') intervention = new TaskIntervention(data);
 
-    return new HTMLInterventionElement(intervention);
+    return intervention;
   }
 
   finish() {

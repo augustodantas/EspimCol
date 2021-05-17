@@ -9,6 +9,7 @@ import { ESPIM_REST_Programs } from '../../../app.api';
 import { LoginService } from '../../../security/login/login.service';
 import { DAOService } from '../../dao/dao.service';
 import { Program } from '../../models/program.model';
+import { InterventionService } from './step4/intervention/intervention.service';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +19,12 @@ export class ProgramsAddService {
   private _currentProgramSubject: BehaviorSubject<Program>;
   program: Observable<Program>;
 
-  constructor(private _daoService: DAOService, private loginService: LoginService, private _loaderService: LoaderService) {
+  constructor(
+    private _daoService: DAOService,
+    private loginService: LoginService,
+    private _loaderService: LoaderService,
+    private readonly interventionService: InterventionService
+  ) {
     this._currentProgramSubject = new BehaviorSubject<Program>(new Program());
     this.program = this._currentProgramSubject.asObservable();
   }
@@ -28,7 +34,10 @@ export class ProgramsAddService {
     let params = new HttpParams()
       .append('include[]', 'passiveEvents')
       .append('include[]', 'passiveEvents.sensors')
+      .append('include[]', 'passiveEvents.triggers')
       .append('include[]', 'activeEvents')
+      .append('include[]', 'activeEvents.interventions')
+      .append('include[]', 'activeEvents.triggers')
       .append('include[]', 'users')
       .append('include[]', 'observers.user');
 
@@ -36,6 +45,13 @@ export class ProgramsAddService {
       .getObject(this.urlPrograms, id, params)
       .pipe(finalize(() => this._loaderService.hide()))
       .subscribe((response) => {
+        response.data.activeEvents.map((activeEvent) => {
+          activeEvent.interventions = activeEvent.interventions.map((intervention) =>
+            this.interventionService.getInterventionClass(intervention)
+          );
+          return activeEvent;
+        });
+
         this._currentProgramSubject.next(response.data);
       });
   }
@@ -87,18 +103,6 @@ export class ProgramsAddService {
       item.triggers.map((trigger) => {
         trigger.condition = trigger.condition.toString();
         return trigger;
-      });
-      item.interventions.map((intervention) => {
-        if (intervention.conditions) {
-          intervention.conditions = JSON.stringify(intervention.conditions);
-        }
-        if (intervention.scales) {
-          intervention.scales = JSON.stringify(intervention.scales);
-        }
-        if (intervention.options) {
-          intervention.options = JSON.stringify(intervention.options);
-        }
-        return intervention;
       });
       return item;
     });

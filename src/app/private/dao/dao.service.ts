@@ -10,7 +10,7 @@ export class DAOService {
     return this.http.get(urlObject, { params: parameters });
   }
 
-  getObject(urlObject: string, id: string, parameters?: HttpParams): Observable<any> {
+  getObject(urlObject: string, id: string | number, parameters?: HttpParams): Observable<any> {
     return this.http.get(urlObject + `${id}`, { params: parameters });
   }
 

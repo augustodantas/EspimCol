@@ -1,8 +1,6 @@
 import { Component, OnInit, ViewChildren } from '@angular/core';
 import { ESPIM_REST_Programs } from 'src/app/app.api';
-import { LoaderService } from 'src/app/services/loader.service';
 
-import { DAOService } from '../../../dao/dao.service';
 import { ActiveEvent, Event } from '../../../models/event.model';
 import { Program } from '../../../models/program.model';
 import { ProgramsAddService } from '../programsadd.service';
@@ -21,7 +19,7 @@ export class Step4Component implements OnInit {
   @ViewChildren(PassiveEventComponent) passiveEventsComponents: PassiveEventComponent[];
   @ViewChildren(ActiveEventComponent) activeEventsComponents: ActiveEventComponent[];
 
-  constructor(private programAddService: ProgramsAddService, private _daoService: DAOService, private _loaderService: LoaderService) {}
+  constructor(private programAddService: ProgramsAddService) {}
 
   trackByFn(index, item) {
     return index;

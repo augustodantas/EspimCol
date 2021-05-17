@@ -9,7 +9,6 @@ export const ESPIM_REST_Observers: string = ESPIM_API + 'observers/';
 
 // configure programs module url
 export const ESPIM_REST_Programs: string = ESPIM_API + 'programs/';
-
 export const ESPIM_REST_ProgramUsers: string = ESPIM_API + 'programUsers/';
 
 // configure events module url

@@ -18,6 +18,13 @@
           >
         </span>
       </div>
+      <div class="col">
+        Intervenções:
+        <span *ngIf="form.get('interventions').value.length == 0" class="text-danger">Não há intervenções adicionadas.</span>
+        <span *ngIf="formValue.interventions.length > 0">
+          {{ formValue.interventions.length }} cadastrada<span *ngIf="formValue.interventions.length > 1">s</span>
+        </span>
+      </div>
       <a href="javascript:" class="link-abs" (click)="loadDetail()">{{ event.title }}</a>
     </div>
   </div>
@@ -69,21 +76,45 @@
       </div>
     </div>
 
-    <div class="row">
-      <div class="col form-group text-center">
-        <a class="btn btn-primary py-2 px-4" href="javascript:" (click)="goToInterventions()">ADICIONAR INTERVENÇÕES</a>
+    <div class="clearfix" *ngIf="!loadingInterventions">
+      <div class="row">
+        <div class="col form-group text-center">
+          <a class="btn btn-primary py-2 px-4" href="javascript:" (click)="goToInterventions()">ADICIONAR INTERVENÇÕES</a>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col form-group">
+          <p class="font-weight-bold">Intervenções cadastradas</p>
+          <div *ngIf="this.form.get('interventions').value.length == 0">Nenhuma intervenção cadastrada</div>
+          <ul>
+            <li *ngFor="let intervention of this.form.get('interventions').value">
+              {{ intervention.getOrderDescription() + ' - ' + intervention.getTypeDescription() + ' - ' + intervention.getDescription() }}
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
 
-    <div class="row">
-      <div class="col form-group">
-        <p class="font-weight-bold">Intervenções cadastradas</p>
+    <div class="clearfix" *ngIf="loadingInterventions">
+      <div class="row justify-content-center">
+        <div class="col-4">
+          <div class="loader-bg"></div>
+          <div class="loader-bg"></div>
+          <div class="loader-bg"></div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col"><p class="font-weight-bold">Intervenções cadastradas</p></div>
+      </div>
+      <div class="clearfix">
+        <div class="loader-bg w-50"></div>
+        <div class="loader-bg w-50"></div>
+        <div class="loader-bg w-50"></div>
 
-        <ul>
-          <li *ngFor="let intervention of this.form.get('interventions').value">
-            {{ intervention.getOrderDescription() + ' - ' + intervention.getTypeDescription() + ' - ' + intervention.getDescription() }}
-          </li>
-        </ul>
+        <div class="loader-bg w-50 mt-2"></div>
+        <div class="loader-bg w-50"></div>
+        <div class="loader-bg w-50"></div>
       </div>
     </div>
 

@@ -21,7 +21,6 @@ export class ProgramsAddComponent {
       //   relativeTo: this.activeRoute,
       // });
 
-      console.log('clearData');
       this.programsAddService.clearData();
     }
   }
