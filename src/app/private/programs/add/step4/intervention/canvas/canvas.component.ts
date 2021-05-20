@@ -42,6 +42,7 @@ export class CanvasComponent implements OnInit, AfterViewInit {
     const already_drew: boolean[] = new Array<boolean>(this.interventionService.graphElements.length);
     // // Here we make a BFS
     const queue: { intervention: number; order_position: number }[] = [];
+
     queue.push({ intervention: this.interventionService.firstIntervention, order_position: 1 });
 
     while (queue.length > 0) {

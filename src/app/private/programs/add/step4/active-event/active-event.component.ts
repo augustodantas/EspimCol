@@ -29,6 +29,7 @@ export class ActiveEventComponent implements OnInit {
   loadingInterventions: boolean = false;
 
   form: FormGroup = this.formBuilder.group({
+    id: this.formBuilder.control(''),
     title: ['', Validators.required],
     type: this.formBuilder.control(''),
     color: this.formBuilder.control(''),
@@ -81,13 +82,10 @@ export class ActiveEventComponent implements OnInit {
   }
 
   deleteEvent() {
-    if (this.event.id) {
-    } else {
-      this.isOpen = !this.isOpen;
-      this.form.reset();
-      this.removeEvent(this.event);
-      return;
-    }
+    this.isOpen = !this.isOpen;
+    this.form.reset();
+    this.removeEvent(this.event);
+    return;
   }
 
   removeEvent(event: Event) {

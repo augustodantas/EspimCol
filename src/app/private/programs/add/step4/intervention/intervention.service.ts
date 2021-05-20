@@ -39,11 +39,12 @@ export class InterventionService {
   constructor(private readonly _localStorageService: LocalStorageService) {}
 
   get firstIntervention(): number {
-    return this.graphElements.findIndex((value) => value.intervention.first === true);
+    return this.graphElements.findIndex((value) => value.intervention.first == true);
   }
 
   init(interventions) {
     this.loadState(interventions);
+
     this.saveState();
   }
 

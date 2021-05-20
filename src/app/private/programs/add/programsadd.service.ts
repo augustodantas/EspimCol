@@ -107,11 +107,21 @@ export class ProgramsAddService {
       return item;
     });
 
+    // Converte o cron para string
+    // Converte conditions
+    program.passiveEvents.map((item) => {
+      item.triggers.map((trigger) => {
+        trigger.condition = trigger.condition.toString();
+        return trigger;
+      });
+      return item;
+    });
+
     this._loaderService.show();
 
     if (id) {
       this._daoService
-        .putObject(ESPIM_REST_Programs, id)
+        .putObject(ESPIM_REST_Programs + id, program)
         .pipe(finalize(() => this._loaderService.hide()))
         .subscribe((resp) => {
           console.log('salvouu');

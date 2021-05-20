@@ -19,6 +19,7 @@ export class PassiveEventComponent implements OnInit {
   isOpen: boolean = false;
 
   form: FormGroup = this.formBuilder.group({
+    id: this.formBuilder.control(''),
     title: ['', Validators.required],
     color: this.formBuilder.control(''),
     description: this.formBuilder.control(''),
@@ -72,13 +73,9 @@ export class PassiveEventComponent implements OnInit {
   }
 
   deleteEvent() {
-    if (this.event.id) {
-    } else {
-      this.isOpen = !this.isOpen;
-      this.form.reset();
-      this.removeEvent(this.event);
-      return;
-    }
+    this.isOpen = !this.isOpen;
+    this.form.reset();
+    this.removeEvent(this.event);
   }
 
   removeEvent(event: Event) {
