@@ -49,13 +49,17 @@ export class Intervention {
 }
 
 export class MediaIntervention extends Intervention {
-  private mediaType: string;
+  public media_type: string = '';
 
   constructor(intervention: any = {}) {
     super(intervention);
 
-    this.mediaType = intervention.mediaType;
+    this.media_type = intervention.media_type ? intervention.media_type : '';
     this.type = 'media';
+  }
+
+  getTypeDescription() {
+    return 'Solicitar Mídia';
   }
 }
 

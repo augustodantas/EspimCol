@@ -15,6 +15,7 @@ import { LikertComponent } from './question/likert/likert.component';
 import { MultipleChoiceComponent } from './question/multiple-choice/multiple-choice.component';
 import { QuestionComponent } from './question/question.component';
 import { UniqueChoiceComponent } from './question/unique-choice/unique-choice.component';
+import { MediaComponent } from './media/media.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { UniqueChoiceComponent } from './question/unique-choice/unique-choice.co
     LikertCustomComponent,
     MultipleChoiceComponent,
     DifferentialSemanticComponent,
+    MediaComponent,
   ],
   imports: [CommonModule, DragDropModule, SharedModule, ComponentsModule, NgChunkPipeModule],
   exports: [InterventionComponent],
