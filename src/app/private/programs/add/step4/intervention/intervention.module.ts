@@ -1,6 +1,7 @@
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { NgChunkPipeModule } from 'angular-pipes';
 import { SharedModule } from 'src/app/app.shared.module';
 import { ComponentsModule } from 'src/app/components/components.module';
 
@@ -28,7 +29,7 @@ import { UniqueChoiceComponent } from './question/unique-choice/unique-choice.co
     MultipleChoiceComponent,
     DifferentialSemanticComponent,
   ],
-  imports: [CommonModule, DragDropModule, SharedModule, ComponentsModule],
+  imports: [CommonModule, DragDropModule, SharedModule, ComponentsModule, NgChunkPipeModule],
   exports: [InterventionComponent],
 })
 export class InterventionModule {}

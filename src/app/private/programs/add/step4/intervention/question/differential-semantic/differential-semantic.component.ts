@@ -19,17 +19,26 @@ export class DifferentialSemanticComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.intervention.scales.length == 0) {
+      this.intervention.scales.push('5');
       this.addChoice();
+    }
+
+    if (this.intervention.scales.length == 1) {
       this.addChoice();
-      this.addChoice();
+    }
+
+    // Corrige escalas impares
+    if ((this.intervention.scales.length - 1) % 2 !== 0) {
+      this.intervention.scales.push('');
     }
   }
 
   addChoice() {
     this.intervention.scales.push('');
+    this.intervention.scales.push('');
   }
 
   removeChoice(choiceIndex: number) {
-    this.intervention.scales.splice(choiceIndex, 1);
+    this.intervention.scales.splice(choiceIndex, 2);
   }
 }
