@@ -3,11 +3,11 @@
   class="mb-2 d-flex justify-content-between align-items-center"
   *ngFor="let alternative of intervention.options; index as i; trackBy: trackByFn"
 >
-  <label class="pl-1 pr-3" style="font-size: 1.2em" [for]="graphIndex + 'alternative' + i">{{ i }}</label>
+  <label class="pl-1 pr-3" style="font-size: 1.2em" [for]="graphIndex + 'alternative' + i">{{ i + 1 }}</label>
   <textarea
     class="w-100"
     cols="1"
-    placeholder="Digite o texto"
+    placeholder="Opção"
     [(ngModel)]="intervention.options[i]"
     [id]="graphIndex + 'alternative' + i"
   ></textarea>

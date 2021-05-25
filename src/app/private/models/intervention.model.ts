@@ -3,7 +3,7 @@ import { isNullOrUndefined, toChar } from 'src/app/util/functions';
 export class Intervention {
   public id: number;
   public type: string;
-  public statement: string;
+  public statement: string = '';
   public order_position: number;
   public first: boolean;
   public next: number;
@@ -16,7 +16,7 @@ export class Intervention {
 
   constructor(intervention: any = {}) {
     this.id = intervention.id;
-    this.statement = intervention.statement;
+    this.statement = intervention.statement ? intervention.statement : '';
     this.order_position = intervention.order_position;
     this.first = !isNullOrUndefined(intervention.first) ? intervention.first : false;
     this.next = intervention.next;

@@ -17,6 +17,15 @@
 <div *ngIf="intervention.question_type === 3">
   <esm-likert class="d-flex flex-column justify-content-center" [intervention]="intervention" [graphIndex]="graphIndex"></esm-likert>
 </div>
+
+<div *ngIf="intervention.question_type === 4">
+  <esm-differential-semantic
+    class="d-flex flex-column justify-content-center"
+    [intervention]="intervention"
+    [graphIndex]="graphIndex"
+  ></esm-differential-semantic>
+</div>
+
 <div *ngIf="intervention.question_type === 31">
   <esm-likert-custom
     class="d-flex flex-column justify-content-center"

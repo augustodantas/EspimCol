@@ -1,0 +1,23 @@
+.holder-steps {
+  position: relative;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.step {
+  &:after {
+    content: '';
+    width: 100%;
+    height: 2px;
+    background: #e0e0e0;
+    position: absolute;
+    left: -50%;
+    top: 19px;
+    z-index: -1; /*put it behind the numbers*/
+  }
+  &:first-child {
+    &:after {
+      content: none;
+    }
+  }
+}

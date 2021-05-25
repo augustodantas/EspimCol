@@ -118,7 +118,8 @@ export class Step2Component implements OnInit, OnDestroy {
   }
 
   submit(): void {
-    this.programAddService.saveStep({ observers: this.programObservers });
+    this.programAddService.saveStep({ observers: this.programObservers.map((item) => item.id) });
+    this.programAddService.saveLocalStep({ observers: this.programObservers });
 
     this.router.navigate(['./third'], {
       relativeTo: this._route.parent,

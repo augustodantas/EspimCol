@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { QuestionIntervention } from 'src/app/private/models/intervention.model';
 
 import { InterventionService } from '../../intervention.service';
@@ -7,13 +7,9 @@ import { InterventionService } from '../../intervention.service';
   selector: 'esm-likert-custom',
   templateUrl: './likert-custom.component.html',
 })
-export class LikertCustomComponent {
+export class LikertCustomComponent implements OnInit {
   @Input() intervention: QuestionIntervention;
   @Input() graphIndex: number;
-
-  get scales() {
-    return this.intervention.scales;
-  }
 
   trackByFn(index, item) {
     return index;
@@ -21,11 +17,19 @@ export class LikertCustomComponent {
 
   constructor(private interventionService: InterventionService) {}
 
+  ngOnInit(): void {
+    if (this.intervention.scales.length == 0) {
+      this.addChoice();
+      this.addChoice();
+      this.addChoice();
+    }
+  }
+
   addChoice() {
-    this.scales.push('Valor' + (this.scales.length + 1));
+    this.intervention.scales.push('');
   }
 
   removeChoice(choiceIndex: number) {
-    this.scales.splice(choiceIndex, 1);
+    this.intervention.scales.splice(choiceIndex, 1);
   }
 }

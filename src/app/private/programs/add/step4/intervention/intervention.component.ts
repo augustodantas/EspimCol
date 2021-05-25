@@ -74,6 +74,7 @@ export class InterventionComponent implements AfterViewInit {
     this.interventionComponents.forEach((interventionComponent) => {
       let componentOffsetX =
         interventionComponent.instance.offset.x + interventionComponent.instance.interventionCoordinate.width + goodSpaceBetween;
+
       if (componentOffsetX > offsetX) {
         offsetX = componentOffsetX;
       }
@@ -93,6 +94,9 @@ export class InterventionComponent implements AfterViewInit {
     this.interventionComponents.push(interventionComponent);
 
     setTimeout(() => {
+      interventionComponent.instance.interventionCoordinate.intervention.x = offsetX;
+      interventionComponent.instance.interventionCoordinate.intervention.y = offsetY;
+
       this.interventionService.redrawGraph$.next();
       this.mainDiv.nativeElement.scrollTo({ top: 0, left: offsetX, behavior: 'smooth' });
     });

@@ -4,31 +4,32 @@ import { QuestionIntervention } from 'src/app/private/models/intervention.model'
 import { InterventionService } from '../../intervention.service';
 
 @Component({
-  selector: 'esm-multiple-choice',
-  templateUrl: './multiple-choice.component.html',
+  selector: 'esm-differential-semantic',
+  templateUrl: './differential-semantic.component.html',
 })
-export class MultipleChoiceComponent implements OnInit {
+export class DifferentialSemanticComponent implements OnInit {
   @Input() intervention: QuestionIntervention;
   @Input() graphIndex: number;
-
-  constructor(private interventionService: InterventionService) {}
 
   trackByFn(index, item) {
     return index;
   }
 
+  constructor(private interventionService: InterventionService) {}
+
   ngOnInit(): void {
-    if (this.intervention.options.length == 0) {
+    if (this.intervention.scales.length == 0) {
+      this.addChoice();
       this.addChoice();
       this.addChoice();
     }
   }
 
   addChoice() {
-    this.intervention.options.push('');
+    this.intervention.scales.push('');
   }
 
   removeChoice(choiceIndex: number) {
-    this.intervention.options.splice(choiceIndex, 1);
+    this.intervention.scales.splice(choiceIndex, 1);
   }
 }

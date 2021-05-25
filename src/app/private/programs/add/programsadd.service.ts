@@ -1,6 +1,8 @@
 import { HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import cloneDeep from 'lodash/cloneDeep';
+import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import { LoaderService } from 'src/app/services/loader.service';
@@ -23,6 +25,8 @@ export class ProgramsAddService {
     private _daoService: DAOService,
     private loginService: LoginService,
     private _loaderService: LoaderService,
+    private route: Router,
+    private _toastr: ToastrService,
     private readonly interventionService: InterventionService
   ) {
     this._currentProgramSubject = new BehaviorSubject<Program>(new Program());
@@ -68,17 +72,13 @@ export class ProgramsAddService {
   saveStep(dados: any) {
     let id = this.programValue.id;
     if (id) {
-      let programUpdated = { ...this.programValue, ...dados } as unknown as Program;
+      // let programUpdated = { ...this.programValue, ...dados } as unknown as Program;
       this._loaderService.show();
 
       this._daoService
-        .patchObject(ESPIM_REST_Programs, id)
+        .patchObject(ESPIM_REST_Programs, { ...dados, ...{ id: id } })
         .pipe(finalize(() => this._loaderService.hide()))
-        .subscribe((resp) => {
-          this._currentProgramSubject.next(programUpdated);
-        });
-    } else {
-      this.saveLocalStep(dados);
+        .subscribe((resp) => {});
     }
   }
 
@@ -124,14 +124,16 @@ export class ProgramsAddService {
         .putObject(ESPIM_REST_Programs + id, program)
         .pipe(finalize(() => this._loaderService.hide()))
         .subscribe((resp) => {
-          console.log('salvouu');
+          this.route.navigate(['/private/programs/list']);
+          this._toastr.success(resp.message);
         });
     } else {
       this._daoService
         .postObject(ESPIM_REST_Programs, program)
         .pipe(finalize(() => this._loaderService.hide()))
         .subscribe((resp) => {
-          console.log('salvouu');
+          this.route.navigate(['/private/programs/list']);
+          this._toastr.success(resp.message);
         });
     }
   }

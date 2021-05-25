@@ -53,6 +53,7 @@ export class Step1Component implements OnDestroy {
 
     if (this.form.valid) {
       this.programAddService.saveStep(this.form.value);
+      this.programAddService.saveLocalStep(this.form.value);
 
       this.router.navigate(['./second'], {
         relativeTo: this._route.parent,

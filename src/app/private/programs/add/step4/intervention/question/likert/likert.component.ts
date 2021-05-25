@@ -22,21 +22,22 @@ export class LikertComponent implements OnInit {
   set scale(scale) {
     this.intervention.scales[0] = scale;
   }
-  get affirmatives() {
-    return this.intervention.options;
-  }
 
   constructor(private interventionService: InterventionService) {}
 
   ngOnInit(): void {
     this.scale = '5 AGREEMENT';
+    if (this.intervention.options.length == 0) {
+      this.addChoice();
+      this.addChoice();
+    }
   }
 
   addChoice() {
-    this.affirmatives.push('Afirmativa' + (this.affirmatives.length + 1));
+    this.intervention.options.push('');
   }
 
   removeChoice(choiceIndex: number) {
-    this.affirmatives.splice(choiceIndex, 1);
+    this.intervention.options.splice(choiceIndex, 1);
   }
 }
