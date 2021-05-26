@@ -1,0 +1,14 @@
+<select class="form-control selectMedia" [(ngModel)]="intervention.app_package" (change)="packageChanged()">
+  <option selected disabled value="">Selecione uma opção</option>
+  <option [ngValue]="pkg.package" *ngFor="let pkg of packages">{{ pkg.name }}</option>
+</select>
+
+<div class="d-flex flex-column mt-3" *ngFor="let param of selectedPackage">
+  <label [for]="graphIndex + '-package-' + param.key">{{ param.name }}</label>
+  <textarea
+    [placeholder]="param.name"
+    [id]="graphIndex + '-package-' + param.key"
+    [(ngModel)]="intervention.parameters[param.key]"
+    maxlength="800"
+  ></textarea>
+</div>

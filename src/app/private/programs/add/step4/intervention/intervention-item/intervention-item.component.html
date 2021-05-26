@@ -46,6 +46,13 @@
     >
     </esm-media>
 
+    <esm-external-media
+      *ngIf="interventionCoordinate.type === 'task'"
+      [intervention]="interventionCoordinate.intervention"
+      [graphIndex]="graphIndex"
+    >
+    </esm-external-media>
+
     <div *ngIf="interventionCoordinate.type !== 'question' || interventionCoordinate.question_type !== 1">
       <hr style="border-top: 2px dashed #e8e8e8" />
       <select class="w-100" [(ngModel)]="nextInterventionSelect" (change)="setNextTo()">

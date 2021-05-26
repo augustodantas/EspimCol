@@ -16,6 +16,7 @@ import { MultipleChoiceComponent } from './question/multiple-choice/multiple-cho
 import { QuestionComponent } from './question/question.component';
 import { UniqueChoiceComponent } from './question/unique-choice/unique-choice.component';
 import { MediaComponent } from './media/media.component';
+import { ExternalMediaComponent } from './external-media/external-media.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { MediaComponent } from './media/media.component';
     MultipleChoiceComponent,
     DifferentialSemanticComponent,
     MediaComponent,
+    ExternalMediaComponent,
   ],
   imports: [CommonModule, DragDropModule, SharedModule, ComponentsModule, NgChunkPipeModule],
   exports: [InterventionComponent],

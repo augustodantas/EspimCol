@@ -91,16 +91,16 @@ export class QuestionIntervention extends Intervention {
 }
 
 export class TaskIntervention extends Intervention {
-  private appPackage: string;
-  private parameters: object;
-  private startFromNotification: boolean;
+  app_package: string;
+  parameters: object = {};
+  start_from_notification: boolean;
 
   constructor(intervention: any = {}) {
     super(intervention);
 
-    this.appPackage = intervention.appPackage;
-    this.parameters = intervention.parameters;
-    this.startFromNotification = intervention.startFromNotification;
+    this.app_package = intervention.app_package;
+    this.parameters = intervention.parameters ? intervention.parameters : {};
+    this.start_from_notification = intervention.start_from_notification;
     this.type = 'task';
   }
 }
