@@ -131,5 +131,17 @@
         <esm-triggers (response)="adicionarTrigger($event)"></esm-triggers>
       </div>
     </div>
+
+    <div class="row">
+      <div class="col-12 form-group">
+        <input type="checkbox" [id]="'is-manual-' + index" formControlName="isManual" />
+        <label [for]="'is-manual-' + index">Participante pode auto-iniciar o evento?</label>
+      </div>
+    </div>
+
+    <esm-complex-conditions
+      [eventComplexConditions]="event.complexConditions"
+      (response)="updateFormComplexConditions($event)"
+    ></esm-complex-conditions>
   </form>
 </div>

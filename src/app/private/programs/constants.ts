@@ -1,4 +1,5 @@
 import { Day } from '../models/date.model';
+import { ComplexCondition } from '../models/intervention.model';
 
 export const LETRAS_FILTRO: string[] = [
   '*',
@@ -115,5 +116,48 @@ export const WEEKLY_DAYS: Day[] = [
     cronName: '7',
     name: 'Sábado',
     hours: [],
+  },
+];
+
+export const COMPLEX_CONDITIONS: { text: string; complexConditions: ComplexCondition[] }[] = [
+  {
+    text: 'Caso um participante NÃO RESPONDA ao disparo deste evento',
+    complexConditions: [
+      {
+        text: 'Enviar aviso por e-mail aos [observadores]',
+        condition: 'MISSED GREATER_THAN 0',
+        action: 'SEND_WARNING_EMAIL [Este participante não respondeu ao evento] OBSERVERS',
+        value: false,
+      },
+      {
+        text: 'Programar [1] novo disparo em [60] minutos',
+        condition: 'MISSED GREATER_THAN 0 AND MISSED LESS_THAN 2',
+        action: 'POSTPONE_EVENT MINUTES 60',
+        value: false,
+      },
+    ],
+  },
+  {
+    text: 'Caso um participante RESPONDA ao disparo deste evento',
+    complexConditions: [
+      {
+        text: 'Enviar aviso por e-mail aos [observadores]',
+        condition: 'COMPLETED GREATER_THAN 0',
+        action: 'SEND_WARNING_EMAIL [O participante respondeu ao evento] OBSERVERS',
+        value: false,
+      },
+      {
+        text: 'Marcar o evento como realizado no aplicativo',
+        condition: 'COMPLETED GREATER_THAN 0',
+        action: 'MARK_EVENT_COMPLETED',
+        value: false,
+      },
+      {
+        text: 'Enviar o resultado das intervenções por e-mail aos observadores',
+        condition: 'SEND_EMAIL_WITH_RESULTS [O participante respondeu ao evento] OBSERVERS',
+        action: 'COMPLETED GREATER_THAN 0',
+        value: false,
+      },
+    ],
   },
 ];

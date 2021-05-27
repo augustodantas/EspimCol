@@ -3,15 +3,12 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
 import { take } from 'rxjs/operators';
-import { DAOService } from 'src/app/private/dao/dao.service';
 import { ActiveEvent, Event } from 'src/app/private/models/event.model';
-import { Intervention } from 'src/app/private/models/intervention.model';
+import { ComplexCondition, Intervention } from 'src/app/private/models/intervention.model';
 import { Trigger } from 'src/app/private/models/trigger.model';
 
 import { ESPIM_REST_Programs } from '../../../../../app.api';
-import { ProgramsAddService } from '../../programsadd.service';
 import { InterventionComponent } from '../intervention/intervention.component';
-import { InterventionService } from '../intervention/intervention.service';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -35,16 +32,12 @@ export class ActiveEventComponent implements OnInit {
     color: this.formBuilder.control(''),
     description: this.formBuilder.control(''),
     triggers: this.formBuilder.array([]),
+    isManual: this.formBuilder.control(false),
     interventions: this.formBuilder.control([]),
+    complexConditions: this.formBuilder.array([]),
   });
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private readonly _modalService: BsModalService,
-    private _daoService: DAOService,
-    private readonly programAddService: ProgramsAddService,
-    private readonly interventionService: InterventionService
-  ) {}
+  constructor(private formBuilder: FormBuilder, private readonly _modalService: BsModalService) {}
 
   ngOnInit(): void {
     // Verifica se é um "NOVO EVENTO"
@@ -79,6 +72,19 @@ export class ActiveEventComponent implements OnInit {
 
   get formValue(): any {
     return this.form.value;
+  }
+
+  updateFormComplexConditions(complexConditions: ComplexCondition[]) {
+    this.complexConditionsFormArray.clear();
+    complexConditions.forEach((it) => this.adicionarComplexCondition(it));
+  }
+
+  adicionarComplexCondition(complexCondition: ComplexCondition) {
+    this.complexConditionsFormArray.push(this.formBuilder.control(complexCondition));
+  }
+
+  get complexConditionsFormArray(): FormArray {
+    return this.form.get('complexConditions') as FormArray;
   }
 
   deleteEvent() {

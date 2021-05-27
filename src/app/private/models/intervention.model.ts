@@ -1,5 +1,11 @@
 import { isNullOrUndefined, toChar } from 'src/app/util/functions';
 
+export class ComplexCondition {
+  text?: string;
+  action: string;
+  condition: string;
+  value?: boolean = false;
+}
 export class Intervention {
   public id: number;
   public type: string;
@@ -11,8 +17,8 @@ export class Intervention {
   public x: number;
   public y: number;
 
-  protected medias;
-  protected complexConditions;
+  public medias;
+  public complexConditions: ComplexCondition[];
 
   constructor(intervention: any = {}) {
     this.id = intervention.id;
@@ -91,14 +97,14 @@ export class QuestionIntervention extends Intervention {
 }
 
 export class TaskIntervention extends Intervention {
-  app_package: string;
+  app_package: string = '';
   parameters: object = {};
   start_from_notification: boolean;
 
   constructor(intervention: any = {}) {
     super(intervention);
 
-    this.app_package = intervention.app_package;
+    this.app_package = intervention.app_package ? intervention.app_package : '';
     this.parameters = intervention.parameters ? intervention.parameters : {};
     this.start_from_notification = intervention.start_from_notification;
     this.type = 'task';

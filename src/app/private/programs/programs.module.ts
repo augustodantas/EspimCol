@@ -11,6 +11,7 @@ import { Step2Component } from './add/step2/step2.component';
 import { Step3Component } from './add/step3/step3.component';
 import { ActiveEventComponent } from './add/step4/active-event/active-event.component';
 import { ChooseColorComponent } from './add/step4/choose-color/choose-color.component';
+import { ComplexConditionComponent } from './add/step4/complex-conditions/complex-conditions.component';
 import { InterventionModule } from './add/step4/intervention/intervention.module';
 import { PassiveEventComponent } from './add/step4/passive-event/passive-event.component';
 import { SensorsComponent } from './add/step4/sensors/sensors.component';
@@ -45,6 +46,7 @@ import { ProgramsRoutingModule } from './programs-routing.module';
     TriggerCustomComponent,
     RowHourComponent,
     ChooseColorComponent,
+    ComplexConditionComponent,
   ],
   imports: [InterventionModule, PortalModule, SharedModule, ComponentsModule, ProgramsRoutingModule, CommonModule],
   exports: [],

@@ -1,0 +1,26 @@
+<div class="row">
+  <div class="col-12 d-flex justify-content-end">
+    <a href="javascript:" (click)="openComplex = !openComplex">Opções Avançadas</a>
+  </div>
+  <div class="col-12" [collapse]="!openComplex">
+    <div class="card">
+      <div class="card-body">
+        <div class="row mb-4" *ngFor="let row of complexConditions; index as j">
+          <div class="col-12">
+            <p>{{ row.text }}</p>
+          </div>
+          <div class="col-12 form-group" *ngFor="let complexCond of row.complexConditions; index as i">
+            <input
+              type="checkbox"
+              [(ngModel)]="complexCond.value"
+              [id]="complexCond.condition + i + uid"
+              [name]="complexCond.condition + i + uid"
+              (change)="changeCondition()"
+            />
+            <label [for]="complexCond.condition + i + uid">{{ complexCond.text }}</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
