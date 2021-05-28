@@ -29,8 +29,14 @@
       <textarea [id]="graphIndex + '-statement'" [(ngModel)]="interventionCoordinate.statement" maxlength="800"></textarea>
     </div>
 
-    <div class="d-flex w-100">
-      <button class="btn btn-outline-primary my-4 mx-auto">Anexar mídia <i class="fas fa-paperclip"></i></button>
+    <div class="holder-media my-4">
+      <div class="mb-2" *ngFor="let media of interventionCoordinate.intervention.medias; index as i">
+        <img [src]="apiUrl + media.url" class="img-thumbnail w-100 mb-1" [alt]="media.name" />
+        <button class="btn btn-danger w-100" (click)="removerMidia(i)" *ngIf="interventionCoordinate.intervention.medias.length > 0">
+          Remover mídia <i class="far fa-trash-alt"></i>
+        </button>
+      </div>
+      <button class="btn btn-outline-primary w-100">Anexar mídia <i class="fas fa-paperclip"></i></button>
     </div>
 
     <esm-question

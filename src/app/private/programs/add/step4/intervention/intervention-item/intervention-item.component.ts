@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { BASE_ESPIM_API } from 'src/app/app.api';
 import { isNullOrUndefined } from 'src/app/util/functions';
 
 import { HTMLInterventionElement, InterventionService } from '../intervention.service';
@@ -10,13 +11,15 @@ import { HTMLInterventionElement, InterventionService } from '../intervention.se
   styleUrls: ['./intervention-item.component.scss'],
 })
 export class InterventionItemComponent implements OnInit, AfterViewInit {
+  @ViewChild('interventionDiv') interventionDiv: ElementRef;
+
+  apiUrl: string = BASE_ESPIM_API;
   interventionCoordinate: HTMLInterventionElement;
   nextInterventionSelect: string;
   redrawGraphSubscription: Subscription;
 
   previousPosition: { x: number; y: number };
   offset: { x: number; y: number } = { x: 0, y: 0 };
-  @ViewChild('interventionDiv') interventionDiv: ElementRef;
 
   get graphIndex(): number {
     return this.interventionService.graphElements.findIndex((value) => value.uuid === this.interventionCoordinate.uuid);
@@ -99,6 +102,10 @@ export class InterventionItemComponent implements OnInit, AfterViewInit {
     if (!this.interventionCoordinate.first) {
       this.interventionService.setFirst(this.graphIndex);
     }
+  }
+
+  removerMidia(index: number) {
+    this.interventionCoordinate.intervention.medias.splice(index, 1);
   }
 
   setNextTo() {

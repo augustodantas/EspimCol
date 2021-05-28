@@ -104,6 +104,11 @@ export class ProgramsAddService {
         trigger.condition = trigger.condition.toString();
         return trigger;
       });
+
+      item.interventions.map((intervention) => {
+        intervention.medias = intervention.medias.map((i) => i.id);
+      });
+
       return item;
     });
 

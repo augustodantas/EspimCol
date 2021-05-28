@@ -15,6 +15,8 @@ export class ProgramsAddComponent {
   ngOnInit() {
     let id = this.activeRoute.snapshot.params.id;
 
+    this.programsAddService.clearData();
+
     if (id) {
       this.programsAddService.fetchData(id);
     } else {

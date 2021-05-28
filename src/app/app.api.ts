@@ -1,5 +1,8 @@
 // configure default backend location
-export const ESPIM_API = 'http://localhost:8083/api/';
+
+export const BASE_ESPIM_API = 'http://localhost:8083/';
+
+export const ESPIM_API = BASE_ESPIM_API + 'api/';
 
 // configure participants module url
 export const ESPIM_REST_Participants: string = ESPIM_API + 'participants/';
