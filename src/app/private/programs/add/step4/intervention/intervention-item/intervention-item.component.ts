@@ -25,11 +25,11 @@ export class InterventionItemComponent implements OnInit, AfterViewInit {
   private _modalMediaRef: BsModalRef;
 
   get graphIndex(): number {
-    return this.interventionService.graphElements.findIndex((value) => value.uuid === this.interventionCoordinate.uuid);
+    return this.interventionHtmlElements.findIndex((value) => value.uuid === this.interventionCoordinate.uuid);
   }
 
   get interventionHtmlElements(): HTMLInterventionElement[] {
-    return this.interventionService.graphElements.map((htmlComponent) => htmlComponent);
+    return this.interventionService.graphElements;
   }
 
   constructor(private interventionService: InterventionService, private readonly _modalService: BsModalService) {}
