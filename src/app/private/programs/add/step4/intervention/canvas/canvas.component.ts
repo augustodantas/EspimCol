@@ -24,9 +24,19 @@ export class CanvasComponent implements OnInit, AfterViewInit {
   }
 
   resizeCanvas() {
-    var tiledBackground = document.getElementsByClassName('tiled-background')[0];
-    this.canvasRef.nativeElement.width = tiledBackground.scrollWidth;
-    this.canvasRef.nativeElement.height = tiledBackground.scrollHeight - 5;
+    let tiledBackground = document.getElementsByClassName('tiled-background')[0];
+    let newHeight = tiledBackground.scrollHeight - 7;
+    let newWidth = tiledBackground.scrollWidth;
+
+    if (this.canvasRef.nativeElement.width !== newWidth) {
+      this.canvasRef.nativeElement.width = newWidth;
+    }
+
+    if (this.canvasRef.nativeElement.height !== newHeight) {
+      this.canvasRef.nativeElement.height = newHeight;
+    }
+
+    this.clearCanvas();
   }
 
   clearCanvas() {

@@ -40,9 +40,6 @@ export class InterventionComponent implements AfterViewInit {
   ) {}
 
   ngAfterViewInit(): void {
-    this.interventionService.interventionsContainer = this.interventionsContainer;
-    this.interventionService.mainDiv = this.mainDiv;
-
     this.interventionService.clearBoard$.subscribe((add) => this.clearBoard());
     this.interventionService.newInterventions$.subscribe((add) => this.createIntervention(add.intervention));
     this.interventionService.removeIntervention$.subscribe((index) => {

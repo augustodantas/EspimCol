@@ -1,4 +1,4 @@
-import { ElementRef, Injectable, ViewContainerRef } from '@angular/core';
+import { Injectable } from '@angular/core';
 import cloneDeep from 'lodash/cloneDeep';
 import { Subject } from 'rxjs';
 import {
@@ -16,10 +16,8 @@ import { v4 as uuid } from 'uuid';
 })
 export class InterventionService {
   lastInteractedIntervention: number;
-  interventionsContainer: ViewContainerRef;
   interventionElementsGraph: number[][] = [];
   graphElements: HTMLInterventionElement[] = [];
-  mainDiv: ElementRef;
 
   clearBoard$: Subject<void> = new Subject<void>();
   redrawGraph$: Subject<void> = new Subject<void>();
