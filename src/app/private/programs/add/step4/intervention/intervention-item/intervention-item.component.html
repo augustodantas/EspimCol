@@ -31,12 +31,16 @@
 
     <div class="holder-media my-4">
       <div class="mb-2" *ngFor="let media of interventionCoordinate.intervention.medias; index as i">
-        <img [src]="apiUrl + media.url" class="img-thumbnail w-100 mb-1" [alt]="media.name" />
+        <img [src]="media.url" class="img-thumbnail w-100 mb-1" [alt]="media.name" *ngIf="media.type == 'image'" />
+        <video [src]="media.url" class="img-thumbnail mb-1" controls height="120" *ngIf="media.type == 'video'"></video>
+        <div class="img-thumbnail mb-1" *ngIf="media.type == 'audio'">
+          <audio [src]="media.url" class="w-100" height="70" controls></audio>
+        </div>
         <button class="btn btn-danger w-100" (click)="removerMidia(i)" *ngIf="interventionCoordinate.intervention.medias.length > 0">
           Remover mídia <i class="far fa-trash-alt"></i>
         </button>
       </div>
-      <button class="btn btn-outline-primary w-100">Anexar mídia <i class="fas fa-paperclip"></i></button>
+      <button class="btn btn-outline-primary w-100" (click)="openMediaUpload()">Anexar mídia <i class="fas fa-paperclip"></i></button>
     </div>
 
     <esm-question

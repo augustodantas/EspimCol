@@ -1,5 +1,8 @@
+@import 'node_modules/bootstrap/scss/bootstrap';
+
 @import './app/stylesheets/_reset.scss';
 
+@import './app/stylesheets/_theme.scss';
 @import './app/stylesheets/_labels.scss';
 @import './app/stylesheets/_typography.scss';
 @import './app/stylesheets/_toastr.scss';
@@ -17,6 +20,10 @@
     height: 100%;
     width: 100%;
   }
+}
+
+.holder-modal-media {
+  background: rgba(0, 0, 0, 0.5);
 }
 
 .modal-intervention {
@@ -480,14 +487,6 @@ a.dropdown-item:hover {
   background-color: #ededee;
 }
 
-/* -- Body -- */
-/* Exchanging background and font color */
-body {
-  background: #ededee;
-  color: #464646;
-}
-/* -- links -- */
-
 .links:hover {
   text-decoration: none;
 }
@@ -582,17 +581,6 @@ body {
     width: 25% !important;
     left: calc(100vw / 2 - 12.5%);
   }
-}
-
-html,
-body {
-  height: 100%;
-}
-body {
-  margin: 0;
-  font-family: Roboto, 'Helvetica Neue', sans-serif;
-  font-size: 14px;
-  background-color: #eeeeee;
 }
 
 .link-disabled {

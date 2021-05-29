@@ -1,0 +1,47 @@
+<div class="modal-header">
+  <h4 class="modal-title margin-0">Anexar mídia</h4>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="close()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <tabset type="pills">
+    <tab heading="Enviar um arquivo">
+      <div class="fileSquare mt-2">
+        <div class="row"></div>
+        <div class="row">
+          <div class="col-12 text-center">
+            <p>Selecione um arquivo para enviar</p>
+            <label class="btn btn-primary btn-lg">
+              Selecionar arquivo
+              <input
+                type="file"
+                (change)="selectFile($event)"
+                accept="video/mp4,audio/mp3,audio/wav,audio/ogg,image/png,image/gif,image/jpg,image/jpeg"
+                capture="camera"
+                id="fileSelector"
+              />
+            </label>
+          </div>
+        </div>
+        <br />
+        <div class="row d-flex justify-content-center">
+          <video [src]="file.url" id="uploadVideo" height="360" controls *ngIf="file?.type == 'video'"></video>
+          <audio [src]="file.url" id="uploadAudio" width="480" controls *ngIf="file?.type == 'audio'"></audio>
+          <img [src]="file.url" id="uploadImage" class="img-thumbnail" *ngIf="file?.type == 'image'" />
+        </div>
+      </div>
+      <p class="help-block text-muted">
+        São suportadas imagens nos formatos gif, jpg e png; vídeos no formato mp4 e áudios no formato mp3, wav e ogg.
+      </p>
+
+      <div class="row">
+        <div class="col-12 justify-content-end d-flex">
+          <button class="btn btn-success min-100" (click)="uploadFile()" (disabled)="(!file)">Enviar arquivo</button>
+        </div>
+      </div>
+    </tab>
+    <!-- <tab heading="Gravar vídeo">Pills content 2</tab> -->
+    <!-- <tab heading="Gravar aúdio">Pills content 2</tab> -->
+  </tabset>
+</div>

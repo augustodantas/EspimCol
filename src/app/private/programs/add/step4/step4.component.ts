@@ -13,11 +13,12 @@ import { PassiveEventComponent } from './passive-event/passive-event.component';
   templateUrl: './step4.component.html',
 })
 export class Step4Component implements OnInit {
+  @ViewChildren(PassiveEventComponent) passiveEventsComponents: PassiveEventComponent[];
+  @ViewChildren(ActiveEventComponent) activeEventsComponents: ActiveEventComponent[];
+
   passiveEvents: Array<Event>;
   activeEvents: Array<Event>;
   urlPrograms: string = ESPIM_REST_Programs;
-  @ViewChildren(PassiveEventComponent) passiveEventsComponents: PassiveEventComponent[];
-  @ViewChildren(ActiveEventComponent) activeEventsComponents: ActiveEventComponent[];
 
   constructor(private programAddService: ProgramsAddService) {}
 

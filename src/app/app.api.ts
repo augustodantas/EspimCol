@@ -26,6 +26,8 @@ export const ESPIM_REST_Triggers: string = ESPIM_API + 'triggers/';
 // configure sensors module url
 export const ESPIM_REST_Sensors: string = ESPIM_API + 'sensors/';
 
+export const ESPIM_REST_Media: string = ESPIM_API + 'media/';
+
 export const ESPIM_REST_ExternalApplications: string = ESPIM_API + 'external-applications/';
 
 // config default page size

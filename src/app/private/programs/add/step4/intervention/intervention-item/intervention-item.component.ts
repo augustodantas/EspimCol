@@ -1,6 +1,9 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs';
-import { BASE_ESPIM_API } from 'src/app/app.api';
+import { take } from 'rxjs/operators';
+import { ModalMidiaComponent } from 'src/app/private/components/modal-midia/modal-midia.component';
+import { Media } from 'src/app/private/models/media';
 import { isNullOrUndefined } from 'src/app/util/functions';
 
 import { HTMLInterventionElement, InterventionService } from '../intervention.service';
@@ -13,13 +16,13 @@ import { HTMLInterventionElement, InterventionService } from '../intervention.se
 export class InterventionItemComponent implements OnInit, AfterViewInit {
   @ViewChild('interventionDiv') interventionDiv: ElementRef;
 
-  apiUrl: string = BASE_ESPIM_API;
   interventionCoordinate: HTMLInterventionElement;
   nextInterventionSelect: string;
   redrawGraphSubscription: Subscription;
 
   previousPosition: { x: number; y: number };
   offset: { x: number; y: number } = { x: 0, y: 0 };
+  private _modalMediaRef: BsModalRef;
 
   get graphIndex(): number {
     return this.interventionService.graphElements.findIndex((value) => value.uuid === this.interventionCoordinate.uuid);
@@ -29,7 +32,7 @@ export class InterventionItemComponent implements OnInit, AfterViewInit {
     return this.interventionService.graphElements.map((htmlComponent) => htmlComponent);
   }
 
-  constructor(private interventionService: InterventionService) {}
+  constructor(private interventionService: InterventionService, private readonly _modalService: BsModalService) {}
 
   ngOnInit(): void {
     this.interventionService.firstInterventionChange$.subscribe((value) => {
@@ -105,7 +108,9 @@ export class InterventionItemComponent implements OnInit, AfterViewInit {
   }
 
   removerMidia(index: number) {
+    this.interventionService.saveCurrentState();
     this.interventionCoordinate.intervention.medias.splice(index, 1);
+    this.interventionService.saveState();
   }
 
   setNextTo() {
@@ -118,5 +123,21 @@ export class InterventionItemComponent implements OnInit, AfterViewInit {
     const to = Number.parseInt(this.nextInterventionSelect);
     this.interventionService.removeEdges(from, false);
     this.interventionService.setNextFromTo(from, to);
+  }
+
+  openMediaUpload() {
+    const config: ModalOptions<ModalMidiaComponent> = {
+      class: 'modal-lg modal-media',
+      ignoreBackdropClick: true,
+      initialState: {},
+    };
+
+    this._modalMediaRef = this._modalService.show(ModalMidiaComponent, config);
+
+    document.getElementsByClassName('modal-media')[0].parentElement.classList.add('holder-modal-media');
+
+    this._modalMediaRef.content.response.pipe(take(1)).subscribe((value: Media) => {
+      this.interventionCoordinate.intervention.medias.push(value);
+    });
   }
 }

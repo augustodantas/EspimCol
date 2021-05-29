@@ -43,6 +43,8 @@ export class InterventionService {
   }
 
   init(interventions) {
+    this.states = [];
+    this.currentState = -1;
     this.loadState(interventions);
 
     this.saveState();
