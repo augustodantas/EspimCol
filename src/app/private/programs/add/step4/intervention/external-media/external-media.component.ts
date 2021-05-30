@@ -70,6 +70,6 @@ export class ExternalMediaComponent implements OnInit {
   }
 
   getExternalApplications(): Observable<{ data: ExternalApplication[] }> {
-    return this.daoService.getObjects(this.urlExternalApplications);
+    return this.daoService.getObjects(this.urlExternalApplications, { all: true });
   }
 }

@@ -9,7 +9,7 @@
           <div class="col-12">
             <p>{{ row.text }}</p>
           </div>
-          <div class="col-12 form-group" *ngFor="let complexCond of row.complexConditions; index as i">
+          <div class="col-12" *ngFor="let complexCond of row.complexConditions; index as i">
             <input
               type="checkbox"
               [(ngModel)]="complexCond.value"

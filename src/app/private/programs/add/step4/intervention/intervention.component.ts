@@ -109,7 +109,7 @@ export class InterventionComponent implements AfterViewInit {
 
   scrollTo = debounce(function (scrollSize) {
     this.mainDiv.nativeElement.scrollTo({ top: 0, left: scrollSize, behavior: 'smooth' });
-  }, 100);
+  }, 50);
 
   onMiddleClickDown(event: any) {
     if (event.buttons === 4) this.previousPosition = { x: event.clientX, y: event.clientY };

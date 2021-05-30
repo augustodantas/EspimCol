@@ -204,6 +204,22 @@
       "addMessage": "All observer's information will be updated. However, his/her name will be changed for that one informed in his/her e-mail. Are you sure about saving?",
       "saveTitle": "Observer saved!",
       "saveMessage": "Observer's data was saved with success"
+    },
+    "external-applications": {
+      "add": {
+        "title": "New external application",
+        "titleEdit": "Edit external application information",
+        "name": "Name",
+        "package": "Pacote",
+        "saveButton": "SAVE"
+      },
+      "list": {
+        "addButton": "New external application",
+        "pageTitle": "External applications List",
+        "totalNumber": "Total external applications",
+        "listTitle": "External applications List",
+        "noObjects": "There are no registered external applications."
+      }
     }
   },
   "errors": {

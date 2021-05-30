@@ -1,0 +1,82 @@
+<div class="mx-auto mt-4 card card-lg w-main container-fluid">
+  <div class="row">
+    <section class="p-0 mx-auto bg-white rounded col-12 p-xl-2">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <h1 class="h4" translate *ngIf="!id">private.external-applications.add.title</h1>
+            <h1 class="h4" translate *ngIf="id">private.external-applications.add.titleEdit</h1>
+          </div>
+        </div>
+
+        <form [formGroup]="form" focusInvalidInput #formElement (ngSubmit)="save($event)">
+          <div class="row">
+            <div class="col-6 form-group">
+              <label for="text" class="sr-only" translate>private.external-applications.add.name</label>
+              <input
+                id="name"
+                name="name"
+                type="text"
+                placeholder="{{ 'private.external-applications.add.name' | translate }}"
+                class="form-control-plaintext border-bottom"
+                formControlName="name"
+              />
+              <input-validations
+                *ngIf="form.controls['name'].invalid && form.controls['name'].touched"
+                [errors]="form.controls['name'].errors"
+                label="Nome"
+              >
+              </input-validations>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-6 form-group">
+              <label for="email" class="sr-only" translate>private.external-applications.add.package</label>
+              <input
+                id="package"
+                name="package"
+                type="package"
+                placeholder="{{ 'private.external-applications.add.package' | translate }}"
+                class="form-control-plaintext border-bottom"
+                formControlName="package"
+                [readonly]="editing"
+              />
+              <input-validations
+                *ngIf="form.controls['package'].invalid && form.controls['package'].touched"
+                [errors]="form.controls['package'].errors"
+                label="Package"
+              >
+              </input-validations>
+            </div>
+          </div>
+
+          <div class="row mt-4 mb-5">
+            <div class="col-12 form-group">
+              <h3 class="h6">Parâmetros</h3>
+              <div class="mb-2" *ngFor="let param of form.get('parameters').value; index as i">
+                <esm-parameter
+                  [parameter]="param"
+                  [parameters]="form.get('parameters').value"
+                  [index]="i"
+                  (remover)="removerParametro(i)"
+                ></esm-parameter>
+              </div>
+              <div class="alert alert-info" *ngIf="form.get('parameters').value.length == 0">Nenhum parâmetro cadastrado</div>
+              <a href="javascript:" class="btn btn-white btn-shadow" (click)="novoParametro()">Adicionar parâmetro</a>
+            </div>
+          </div>
+
+          <div class="row justify-content-end">
+            <div class="col-auto">
+              <a routerLink="/private/external-applications/list" class="btn btn-success btn-lg btn-shadow">VOLTAR</a>
+            </div>
+            <div class="col-auto">
+              <button type="submit" name="saveButton" class="btn btn-primary btn-lg btn-shadow min-100" translate>SALVAR</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </section>
+  </div>
+</div>

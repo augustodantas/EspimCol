@@ -13,7 +13,7 @@
         <i class="fas fa-exclamation-circle text-warning" *ngIf="biggerStepOpened > 1 && _program.title == ''"></i>
       </div>
       <div class="row align-items-center justify-content-center mt-3">
-        <small class="font-weight-bold">Informações</small>
+        <small class="medium font-weight-bold">Informações</small>
       </div>
     </div>
     <div class="col-3 step">
@@ -29,7 +29,7 @@
         <i class="fas fa-exclamation-circle text-warning" *ngIf="biggerStepOpened > 2 && _program.observers.length == 0"></i>
       </div>
       <div class="row align-items-center justify-content-center mt-3">
-        <small class="font-weight-bold">Observadores</small>
+        <small class="medium font-weight-bold">Observadores</small>
       </div>
     </div>
     <div class="col-3 step">
@@ -45,7 +45,7 @@
         <i class="fas fa-exclamation-circle text-warning" *ngIf="biggerStepOpened > 3 && _program.users.length == 0"></i>
       </div>
       <div class="row align-items-center justify-content-center mt-3">
-        <small class="font-weight-bold">Participantes</small>
+        <small class="medium font-weight-bold">Participantes</small>
       </div>
     </div>
     <div class="col-3 step">
@@ -63,7 +63,7 @@
           *ngIf="biggerStepOpened == 4 && currentStep < 4 && _program.activeEvents.length == 0 && _program.passiveEvents.length == 0"
         ></i>
       </div>
-      <div class="row justify-content-center mt-3"><small class="font-weight-bold">Eventos</small></div>
+      <div class="row justify-content-center mt-3"><small class="font-weight-bold medium">Eventos</small></div>
     </div>
   </div>
 </div>

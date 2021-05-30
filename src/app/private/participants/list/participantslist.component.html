@@ -1,7 +1,7 @@
 <main class="px-5 mx-auto mt-4 mb-5 card card-lg w-main">
   <!--Título & busca-->
   <div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="h4 font-weight-bold flex-column no-margin" translate>private.participants.list.pageTitle</h1>
+    <h1 class="h4" translate>private.participants.list.pageTitle</h1>
     <a [routerLink]="['/private/participants/add']" class="btn btn-link align-self-end" translate>private.participants.list.addButton</a>
   </div>
 
@@ -60,7 +60,7 @@
         [disabled]="!total"
       ></pagination>
 
-      <div *ngIf="!total">
+      <div *ngIf="total == null">
         <div class="loader-bg w-25"></div>
         <div class="loader-bg w-25"></div>
         <div class="loader-bg w-25"></div>

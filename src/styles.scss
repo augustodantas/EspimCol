@@ -1,6 +1,5 @@
-@import 'node_modules/bootstrap/scss/bootstrap';
-
 @import './app/stylesheets/_reset.scss';
+@import 'node_modules/bootstrap/scss/bootstrap';
 
 @import './app/stylesheets/_theme.scss';
 @import './app/stylesheets/_labels.scss';
@@ -514,18 +513,6 @@ a.dropdown-item:hover {
 .input-with-icon-l i {
   padding: 0.6em 0.6em;
   left: 0;
-}
-
-.fa-edit:hover {
-  color: #0056b3;
-}
-
-.fa-trash-alt:hover {
-  color: #0056b3;
-}
-
-.fa-chart-pie:hover {
-  color: #0056b3;
 }
 
 /* -- CSS especificos -- */

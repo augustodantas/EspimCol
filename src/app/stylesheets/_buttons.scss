@@ -1,12 +1,8 @@
 /* -- Buttons -- */
 
-.btn {
-  border-radius: 0;
-}
-
 .btn-primary {
   border: 0px;
-  background-color: #0a467f;
+  background-color: #0f5394;
   &:hover {
     border: 0px;
     background-color: #003061;
@@ -29,13 +25,10 @@
 }
 
 .btn-success {
-  border: 0px;
   background-color: #04c481;
-  box-shadow: 1px 1px 1px 1px #ccc;
 }
 .btn-success:hover {
   background-color: #329673;
-  box-shadow: 1px 1px 1px 1px #ccc;
 }
 
 .btn-default-active {

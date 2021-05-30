@@ -1,0 +1,57 @@
+<div class="card" [formGroup]="form">
+  <div class="card-body">
+    <h3 class="h6">Parâmetro {{ index + 1 }}</h3>
+
+    <div class="row">
+      <div class="col-4">
+        <label for="text" class="sr-only" translate>Nome visual</label>
+        <input
+          id="name"
+          name="name"
+          type="text"
+          placeholder="Nome visual"
+          class="form-control-plaintext border-bottom"
+          formControlName="name"
+        />
+        <input-validations
+          *ngIf="form.controls['name'].invalid && form.controls['name'].touched"
+          [errors]="form.controls['name'].errors"
+          label="Nome visual"
+        >
+        </input-validations>
+      </div>
+      <div class="col-4">
+        <label for="text" class="sr-only" translate>Nome real</label>
+        <input id="key" name="key" type="text" placeholder="Nome real" class="form-control-plaintext border-bottom" formControlName="key" />
+        <input-validations
+          *ngIf="form.controls['key'].invalid && form.controls['key'].touched"
+          [errors]="form.controls['key'].errors"
+          label="Nome real"
+        >
+        </input-validations>
+      </div>
+      <div class="col">
+        <label for="text" class="sr-only" translate>Valor padrão</label>
+        <input
+          id="default_value"
+          name="default_value"
+          type="text"
+          placeholder="Valor padrão"
+          class="form-control-plaintext border-bottom"
+          formControlName="default_value"
+        />
+        <input-validations
+          *ngIf="form.controls['default_value'].invalid && form.controls['default_value'].touched"
+          [errors]="form.controls['default_value'].errors"
+          label="Valor padrão"
+        >
+        </input-validations>
+      </div>
+      <div class="col-auto">
+        <a href="javascript:" class="btn btn-danger btn-sm" (click)="excluir()">
+          <i class="fas fa-trash-alt"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

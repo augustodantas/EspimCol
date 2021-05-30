@@ -20,6 +20,10 @@ const routes: Routes = [
         path: 'programs',
         loadChildren: () => import('./programs/programs.module').then((m) => m.ProgramsModule),
       },
+      {
+        path: 'external-applications',
+        loadChildren: () => import('./external-applications/external-applications.module').then((m) => m.ExternalApplicationsModule),
+      },
     ],
   },
 ];
