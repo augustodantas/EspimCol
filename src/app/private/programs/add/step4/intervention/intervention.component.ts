@@ -10,6 +10,7 @@ import {
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
+import debounce from 'lodash/debounce';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { Intervention } from 'src/app/private/models/intervention.model';
 
@@ -95,9 +96,20 @@ export class InterventionComponent implements AfterViewInit {
       interventionComponent.instance.interventionCoordinate.intervention.y = offsetY;
 
       this.interventionService.redrawGraph$.next();
-      this.mainDiv.nativeElement.scrollTo({ top: 0, left: offsetX, behavior: 'smooth' });
+
+      let scrollMeioDaTela = offsetX - window.innerWidth / 2 + interventionComponent.instance.interventionCoordinate.width / 2;
+      if (scrollMeioDaTela < 0) {
+        scrollMeioDaTela = 0;
+      }
+
+      // Utiliza o scroll com debounce para evitar dois eventos no mesmo tempo
+      this.scrollTo(scrollMeioDaTela);
     });
   }
+
+  scrollTo = debounce(function (scrollSize) {
+    this.mainDiv.nativeElement.scrollTo({ top: 0, left: scrollSize, behavior: 'smooth' });
+  }, 100);
 
   onMiddleClickDown(event: any) {
     if (event.buttons === 4) this.previousPosition = { x: event.clientX, y: event.clientY };
