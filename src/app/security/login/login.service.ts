@@ -43,14 +43,9 @@ export class LoginService {
           this._observerService
             .authenticate(this.urlObservers, user.authToken)
             .pipe(finalize(() => this._loaderService.hide()))
-            .subscribe(
-              (response: any) => {
-                this.handleAuth(response);
-              },
-              (error) => {
-                this.router.navigate(['/index/signin', { email: user.email, name: user.name }]);
-              }
-            );
+            .subscribe((response: any) => {
+              this.handleAuth(response);
+            });
         });
       },
       (error) => console.log(error)
@@ -69,12 +64,19 @@ export class LoginService {
   }
 
   handleAuth(response: any) {
-    this.accessToken = response.token;
+    if (response.token) {
+      this.accessToken = response.token;
+      this._localStorageService.Set(this._propertyName, response.token);
+    }
+
     this._currentUserSubject.next(response.user);
     this.userObserver = response.user.observer;
-    this._localStorageService.Set(this._propertyName, response.token);
 
-    this.router.navigate(['/private']);
+    if (this.userObserver) {
+      this.router.navigate(['/private']);
+    } else {
+      this.router.navigate(['/security/signup']);
+    }
   }
 
   logout(): void {

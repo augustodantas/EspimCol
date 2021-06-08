@@ -17,7 +17,6 @@ import { HeaderComponent } from './header/header.component';
 import { HomeComponent } from './home/home.component';
 import { IndexRoutingModule } from './index-routing.module';
 import { IndexComponent } from './index.component';
-import { SigninComponent } from './signin/signin.component';
 import { TeamComponent } from './team/team.component';
 import { TimelineComponent } from './timeline/timeline.component';
 import { WorksComponent } from './works/works.component';
@@ -45,7 +44,6 @@ import { WorksComponent } from './works/works.component';
     TimelineComponent,
     TeamComponent,
     DocumentationComponent,
-    SigninComponent,
   ],
   providers: [
     DAOService,

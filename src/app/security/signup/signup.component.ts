@@ -1,0 +1,70 @@
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { SocialUser } from 'angularx-social-login';
+import { ToastrService } from 'ngx-toastr';
+import { Observable } from 'rxjs';
+import { finalize } from 'rxjs/operators';
+import { ESPIM_REST_Observers } from 'src/app/app.api';
+import { DAOService } from 'src/app/private/dao/dao.service';
+import { LoginService } from 'src/app/security/login/login.service';
+import { LoaderService } from 'src/app/services/loader.service';
+import { isNullOrUndefined } from 'src/app/util/functions';
+import { FormUtil } from 'src/app/util/util.form.service';
+
+@Component({
+  selector: 'esm-signup',
+  templateUrl: './signup.component.html',
+})
+export class SignupComponent implements OnInit {
+  @ViewChild('formElement') formElement: ElementRef;
+
+  urlObservers: string = ESPIM_REST_Observers;
+  form: FormGroup = this.formBuilder.group({
+    name: this.formBuilder.control('', [Validators.required]),
+    email: this.formBuilder.control('', [Validators.required]),
+    role: this.formBuilder.control('', [Validators.required]),
+  });
+  user$: Observable<SocialUser>;
+
+  constructor(
+    private _loginService: LoginService,
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private _toastr: ToastrService,
+    private _loaderService: LoaderService,
+    private _daoService: DAOService
+  ) {
+    // // Carrega os parametros da rota nos valores do formulário
+    this.form.patchValue(this._loginService.userValue);
+
+    if (!isNullOrUndefined(this._loginService.userObserver)) {
+      this.router.navigate(['/private']);
+    }
+  }
+
+  ngOnInit() {
+    this.user$ = this._loginService.user;
+  }
+
+  save() {
+    this.form.markAllAsTouched();
+
+    if (this.form.valid) {
+      var dados = { ...this.form.value };
+      this._loaderService.show();
+
+      this._daoService
+        .postObject(this.urlObservers, dados)
+        .pipe(finalize(() => this._loaderService.hide()))
+        .subscribe(
+          (resp) => {
+            this._toastr.success('Dados registrados com sucesso!');
+            resp.user.observer = resp.observer;
+            this._loginService.handleAuth(resp);
+          },
+          (resp) => FormUtil.setErrorsBackend(this.form, resp.data, this.formElement)
+        );
+    }
+  }
+}

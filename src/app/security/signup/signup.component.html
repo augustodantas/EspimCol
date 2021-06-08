@@ -1,0 +1,74 @@
+<esm-security-header></esm-security-header>
+
+<main class="card mx-auto mt-4 col-4" *ngIf="user$ | async as _user">
+  <!-- Forms -->
+  <form focusInvalidInput #formElement class="d-flex flex-wrap p-4 pt-5 pb-5" [formGroup]="form" (ngSubmit)="save()">
+    <!-- Placeholder, Nome e Sobre você -->
+    <div class="container-fluid mb-2 mb-md-5">
+      <div class="row">
+        <!-- Placeholder -->
+        <div class="col-12 col-md-12">
+          <div class="h2 font-weight-bold">Olá, {{ _user.name }}</div>
+          <h4 class="mt-5">Complete o seu cadastro para acessar o sistema</h4>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid mb-4">
+      <div class="row">
+        <!-- Primeira coluna -->
+        <div class="col-12 d-flex flex-column">
+          <!-- E-mail -->
+          <div class="w-100 mb-4">
+            <label class="font-weight-bold w-100 mb-0" for="email">E-mail</label>
+            <input
+              class="form-control"
+              name="email"
+              id="email"
+              formControlName="email"
+              disabled
+              type="email"
+              placeholder="Qual o seu e-mail?"
+            />
+          </div>
+
+          <!-- Name -->
+          <div class="w-100 mb-4">
+            <label class="font-weight-bold w-100 mb-0" for="name">Nome</label>
+            <input class="form-control" name="name" id="name" formControlName="name" type="text" placeholder="Nome completo" />
+            <input-validations
+              *ngIf="form.controls['name'].invalid && form.controls['name'].touched"
+              [errors]="form.controls['name'].errors"
+              label="Nome"
+            >
+            </input-validations>
+          </div>
+
+          <!-- ROLE -->
+          <div class="w-100 mb-4">
+            <label class="font-weight-bold w-100 mb-0" for="name">Papel</label>
+            <input
+              class="form-control"
+              name="role"
+              id="role"
+              formControlName="role"
+              type="text"
+              placeholder="Insira aqui o seu papel. Ex: Psicóloga"
+            />
+            <input-validations
+              *ngIf="form.controls['role'].invalid && form.controls['role'].touched"
+              [errors]="form.controls['role'].errors"
+              label="Papel"
+            >
+            </input-validations>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-end w-100">
+      <button name="saveButton" class="btn btn-white btn-lg btn-shadow mr-4">VOLTAR</button>
+      <button name="saveButton" class="btn btn-primary btn-lg btn-shadow min-100">ENTRAR</button>
+    </div>
+  </form>
+</main>

@@ -14,6 +14,8 @@
       [total]="total"
     ></esm-list-header>
 
+    <div class="alert alert-info" *ngIf="!loading && programs.length == 0">Nenhum programa encontrado</div>
+
     <table class="table table-hover">
       <tbody>
         <tr *ngFor="let program of programs">

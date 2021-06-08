@@ -14,6 +14,8 @@
       [total]="total"
     ></esm-list-header>
 
+    <div class="alert alert-info" *ngIf="!loading && participants.length == 0">Nenhum participante encontrado</div>
+
     <table class="table table-hover">
       <tbody>
         <tr *ngFor="let participant of participants">
