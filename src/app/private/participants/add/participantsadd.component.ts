@@ -26,7 +26,6 @@ export class ParticipanstAddComponent implements OnInit {
   constructor(
     private _daoService: DAOService,
     private _toastr: ToastrService,
-    private _activatedRoute: ActivatedRoute,
     private _formBuilder: FormBuilder,
     private _loaderService: LoaderService,
     private route: Router,

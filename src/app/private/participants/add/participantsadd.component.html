@@ -9,15 +9,15 @@
           </div>
         </div>
 
-        <form [formGroup]="form" focusInvalidInput #formElement (ngSubmit)="save($event)">
+        <form [formGroup]="form" focusInvalidInput #formElement (ngSubmit)="save($event)" class="mt-4">
           <div class="row">
             <div class="col-6 form-group">
-              <label for="text" class="sr-only" translate>private.participants.add.name</label>
+              <label for="text" class="sr-only" translate>private.participants.add.alias</label>
               <input
-                id="name"
-                name="name"
+                id="alias"
+                name="alias"
                 type="text"
-                placeholder="{{ 'private.participants.add.alias' | translate }}"
+                [placeholder]="'private.participants.add.alias' | translate"
                 class="form-control-plaintext border-bottom"
                 formControlName="alias"
                 [readonly]="editing"
@@ -25,7 +25,7 @@
               <input-validations
                 *ngIf="form.controls['alias'].invalid && form.controls['alias'].touched"
                 [errors]="form.controls['alias'].errors"
-                label="Nome"
+                [label]="'private.participants.add.alias' | translate"
               >
               </input-validations>
             </div>

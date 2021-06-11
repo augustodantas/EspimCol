@@ -114,7 +114,7 @@ export class Step3Component implements OnInit {
   }
 
   getName(user: User): string {
-    return user.name + ' ' + (user.alias ? `(${user.alias})` : `(${user.email})`);
+    return (user.name ? user.name : user.alias) + ' ' + (user.name && user.alias ? `(${user.alias})` : `(${user.email})`);
   }
 
   submit(): void {

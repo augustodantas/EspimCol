@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { User } from 'src/app/private/models/user.model';
+import { v4 as uuid } from 'uuid';
 
 import { Observer } from '../../../models/observer.model';
 
@@ -14,6 +15,7 @@ export class UserCheckBoxComponent implements OnInit {
   @Input() label: string;
   @Input() checked: boolean;
   @Input() disabled: boolean;
+  uid: string = uuid();
 
   @Output() removeUser = new EventEmitter<Observer | User>();
   @Output() addUser = new EventEmitter<Observer | User>();

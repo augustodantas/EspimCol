@@ -25,11 +25,8 @@ export class StepPanelComponent implements OnInit {
     let id = this.activeRoute.snapshot.params.id;
     if (id) {
       this.biggerStepOpened = 4;
+      this.updateStep(this.router.url);
     }
-
-    console.log(this.router.url);
-
-    this.updateStep(this.router.url);
 
     // Subscribes to url changes. At first there will be a 'reset' queryParam that indicates that the currentStep shall be reseted. Then, it will listen to url changes and update the currentStep accordingly
     this.router.events.subscribe((value: NavigationEnd) => {
