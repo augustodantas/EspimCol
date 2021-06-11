@@ -1,13 +1,13 @@
 import { DecimalPipe } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 import { Observable, Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, finalize, switchMap, take } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, finalize, switchMap } from 'rxjs/operators';
 import { ESPIM_REST_Participants } from 'src/app/app.api';
-import { ModalConfirmDeleteComponent } from 'src/app/components/modal-confirm-delete/modal-confirm-delete.component';
 import { LoaderService } from 'src/app/services/loader.service';
+import { SwalService } from 'src/app/services/swal.service';
 
 import { DAOService } from '../../dao/dao.service';
 import { Participant } from '../../models/participant.model';
@@ -32,7 +32,8 @@ export class ParticipantsListComponent {
     private daoService: DAOService,
     private readonly _modalService: BsModalService,
     private _loaderService: LoaderService,
-    private _toastr: ToastrService
+    private _toastr: ToastrService,
+    private readonly _swalService: SwalService
   ) {
     this.search
       .pipe(
@@ -79,20 +80,8 @@ export class ParticipantsListComponent {
   }
 
   deleteParticipant(participant: Participant) {
-    const config: ModalOptions<ModalConfirmDeleteComponent> = {
-      class: 'modal-md',
-      initialState: {
-        title: 'Participante',
-        object: participant.alias + '-' + participant.user.email,
-      },
-    };
-
-    console.log(participant);
-
-    this._modalRef = this._modalService.show(ModalConfirmDeleteComponent, config);
-
-    this._modalRef.content.response.pipe(take(1)).subscribe((value: boolean) => {
-      if (value) {
+    this._swalService.confirmDelete(participant.alias + '-' + participant.user.email, 'Participante').then((result) => {
+      if (result.isConfirmed) {
         this._loaderService.show();
         this.daoService
           .deleteObject(this.urlParticipants, participant.id.toString())

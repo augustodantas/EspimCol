@@ -9,6 +9,15 @@
   }
 }
 
+.btn-secondary {
+  border: 0px;
+  background-color: #c1c1c1;
+  &:hover {
+    border: 0px;
+    background-color: #b5b5b5;
+  }
+}
+
 .btn-outline {
   outline: 1px solid #00578f;
 }
@@ -25,10 +34,12 @@
 }
 
 .btn-success {
+  border: 0px;
   background-color: #04c481;
-}
-.btn-success:hover {
-  background-color: #329673;
+  &:hover {
+    border: 0px;
+    background-color: #329673;
+  }
 }
 
 .btn-default-active {

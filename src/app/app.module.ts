@@ -9,6 +9,7 @@ import {
   TranslateModule,
 } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { MomentModule } from 'ngx-moment';
 import { ToastrModule } from 'ngx-toastr';
 
@@ -47,6 +48,7 @@ const providers = [LoaderService];
     SecurityModule,
     // configure the imports
     HttpClientModule,
+    SweetAlert2Module.forRoot(),
     ToastrModule.forRoot({
       closeButton: true,
       disableTimeOut: false,
