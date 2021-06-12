@@ -1,13 +1,13 @@
 import { DecimalPipe } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 import { Observable, Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, finalize, switchMap, take } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, finalize, switchMap } from 'rxjs/operators';
 import { ESPIM_REST_ExternalApplications } from 'src/app/app.api';
-import { ModalConfirmDeleteComponent } from 'src/app/components/modal-confirm-delete/modal-confirm-delete.component';
 import { LoaderService } from 'src/app/services/loader.service';
+import { SwalService } from 'src/app/services/swal.service';
 
 import { DAOService } from '../../dao/dao.service';
 import { ExternalApplication } from '../../models/external-application.model';
@@ -32,6 +32,7 @@ export class ExternalApplicationListComponent {
     private daoService: DAOService,
     private readonly _modalService: BsModalService,
     private _loaderService: LoaderService,
+    private readonly _swalService: SwalService,
     private _toastr: ToastrService
   ) {
     this.search
@@ -79,18 +80,8 @@ export class ExternalApplicationListComponent {
   }
 
   deleteExternalApp(externalApp: ExternalApplication) {
-    const config: ModalOptions<ModalConfirmDeleteComponent> = {
-      class: 'modal-md',
-      initialState: {
-        title: 'ExternalApplicatione',
-        object: externalApp.name + '-' + externalApp.package,
-      },
-    };
-
-    this._modalRef = this._modalService.show(ModalConfirmDeleteComponent, config);
-
-    this._modalRef.content.response.pipe(take(1)).subscribe((value: boolean) => {
-      if (value) {
+    this._swalService.confirmDelete(externalApp.name + '-' + externalApp.package, 'Aplicação Externa').then((result) => {
+      if (result.isConfirmed) {
         this._loaderService.show();
         this.daoService
           .deleteObject(this.urlExternalApplications, externalApp.id.toString())

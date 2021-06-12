@@ -80,7 +80,7 @@ export class ParticipantsListComponent {
   }
 
   deleteParticipant(participant: Participant) {
-    this._swalService.confirmDelete(participant.alias + '-' + participant.user.email, 'Participante').then((result) => {
+    this._swalService.confirmDelete(participant.alias + ' - ' + participant.user.email, 'Participante').then((result) => {
       if (result.isConfirmed) {
         this._loaderService.show();
         this.daoService

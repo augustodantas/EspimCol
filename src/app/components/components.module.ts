@@ -13,11 +13,10 @@ import { MomentModule } from 'ngx-moment';
 import { ListHeaderComponent } from '../private/components/list-header/list-header.component';
 import { SearchComponent } from '../private/search/search.component';
 import { InputValidationsComponent } from './input-validations/input-validations.component';
-import { ModalConfirmDeleteComponent } from './modal-confirm-delete/modal-confirm-delete.component';
 import { SplashScreenComponent } from './splash-screen/splash-screen.component';
 
 const modules = [PaginationModule, CommonModule, MomentModule, TranslateModule, ReactiveFormsModule, FormsModule, ModalModule];
-const components = [InputValidationsComponent, SplashScreenComponent, ModalConfirmDeleteComponent, ListHeaderComponent, SearchComponent];
+const components = [InputValidationsComponent, SplashScreenComponent, ListHeaderComponent, SearchComponent];
 
 @NgModule({
   declarations: [...components],

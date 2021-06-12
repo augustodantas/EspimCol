@@ -455,26 +455,17 @@ a {
   display: none;
 }
 
-/* -- header -- */
-/* Exchanging menu hover color */
-.navbar li.c-hover:hover {
-  background-color: #003061;
-}
-
-/* Exchanging the background and font colors of the active dropdown menu links */
-.navbar li .dropdown-item:active {
-  background-color: #ededee;
-  color: black;
-}
-
-/* Making the link from the current page acquire active link characteristics */
-.navbar .active {
-  background-color: #003061;
-}
-
 /* Changing the menu background color */
 .navbar {
   background-color: #0a467f;
+}
+
+.nav-link {
+  font-size: 1rem;
+  &.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
 }
 
 .names {
