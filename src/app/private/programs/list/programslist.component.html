@@ -57,8 +57,11 @@
         [(ngModel)]="page"
         name="page"
         (pageChanged)="handleChange($event)"
-        [disabled]="!total"
-      ></pagination>
+        [maxSize]="10"
+        [boundaryLinks]="true"
+      >
+        [disabled]="!total" ></pagination
+      >
 
       <div *ngIf="total == null">
         <div class="loader-bg w-25"></div>

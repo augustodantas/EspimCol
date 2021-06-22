@@ -53,7 +53,7 @@ export class CanvasComponent implements OnInit, AfterViewInit {
     // // Here we make a BFS
     const queue: { intervention: number; order_position: number }[] = [];
 
-    queue.push({ intervention: this.interventionService.firstIntervention, order_position: 1 });
+    queue.push({ intervention: this.interventionService.firstIntervention, order_position: 0 });
 
     while (queue.length > 0) {
       const { intervention, order_position } = queue[0];

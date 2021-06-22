@@ -9,6 +9,9 @@
   white-space: nowrap;
   vertical-align: baseline;
   border-radius: 0.25em;
+  &.label-sm {
+    font-size: 0.8em;
+  }
 }
 a.label:hover,
 a.label:focus {
@@ -31,11 +34,11 @@ a.label:focus {
   background-color: #a2a2a2;
 }
 .label-primary {
-  background-color: #2196f3;
+  background-color: #0a467f;
 }
 .label-primary[href]:hover,
 .label-primary[href]:focus {
-  background-color: #0c7cd5;
+  background-color: #062f56;
 }
 .label-success {
   background-color: #4caf50;

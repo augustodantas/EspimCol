@@ -460,6 +460,23 @@ a {
   background-color: #0a467f;
 }
 
+/* -- header -- */
+/* Exchanging menu hover color */
+.navbar li.c-hover:hover {
+  background-color: #003061;
+}
+
+/* Exchanging the background and font colors of the active dropdown menu links */
+.navbar li .dropdown-item:active {
+  background-color: #ededee;
+  color: black;
+}
+
+/* Making the link from the current page acquire active link characteristics */
+.navbar .active {
+  background-color: #003061;
+}
+
 .nav-link {
   font-size: 1rem;
   &.disabled {

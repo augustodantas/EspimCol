@@ -117,6 +117,10 @@ export class Step2Component implements OnInit, OnDestroy {
     return this.daoService.getObjects(this.urlObservers, params);
   }
 
+  sort(observers: Observer[]): Observer[] {
+    return observers.sort((a, b) => (a.user.name > b.user.name ? 1 : -1));
+  }
+
   submit(): void {
     this.programAddService.saveStep({ observers: this.programObservers.map((item) => item.id) });
     this.programAddService.saveLocalStep({ observers: this.programObservers });

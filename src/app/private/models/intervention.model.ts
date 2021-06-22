@@ -45,7 +45,7 @@ export class Intervention {
   }
 
   getOrderDescription() {
-    return this.order_position < 0 ? toChar(this.order_position * -1) : this.order_position;
+    return this.order_position < 0 ? toChar(this.order_position * -1) : this.order_position + 1;
   }
 
   getDescription() {

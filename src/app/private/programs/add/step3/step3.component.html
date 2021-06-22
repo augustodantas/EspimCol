@@ -25,8 +25,15 @@
       <div *ngIf="!programUsers?.length">Você não selecionou nenhum participante.</div>
 
       <div class="align-items-center" *ngIf="programUsers.length > 0">
-        <span>Você adicionou:</span>
-        <span *ngFor="let selectedUser of programUsers"> {{ selectedUser.name }}</span>
+        <span class="mr-2">Você adicionou:</span>
+        <a
+          class="label label-primary label-sm mr-2 mb-2 d-inline-block"
+          href="javascript:"
+          (click)="removeProgramUser(selectedUser)"
+          *ngFor="let selectedUser of sort(programUsers)"
+        >
+          {{ selectedUser.name ? selectedUser.name : selectedUser.alias }} <i class="fas fa-times pointer ml-2"></i>
+        </a>
       </div>
     </div>
   </form>
@@ -37,7 +44,7 @@
       <div class="card-body">
         <div class="row">
           <div *ngIf="!users?.length" class="col-12">O filtro selecionado resultou em nada, tente troca-lo.</div>
-          <div class="col-3 d-flex align-items-center overflow-hidden text-nowrap" *ngFor="let user of users">
+          <div class="col-4 d-flex align-items-center overflow-hidden text-nowrap" *ngFor="let user of users">
             <esm-user-checkbox
               [user]="user"
               [label]="getName(user)"

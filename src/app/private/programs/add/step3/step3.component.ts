@@ -113,6 +113,10 @@ export class Step3Component implements OnInit {
     return this.daoService.getObjects(this.urlProgramUsers + (id ? id : ''), params);
   }
 
+  sort(participants: User[]): User[] {
+    return participants.sort((a, b) => (a.name > b.name ? 1 : -1));
+  }
+
   getName(user: User): string {
     return (user.name ? user.name : user.alias) + ' ' + (user.name && user.alias ? `(${user.alias})` : `(${user.email})`);
   }

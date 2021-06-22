@@ -24,8 +24,15 @@
     <div *ngIf="!programObservers?.length">Você não selecionou nenhum observador.</div>
 
     <div class="align-items-center" *ngIf="programObservers.length > 0">
-      <span>Você adicionou:</span>
-      <span *ngFor="let selectedObserver of programObservers"> {{ selectedObserver.user.name }}</span>
+      <span class="mr-2">Você adicionou:</span>
+      <a
+        class="label label-primary label-sm mr-2 mb-2 d-inline-block"
+        href="javascript:"
+        (click)="removeProgramObserver(selectedObserver)"
+        *ngFor="let selectedObserver of sort(programObservers)"
+      >
+        {{ selectedObserver.user.name }} <i class="fas fa-times pointer ml-2"></i>
+      </a>
     </div>
   </div>
 </form>

@@ -53,6 +53,9 @@ export class ProgramsAddService {
           activeEvent.interventions = activeEvent.interventions.map((intervention) =>
             this.interventionService.getInterventionClass(intervention)
           );
+
+          activeEvent.interventions = this.interventionService.fixOrderAndNextForOldSPIMInterventions(activeEvent.interventions);
+
           return activeEvent;
         });
 

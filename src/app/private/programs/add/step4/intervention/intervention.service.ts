@@ -40,12 +40,47 @@ export class InterventionService {
     return this.graphElements.findIndex((value) => value.intervention.first == true);
   }
 
-  init(interventions) {
+  init(interventions: Intervention[]) {
     this.states = [];
     this.currentState = -1;
     this.loadState(interventions);
 
     this.saveState();
+  }
+
+  fixOrderAndNextForOldSPIMInterventions(interventions: Intervention[]) {
+    // Old espim did not save order position correctly, so here we have to correct
+    interventions.sort((a, b) => {
+      if (a.order_position < b.order_position) {
+        return -1;
+      } else if (a.order_position > b.order_position) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+
+    // Old espim did not save order position correctly, so here we have to correct
+    const orderPositions = {};
+    interventions.forEach(function (element, key) {
+      orderPositions[element.order_position] = key;
+    });
+
+    interventions.map((intervention, mapIndex) => {
+      intervention.order_position = mapIndex;
+
+      if (intervention.type === 'question' && (intervention as QuestionIntervention).question_type == 1) {
+        let question = intervention as QuestionIntervention;
+
+        Object.keys(question.conditions).map((key) => {
+          question.conditions[key] = orderPositions[question.conditions[key]];
+        });
+      }
+
+      intervention.next = !isNullOrUndefined(orderPositions[intervention.next]) ? orderPositions[intervention.next] : null;
+    });
+
+    return interventions;
   }
 
   nextState() {

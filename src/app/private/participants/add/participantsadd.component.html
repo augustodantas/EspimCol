@@ -12,16 +12,18 @@
         <form [formGroup]="form" focusInvalidInput #formElement (ngSubmit)="save($event)" class="mt-4">
           <div class="row">
             <div class="col-6 form-group">
-              <label for="text" class="sr-only" translate>private.participants.add.alias</label>
-              <input
-                id="alias"
-                name="alias"
-                type="text"
-                [placeholder]="'private.participants.add.alias' | translate"
-                class="form-control-plaintext border-bottom"
-                formControlName="alias"
-                [readonly]="editing"
-              />
+              <div class="form-label-group">
+                <input
+                  id="alias"
+                  name="alias"
+                  type="text"
+                  [placeholder]="'private.participants.add.alias' | translate"
+                  class="form-control border-bottom"
+                  formControlName="alias"
+                  [readonly]="editing"
+                />
+                <label for="text" translate>private.participants.add.alias</label>
+              </div>
               <input-validations
                 *ngIf="form.controls['alias'].invalid && form.controls['alias'].touched"
                 [errors]="form.controls['alias'].errors"
@@ -33,16 +35,18 @@
 
           <div class="row">
             <div class="col-6 form-group">
-              <label for="email" class="sr-only" translate>private.participants.add.email</label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                placeholder="{{ 'private.participants.add.email' | translate }}"
-                class="form-control-plaintext border-bottom"
-                formControlName="email"
-                [readonly]="editing"
-              />
+              <div class="form-label-group">
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  placeholder="{{ 'private.participants.add.email' | translate }}"
+                  class="form-control border-bottom"
+                  formControlName="email"
+                  [readonly]="editing"
+                />
+                <label for="email" translate>private.participants.add.email</label>
+              </div>
               <input-validations
                 *ngIf="form.controls['email'].invalid && form.controls['email'].touched"
                 [errors]="form.controls['email'].errors"
