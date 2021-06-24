@@ -72,16 +72,15 @@ export class ProgramsAddService {
   /**
    * Saves an step patching "programs". Patching results in updating the attributes specified in programs
    */
-  saveStep(dados: any) {
+  saveStep(dados: any): Observable<any> {
     let id = this.programValue.id;
     if (id) {
       // let programUpdated = { ...this.programValue, ...dados } as unknown as Program;
       this._loaderService.show();
 
-      this._daoService
+      return this._daoService
         .patchObject(ESPIM_REST_Programs, { ...dados, ...{ id: id } })
-        .pipe(finalize(() => this._loaderService.hide()))
-        .subscribe((resp) => {});
+        .pipe(finalize(() => this._loaderService.hide()));
     }
   }
 
@@ -108,9 +107,7 @@ export class ProgramsAddService {
         return trigger;
       });
 
-      item.interventions.map((intervention) => {
-        intervention.medias = intervention.medias.map((i) => i.id);
-      });
+      item.interventions = this.fixInterventionsToSave(item.interventions);
 
       return item;
     });
@@ -144,6 +141,14 @@ export class ProgramsAddService {
           this._toastr.success(resp.message);
         });
     }
+  }
+
+  fixInterventionsToSave(interventions: Intervention[]) {
+    interventions.map((intervention) => {
+      intervention.medias = intervention.medias.map((i) => i.id);
+    });
+
+    return interventions;
   }
 
   public get programValue(): Program {

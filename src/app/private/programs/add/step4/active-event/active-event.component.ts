@@ -130,6 +130,7 @@ export class ActiveEventComponent implements OnInit {
       keyboard: false,
       ignoreBackdropClick: true,
       initialState: {
+        activeEvent: this.event,
         interventionsToInit: this.form.get('interventions').value,
       },
     };

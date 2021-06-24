@@ -10,12 +10,15 @@ import {
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
+import cloneDeep from 'lodash/cloneDeep';
 import debounce from 'lodash/debounce';
 import { BsModalRef } from 'ngx-bootstrap/modal';
+import { ActiveEvent } from 'src/app/private/models/event.model';
 import { Intervention } from 'src/app/private/models/intervention.model';
 import { SwalService } from 'src/app/services/swal.service';
 import { isNullOrUndefined } from 'src/app/util/functions';
 
+import { ProgramsAddService } from '../../programsadd.service';
 import { InterventionItemComponent } from './intervention-item/intervention-item.component';
 import { HTMLInterventionElement, InterventionService } from './intervention.service';
 
@@ -32,6 +35,7 @@ export class InterventionComponent implements AfterViewInit {
 
   @Output() response: EventEmitter<Intervention[]> = new EventEmitter<Intervention[]>();
   @Input() interventionsToInit: Intervention[] = [];
+  @Input() activeEvent: ActiveEvent;
 
   @ViewChild('container', { read: ViewContainerRef }) interventionsContainer;
   @ViewChild('main_div') mainDiv: ElementRef;
@@ -39,6 +43,7 @@ export class InterventionComponent implements AfterViewInit {
   constructor(
     public bsModalRef: BsModalRef,
     private interventionService: InterventionService,
+    private programAddService: ProgramsAddService,
     private _swalService: SwalService,
     private componentFactoryResolver: ComponentFactoryResolver
   ) {}
@@ -140,7 +145,7 @@ export class InterventionComponent implements AfterViewInit {
   }
 
   finish() {
-    let currentState = this.interventionService.getCurrentState();
+    let interventions = cloneDeep(this.interventionService.getCurrentState());
     let hasError = false;
 
     if (this.interventionService.hasMultiplePaths) {
@@ -153,7 +158,7 @@ export class InterventionComponent implements AfterViewInit {
       return;
     }
 
-    currentState.forEach((intervention) => {
+    interventions.forEach((intervention) => {
       if (intervention.statement == '' || isNullOrUndefined(intervention.statement)) {
         this._swalService.error(
           `Intervenção ${intervention.getOrderDescription()} não possui uma descrição. Por favor, é necessário digitar uma descrição.`,
@@ -165,8 +170,23 @@ export class InterventionComponent implements AfterViewInit {
     });
 
     if (!hasError) {
-      this.response.emit(currentState);
-      this.bsModalRef.hide();
+      this._swalService.warning(`Deseja concluir o planejamento das intervenções?`, 'Concluindo o Planejamento').then((result) => {
+        if (result.isConfirmed) {
+          if (this.activeEvent.id) {
+            let interventionsToSave = this.programAddService.fixInterventionsToSave(cloneDeep(interventions));
+
+            this.programAddService
+              .saveStep({ activeEvent: { id: this.activeEvent.id, interventions: interventionsToSave } })
+              .subscribe(() => {
+                this.response.emit(interventions);
+                this.bsModalRef.hide();
+              });
+          } else {
+            this.response.emit(interventions);
+            this.bsModalRef.hide();
+          }
+        }
+      });
     }
   }
 }
