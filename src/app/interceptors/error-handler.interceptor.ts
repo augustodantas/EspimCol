@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { EMPTY, from, Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
+import { SwalService } from '../services/swal.service';
 import { LoginService } from './../security/login/login.service';
 
 @Injectable()
@@ -13,6 +14,7 @@ export class ErrorHandlerInterceptor implements HttpInterceptor {
   constructor(
     private readonly _authenticationService: LoginService,
     private readonly _router: Router,
+    private readonly _swalService: SwalService,
     private readonly _toastr: ToastrService
   ) {}
 
@@ -39,7 +41,7 @@ export class ErrorHandlerInterceptor implements HttpInterceptor {
     );
   }
 
-  private _handleError(url: string, error: HttpErrorResponse): Observable<never> {
+  private _handleError(url: string, error: any): Observable<never> {
     const objError = {
       unauthorized: error.status === 401 || error.status === 403,
       code: error.status,
@@ -67,13 +69,19 @@ export class ErrorHandlerInterceptor implements HttpInterceptor {
       }
     }
 
-    this._toastr.error(this._getMessage(error), this._getTitle(error));
-
+    if (error.status === 422) {
+      this._swalService.showFormErrors(this._getTitle(error), error.error.message);
+    } else {
+      this._toastr.error(this._getMessage(error), this._getTitle(error));
+    }
     return throwError(objError);
   }
 
   private _getMessage(error: HttpErrorResponse): string {
     if (error.error && error.error.message && (!environment.production || (environment.production && error.status < 500))) {
+      if (error.error.message instanceof Object) {
+        return 'Existem campos inválidos no formulário';
+      }
       return error.error.message;
     }
 

@@ -63,7 +63,7 @@ export class CanvasComponent implements OnInit, AfterViewInit {
       }
       // Cycle on the BFS
       if (already_drew[intervention]) {
-        this.interventionService.warnCycle(intervention);
+        this.interventionService.warnCycle(order_position);
         continue;
       }
       this.interventionService.graphElement(intervention).order_position = order_position;

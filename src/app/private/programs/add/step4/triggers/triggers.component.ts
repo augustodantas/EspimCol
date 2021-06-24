@@ -37,6 +37,10 @@ export class TriggersComponent {
     });
   }
 
+  clearValue(): void {
+    this.form.get('selectedChoice').setValue('');
+  }
+
   addTrigger(trigger): void {
     this.response.emit(trigger);
   }

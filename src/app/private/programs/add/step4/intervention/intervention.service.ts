@@ -8,6 +8,7 @@ import {
   TaskIntervention,
 } from 'src/app/private/models/intervention.model';
 import { LocalStorageService } from 'src/app/security/login/local-storage.service';
+import { SwalService } from 'src/app/services/swal.service';
 import { isNullOrUndefined } from 'src/app/util/functions';
 import { v4 as uuid } from 'uuid';
 
@@ -34,7 +35,7 @@ export class InterventionService {
 
   states: any[] = [];
   currentState: number = -1;
-  constructor(private readonly _localStorageService: LocalStorageService) {}
+  constructor(private readonly _localStorageService: LocalStorageService, private readonly _swalService: SwalService) {}
 
   get firstIntervention(): number {
     return this.graphElements.findIndex((value) => value.intervention.first == true);
@@ -193,26 +194,6 @@ export class InterventionService {
     return intervention;
   }
 
-  finish() {
-    //   if (this.hasMultiplePaths) {
-    // new SwalComponent({
-    //   title: 'Há intervenções desconectadas',
-    //   text:
-    //     'Encontramos intervenções que não estão ligadas à primeira. Por favor, é necessário deleta-las ou liga-las ao caminho principal',
-    // })
-    //   .show()
-    //   .then();
-    //     return;
-    //   }
-    /* Connection to server
-    if (intervention.id)
-      this.http.patch(`${ESPIM_REST_Interventions}${intervention.id}/`, intervention).subscribe(_ => {}, _ => console.log(`Failed to patch intervention of id ${intervention.id}, order_position ${intervention.order_position}`));
-    else
-      this.http.post(ESPIM_REST_Interventions, intervention).subscribe((data: any) => intervention.id = data.id, _ => console.log(`Failed to post intervention of order_position ${intervention.order_position}`));
-    */
-    //   this.router.navigateByUrl(`private/programs/add/${this.program_id}/fourth`).then();
-  }
-
   addIntervention(intervention: HTMLInterventionElement) {
     this.saveCurrentState();
 
@@ -298,7 +279,7 @@ export class InterventionService {
   }
 
   warnCycle(intervention: number) {
-    // alert('Intervenção ' + intervention + ' resulta em um ciclo');
+    // this._swalService.warning(`Intervenção ${intervention} resulta em um ciclo`, 'Ciclo detectado', 'success', false);
   }
 
   setFirst(graphIndex: number) {

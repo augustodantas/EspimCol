@@ -69,6 +69,7 @@ export class UniqueChoiceComponent implements OnInit {
   }
 
   removeChoice(choiceIndex: number) {
+    delete this.intervention.conditions[this.intervention.options[choiceIndex]];
     this.alternatives.splice(choiceIndex, 1);
     this.updateEdges();
   }

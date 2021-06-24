@@ -13,6 +13,8 @@ import {
 import debounce from 'lodash/debounce';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { Intervention } from 'src/app/private/models/intervention.model';
+import { SwalService } from 'src/app/services/swal.service';
+import { isNullOrUndefined } from 'src/app/util/functions';
 
 import { InterventionItemComponent } from './intervention-item/intervention-item.component';
 import { HTMLInterventionElement, InterventionService } from './intervention.service';
@@ -37,6 +39,7 @@ export class InterventionComponent implements AfterViewInit {
   constructor(
     public bsModalRef: BsModalRef,
     private interventionService: InterventionService,
+    private _swalService: SwalService,
     private componentFactoryResolver: ComponentFactoryResolver
   ) {}
 
@@ -137,7 +140,33 @@ export class InterventionComponent implements AfterViewInit {
   }
 
   finish() {
-    this.response.emit(this.interventionService.getCurrentState());
-    this.bsModalRef.hide();
+    let currentState = this.interventionService.getCurrentState();
+    let hasError = false;
+
+    if (this.interventionService.hasMultiplePaths) {
+      this._swalService.error(
+        `Encontramos intervenções que não estão ligadas à primeira. Por favor, é necessário deleta-las ou liga-las ao caminho principal`,
+        'Há intervenções desconectadas'
+      );
+      hasError = true;
+
+      return;
+    }
+
+    currentState.forEach((intervention) => {
+      if (intervention.statement == '' || isNullOrUndefined(intervention.statement)) {
+        this._swalService.error(
+          `Intervenção ${intervention.getOrderDescription()} não possui uma descrição. Por favor, é necessário digitar uma descrição.`,
+          'Há intervenções sem descrição'
+        );
+        hasError = true;
+        return;
+      }
+    });
+
+    if (!hasError) {
+      this.response.emit(currentState);
+      this.bsModalRef.hide();
+    }
   }
 }

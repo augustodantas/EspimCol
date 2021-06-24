@@ -1,10 +1,12 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { BsModalRef } from 'ngx-bootstrap/modal';
 import {
   Intervention,
   MediaIntervention,
   QuestionIntervention,
   TaskIntervention,
 } from 'src/app/private/models/intervention.model';
+import { SwalService } from 'src/app/services/swal.service';
 
 import { HTMLInterventionElement, InterventionService } from '../intervention.service';
 import { ITENS_QUESTION } from './constants';
@@ -23,7 +25,11 @@ export class NavbarComponent implements OnInit {
   @Output() updateZoom: EventEmitter<number> = new EventEmitter<number>();
   @Output() finishIntervention: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  constructor(private interventionService: InterventionService) {}
+  constructor(
+    public bsModalRef: BsModalRef,
+    private interventionService: InterventionService,
+    private readonly _swalService: SwalService
+  ) {}
 
   ngOnInit(): void {
     // this.over1200px = window.innerWidth > 950;
@@ -72,6 +78,14 @@ export class NavbarComponent implements OnInit {
 
   finish() {
     this.finishIntervention.emit(true);
+  }
+
+  close() {
+    this._swalService.warning('Tem certeza que deseja sair do editor de intervenções?', 'Sair do editor').then((result) => {
+      if (result.isConfirmed) {
+        this.bsModalRef.hide();
+      }
+    });
   }
 
   debug() {

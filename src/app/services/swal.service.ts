@@ -8,13 +8,14 @@ export class SwalService {
   warning(
     message: string = 'Essa ação não poderá ser desfeita',
     title: string = 'Atenção!',
-    confirmButton: string = 'success'
+    confirmButton: string = 'success',
+    showCancelButton: boolean = true
   ): Promise<any> {
     return Swal.fire({
       title: title,
       html: message,
       icon: 'warning',
-      showCancelButton: true,
+      showCancelButton: showCancelButton,
       reverseButtons: true,
       cancelButtonText: 'NÃO',
       confirmButtonText: 'SIM',
@@ -29,9 +30,13 @@ export class SwalService {
   error(message: string = 'Ocorreu um erro ao realizar essa ação', title: string = 'Erro!'): Promise<any> {
     return Swal.fire({
       title: title,
-      text: message,
+      html: message,
       icon: 'error',
       confirmButtonText: 'OK',
+      buttonsStyling: false,
+      customClass: {
+        confirmButton: `btn btn-lg btn-success btn-shadow`,
+      },
     });
   }
 
@@ -50,5 +55,16 @@ export class SwalService {
       'Deletar ' + title,
       'danger'
     );
+  }
+
+  showFormErrors(title: string, errors: string[]) {
+    let errorList = '<ul>';
+
+    Object.keys(errors).forEach((key) => {
+      errorList += `<li class="font-size-md">${errors[key]} </li>`;
+    });
+
+    errorList += '</ul>';
+    return this.error(errorList, title);
   }
 }

@@ -19,7 +19,7 @@
           type="text"
           placeholder="Nome do programa"
           formControlName="title"
-          class="form-control-plaintext border-bottom"
+          class="form-control border-bottom"
         />
         <label for="title"> Nome do programa <b class="text-danger">*</b> </label>
       </div>
@@ -36,7 +36,7 @@
     <div class="col-12 form-group">
       <div class="form-label-group">
         <textarea
-          class="form-control-plaintext border-bottom w-100"
+          class="form-control border-bottom w-100"
           name="program-description"
           id="program-description"
           rows="2"
@@ -61,14 +61,18 @@
       <div class="form-row form-group input-group">
         <!--Data de Início-->
         <div class="col form-inline">
-          <input
-            type="text"
-            placeholder="Data de início"
-            name="beginDate"
-            formControlName="beginDate"
-            class="form-control-plaintext border-bottom w-100"
-            bsDatepicker
-          />
+          <div class="form-label-group mt-3 w-100">
+            <input
+              type="text"
+              placeholder="Data de início"
+              name="beginDate"
+              autocomplete="off"
+              formControlName="beginDate"
+              class="form-control border-bottom w-100"
+              bsDatepicker
+            />
+            <label for="beginDate">Data de início</label>
+          </div>
           <input-validations
             *ngIf="form.controls['beginDate'].invalid && form.controls['beginDate'].touched"
             [errors]="form.controls['beginDate'].errors"
@@ -96,13 +100,17 @@
       <div class="form-row form-group input-group">
         <!--Data de Fim-->
         <div class="col form-inline">
-          <input
-            type="text"
-            placeholder="Data de fim"
-            formControlName="endDate"
-            class="form-control-plaintext border-bottom w-100"
-            bsDatepicker
-          />
+          <div class="form-label-group mt-3 w-100">
+            <input
+              type="text"
+              placeholder="Data de fim"
+              formControlName="endDate"
+              autocomplete="off"
+              class="form-control border-bottom w-100"
+              bsDatepicker
+            />
+            <label for="endDate">Data de fim</label>
+          </div>
           <input-validations
             *ngIf="form.controls['endDate'].invalid && form.controls['endDate'].touched"
             [errors]="form.controls['endDate'].errors"
@@ -126,7 +134,10 @@
 
   <div class="row justify-content-end">
     <div class="col-auto">
-      <button type="submit" name="saveButton" class="btn btn-primary btn-md min-100">PROSSEGUIR</button>
+      <a routerLink="/private/programs/list" class="btn btn-success btn-lg btn-shadow">VOLTAR</a>
+    </div>
+    <div class="col-auto">
+      <button type="submit" name="saveButton" class="btn btn-primary btn-lg btn-shadow min-100" translate>PROSSEGUIR</button>
     </div>
   </div>
 </form>

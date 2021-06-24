@@ -4,15 +4,11 @@
 
     <div class="row">
       <div class="col-4">
-        <label for="text" class="sr-only" translate>Nome visual</label>
-        <input
-          id="name"
-          name="name"
-          type="text"
-          placeholder="Nome visual"
-          class="form-control-plaintext border-bottom"
-          formControlName="name"
-        />
+        <div class="form-label-group">
+          <input id="name" name="name" type="text" placeholder="Nome visual" class="form-control border-bottom" formControlName="name" />
+          <label for="text">Nome visual</label>
+        </div>
+
         <input-validations
           *ngIf="form.controls['name'].invalid && form.controls['name'].touched"
           [errors]="form.controls['name'].errors"
@@ -21,8 +17,10 @@
         </input-validations>
       </div>
       <div class="col-4">
-        <label for="text" class="sr-only" translate>Nome real</label>
-        <input id="key" name="key" type="text" placeholder="Nome real" class="form-control-plaintext border-bottom" formControlName="key" />
+        <div class="form-label-group">
+          <input id="key" name="key" type="text" placeholder="Nome real" class="form-control border-bottom" formControlName="key" />
+          <label for="text">Nome real</label>
+        </div>
         <input-validations
           *ngIf="form.controls['key'].invalid && form.controls['key'].touched"
           [errors]="form.controls['key'].errors"
@@ -31,15 +29,17 @@
         </input-validations>
       </div>
       <div class="col">
-        <label for="text" class="sr-only" translate>Valor padrão</label>
-        <input
-          id="default_value"
-          name="default_value"
-          type="text"
-          placeholder="Valor padrão"
-          class="form-control-plaintext border-bottom"
-          formControlName="default_value"
-        />
+        <div class="form-label-group">
+          <input
+            id="default_value"
+            name="default_value"
+            type="text"
+            placeholder="Valor padrão"
+            class="form-control border-bottom"
+            formControlName="default_value"
+          />
+          <label for="text">Valor padrão</label>
+        </div>
         <input-validations
           *ngIf="form.controls['default_value'].invalid && form.controls['default_value'].touched"
           [errors]="form.controls['default_value'].errors"

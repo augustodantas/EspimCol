@@ -32,15 +32,17 @@
   <form focusInvalidInput class="card-body box-body" [formGroup]="form" [collapse]="!isOpen">
     <div class="row">
       <div class="col-6 form-group">
-        <label class="form-label" [for]="'title-active' + index">Título <b class="text-danger">*</b>:</label>
-        <input
-          class="form-control-plaintext border-bottom"
-          [id]="'title-active' + index"
-          formControlName="title"
-          focusInput
-          type="text"
-          placeholder="Título"
-        />
+        <div class="form-label-group">
+          <input
+            class="form-control border-bottom"
+            [id]="'title-active' + index"
+            formControlName="title"
+            focusInput
+            type="text"
+            placeholder="Título"
+          />
+          <label class="form-label" [for]="'title-active' + index">Título <b class="text-danger">*</b>:</label>
+        </div>
         <input-validations
           *ngIf="form.controls['title'].invalid && form.controls['title'].touched"
           [errors]="form.controls['title'].errors"
@@ -52,15 +54,17 @@
 
     <div class="row">
       <div class="col-12 form-group">
-        <label [for]="'program-description-active' + index"> Descrição do programa </label>
-        <textarea
-          class="form-control-plaintext border-bottom w-100 resize-none"
-          [id]="'program-description-active' + index"
-          rows="2"
-          maxlength="200"
-          placeholder="Descrição do evento"
-          formControlName="description"
-        ></textarea>
+        <div class="form-label-group">
+          <textarea
+            class="form-control border-bottom w-100 resize-none"
+            [id]="'program-description-active' + index"
+            rows="2"
+            maxlength="200"
+            placeholder="Descrição do evento"
+            formControlName="description"
+          ></textarea>
+          <label [for]="'program-description-active' + index"> Descrição do programa </label>
+        </div>
         <input-validations
           *ngIf="form.controls['description'].invalid && form.controls['description'].touched"
           [errors]="form.controls['description'].errors"
