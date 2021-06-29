@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import cloneDeep from 'lodash/cloneDeep';
 import { ToastrService } from 'ngx-toastr';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import { LoaderService } from 'src/app/services/loader.service';
 
@@ -81,6 +81,8 @@ export class ProgramsAddService {
       return this._daoService
         .patchObject(ESPIM_REST_Programs, { ...dados, ...{ id: id } })
         .pipe(finalize(() => this._loaderService.hide()));
+    } else {
+      return of(false);
     }
   }
 
@@ -143,7 +145,7 @@ export class ProgramsAddService {
     }
   }
 
-  fixInterventionsToSave(interventions: Intervention[]) {
+  fixInterventionsToSave(interventions) {
     interventions.map((intervention) => {
       intervention.medias = intervention.medias.map((i) => i.id);
     });

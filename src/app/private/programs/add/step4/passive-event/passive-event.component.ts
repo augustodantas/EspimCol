@@ -88,6 +88,10 @@ export class PassiveEventComponent implements OnInit {
 
   validateForm(): boolean {
     this.form.markAllAsTouched();
+
+    if (!this.form.valid) {
+      this.isOpen = true;
+    }
     return this.form.valid;
   }
 }

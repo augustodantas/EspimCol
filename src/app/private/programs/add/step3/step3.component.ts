@@ -122,7 +122,7 @@ export class Step3Component implements OnInit {
   }
 
   submit(): void {
-    this.programAddService.saveStep({ users: this.programUsers.map((item) => item.id) });
+    this.programAddService.saveStep({ users: this.programUsers.map((item) => item.id) }).subscribe(() => {});
     this.programAddService.saveLocalStep({ users: this.programUsers });
 
     this.router.navigate(['./fourth'], {

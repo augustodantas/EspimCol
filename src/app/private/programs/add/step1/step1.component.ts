@@ -52,7 +52,7 @@ export class Step1Component implements OnDestroy {
     this.form.markAllAsTouched();
 
     if (this.form.valid) {
-      this.programAddService.saveStep(this.form.value);
+      this.programAddService.saveStep(this.form.value).subscribe(() => {});
       this.programAddService.saveLocalStep(this.form.value);
 
       this.router.navigate(['./second'], {

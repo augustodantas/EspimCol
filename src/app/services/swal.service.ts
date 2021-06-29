@@ -67,4 +67,15 @@ export class SwalService {
     errorList += '</ul>';
     return this.error(errorList, title);
   }
+
+  showFieldErrors(title: string, errors: any[]) {
+    let errorList = '<ul>';
+
+    errors.forEach((error) => {
+      errorList += `<li class="font-size-sm"><span class="font-weight-bold">${error.field}</span>: ${error.message} </li>`;
+    });
+
+    errorList += '</ul>';
+    return this.error(errorList, title);
+  }
 }
