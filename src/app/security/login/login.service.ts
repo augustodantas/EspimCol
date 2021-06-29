@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { GoogleLoginProvider, SocialAuthService, SocialUser } from 'angularx-social-login';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
-import { ESPIM_REST_Observers } from 'src/app/app.api';
+import { ESPIM_API, ESPIM_REST_Observers } from 'src/app/app.api';
 import { Observer } from 'src/app/private/models/observer.model';
 import { ObserversService } from 'src/app/private/observers/observers.service';
 
@@ -16,7 +16,7 @@ import { LocalStorageService } from './local-storage.service';
 })
 export class LoginService {
   private _propertyName: string = 'accessToken';
-  urlObservers: string = ESPIM_REST_Observers + 'auth/';
+  urlLogin: string = ESPIM_API + 'auth/';
   private _currentUserSubject: BehaviorSubject<SocialUser>;
   accessToken: string;
   user: Observable<SocialUser>;
@@ -41,7 +41,7 @@ export class LoginService {
         this._loaderService.show();
         this.zone.run(() => {
           this._observerService
-            .authenticate(this.urlObservers, user.authToken)
+            .authenticate(this.urlLogin, user.authToken)
             .pipe(finalize(() => this._loaderService.hide()))
             .subscribe((response: any) => {
               this.handleAuth(response);
