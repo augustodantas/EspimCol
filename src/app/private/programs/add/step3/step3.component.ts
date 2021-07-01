@@ -1,8 +1,9 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
 import { Observable, Subject, Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, switchMap, take } from 'rxjs/operators';
 import { ESPIM_REST_ProgramUsers } from 'src/app/app.api';
 import { User } from 'src/app/private/models/user.model';
 import { SearchComponent } from 'src/app/private/search/search.component';
@@ -11,6 +12,7 @@ import { DAOService } from '../../../dao/dao.service';
 import { Program } from '../../../models/program.model';
 import { LETRAS_FILTRO } from '../../constants';
 import { ProgramsAddService } from '../programsadd.service';
+import { ModalAddParticipantComponent } from './modal-add-participant/modal-add-participant.component';
 
 @Component({
   selector: 'esm-step3',
@@ -27,12 +29,14 @@ export class Step3Component implements OnInit {
   private _subscription$: Subscription;
   urlProgramUsers: string = ESPIM_REST_ProgramUsers;
   letters: string[] = LETRAS_FILTRO;
+  private _modalRef: BsModalRef;
 
   constructor(
     private daoService: DAOService,
     private programAddService: ProgramsAddService,
     private router: Router,
-    private activeRoute: ActivatedRoute
+    private activeRoute: ActivatedRoute,
+    private _modalService: BsModalService
   ) {
     this.program = this.programAddService.program;
     this.search
@@ -45,6 +49,7 @@ export class Step3Component implements OnInit {
       )
       .subscribe((response) => {
         this.loading = false;
+        console.log('loading false');
         this.users = response.data;
       });
   }
@@ -127,6 +132,20 @@ export class Step3Component implements OnInit {
 
     this.router.navigate(['./fourth'], {
       relativeTo: this.activeRoute.parent,
+    });
+  }
+
+  openModalParticipant(): void {
+    const config: ModalOptions<ModalAddParticipantComponent> = {
+      ignoreBackdropClick: true,
+      initialState: {},
+    };
+
+    this._modalRef = this._modalService.show(ModalAddParticipantComponent, config);
+
+    this._modalRef.content.response.pipe(take(1)).subscribe((participant: User) => {
+      this.handleChange(participant);
+      this.addProgramUser(participant);
     });
   }
 }

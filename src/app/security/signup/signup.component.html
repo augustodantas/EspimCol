@@ -20,22 +20,26 @@
         <div class="col-12 d-flex flex-column">
           <!-- E-mail -->
           <div class="w-100 mb-4">
-            <label class="font-weight-bold w-100 mb-0" for="email">E-mail</label>
-            <input
-              class="form-control"
-              name="email"
-              id="email"
-              formControlName="email"
-              disabled
-              type="email"
-              placeholder="Qual o seu e-mail?"
-            />
+            <div class="form-label-group">
+              <input
+                class="form-control"
+                name="email"
+                id="email"
+                formControlName="email"
+                disabled
+                type="email"
+                placeholder="Qual o seu e-mail?"
+              />
+              <label for="email">E-mail</label>
+            </div>
           </div>
 
           <!-- Name -->
           <div class="w-100 mb-4">
-            <label class="font-weight-bold w-100 mb-0" for="name">Nome</label>
-            <input class="form-control" name="name" id="name" formControlName="name" type="text" placeholder="Nome completo" />
+            <div class="form-label-group">
+              <input class="form-control" name="name" id="name" formControlName="name" type="text" placeholder="Nome completo" />
+              <label for="name">Nome</label>
+            </div>
             <input-validations
               *ngIf="form.controls['name'].invalid && form.controls['name'].touched"
               [errors]="form.controls['name'].errors"
@@ -46,15 +50,17 @@
 
           <!-- ROLE -->
           <div class="w-100 mb-4">
-            <label class="font-weight-bold w-100 mb-0" for="name">Papel</label>
-            <input
-              class="form-control"
-              name="role"
-              id="role"
-              formControlName="role"
-              type="text"
-              placeholder="Insira aqui o seu papel. Ex: Psicóloga"
-            />
+            <div class="form-label-group">
+              <input
+                class="form-control"
+                name="role"
+                id="role"
+                formControlName="role"
+                type="text"
+                placeholder="Insira aqui o seu papel. Ex: Psicóloga"
+              />
+              <label for="name">Papel</label>
+            </div>
             <input-validations
               *ngIf="form.controls['role'].invalid && form.controls['role'].touched"
               [errors]="form.controls['role'].errors"

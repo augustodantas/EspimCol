@@ -1,8 +1,9 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
 import { Observable, Subject, Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, switchMap, take } from 'rxjs/operators';
 import { ESPIM_REST_Observers } from 'src/app/app.api';
 import { Program } from 'src/app/private/models/program.model';
 import { SearchComponent } from 'src/app/private/search/search.component';
@@ -12,6 +13,7 @@ import { DAOService } from '../../../dao/dao.service';
 import { Observer } from '../../../models/observer.model';
 import { LETRAS_FILTRO } from '../../constants';
 import { ProgramsAddService } from '../programsadd.service';
+import { ModalAddObserverComponent } from './modal-add-observer/modal-add-observer.component';
 
 @Component({
   selector: 'esm-step2',
@@ -28,13 +30,15 @@ export class Step2Component implements OnInit, OnDestroy {
   private _subscription$: Subscription;
   urlObservers: string = ESPIM_REST_Observers;
   letters: string[] = LETRAS_FILTRO;
+  private _modalRef: BsModalRef;
 
   constructor(
     private daoService: DAOService,
     private programAddService: ProgramsAddService,
     private router: Router,
     private _route: ActivatedRoute,
-    private loginService: LoginService
+    private loginService: LoginService,
+    private _modalService: BsModalService
   ) {
     this.program = this.programAddService.program;
     this.search
@@ -118,7 +122,7 @@ export class Step2Component implements OnInit, OnDestroy {
   }
 
   sort(observers: Observer[]): Observer[] {
-    return observers.sort((a, b) => (a.user.name > b.user.name ? 1 : -1));
+    return observers.sort((a, b) => (a.user.name.toLowerCase() > b.user.name.toLowerCase() ? 1 : -1));
   }
 
   submit(): void {
@@ -127,6 +131,20 @@ export class Step2Component implements OnInit, OnDestroy {
 
     this.router.navigate(['./third'], {
       relativeTo: this._route.parent,
+    });
+  }
+
+  openModalObserver(): void {
+    const config: ModalOptions<ModalAddObserverComponent> = {
+      ignoreBackdropClick: true,
+      initialState: {},
+    };
+
+    this._modalRef = this._modalService.show(ModalAddObserverComponent, config);
+
+    this._modalRef.content.response.pipe(take(1)).subscribe((observer: Observer) => {
+      this.handleChange(observer);
+      this.addProgramObserver(observer);
     });
   }
 }

@@ -24,7 +24,6 @@ export class DAOService {
 
   patchObject(urlObject: string, object: any): Observable<any> {
     const objectId = object.id;
-    console.log(urlObject + `${objectId}/`);
     return this.http.patch(urlObject + `${objectId}/`, object);
   }
 

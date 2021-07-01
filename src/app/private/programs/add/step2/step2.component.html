@@ -43,7 +43,7 @@
     <div class="card-body">
       <div class="row">
         <div *ngIf="!observers?.length" class="col-12">O filtro selecionado resultou em nada, tente troca-lo.</div>
-        <div class="col-3 d-flex align-items-center overflow-hidden text-nowrap" *ngFor="let observer of observers">
+        <div class="col-3 d-flex align-items-center overflow-hidden text-nowrap" *ngFor="let observer of sort(observers)">
           <esm-user-checkbox
             [user]="observer"
             [label]="observer.user.name"
@@ -57,12 +57,13 @@
     </div>
   </div>
 
-  <div class="row justify-content-end mt-5">
+  <div class="row justify-content-between mt-3">
     <div class="col-auto">
-      <a [routerLink]="['../first']" class="btn btn-success btn-lg btn-shadow">VOLTAR</a>
+      <a name="buttonObserver" class="btn btn-white btn-lg btn-shadow" (click)="openModalObserver()" translate>ADICIONAR OBSERVADOR</a>
     </div>
-
     <div class="col-auto">
+      <a [routerLink]="['../first']" class="btn btn-success btn-lg btn-shadow mr-4">VOLTAR</a>
+
       <button type="submit" name="saveButton" class="btn btn-primary btn-lg btn-shadow min-100" translate>PROSSEGUIR</button>
     </div>
   </div>

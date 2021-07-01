@@ -7,7 +7,9 @@ import { SharedModule } from '../../app.shared.module';
 import { ProgramsAddComponent } from './add/programsadd.component';
 import { StepPanelComponent } from './add/step-panel/step-panel.component';
 import { Step1Component } from './add/step1/step1.component';
+import { ModalAddObserverComponent } from './add/step2/modal-add-observer/modal-add-observer.component';
 import { Step2Component } from './add/step2/step2.component';
+import { ModalAddParticipantComponent } from './add/step3/modal-add-participant/modal-add-participant.component';
 import { Step3Component } from './add/step3/step3.component';
 import { ActiveEventComponent } from './add/step4/active-event/active-event.component';
 import { ChooseColorComponent } from './add/step4/choose-color/choose-color.component';
@@ -47,6 +49,8 @@ import { ProgramsRoutingModule } from './programs-routing.module';
     RowHourComponent,
     ChooseColorComponent,
     ComplexConditionComponent,
+    ModalAddObserverComponent,
+    ModalAddParticipantComponent,
   ],
   imports: [InterventionModule, PortalModule, SharedModule, ComponentsModule, ProgramsRoutingModule, CommonModule],
   exports: [],

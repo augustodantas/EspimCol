@@ -58,7 +58,6 @@ export class ModalMidiaComponent implements OnInit {
       .postObject(this.urlUpload, formData)
       .pipe(finalize(() => this._loaderService.hide()))
       .subscribe((resp) => {
-        console.log(resp.data);
         this.response.emit(resp.data);
         this.bsModalRef.hide();
       });
