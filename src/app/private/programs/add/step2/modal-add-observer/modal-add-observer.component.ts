@@ -47,7 +47,7 @@ export class ModalAddObserverComponent implements OnInit {
       this._loaderService.show();
 
       this._daoService
-        .postObject(this.urlObservers, dados)
+        .postObject(this.urlObservers + '?include=user', dados)
         .pipe(finalize(() => this._loaderService.hide()))
         .subscribe(
           (resp) => {
