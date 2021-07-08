@@ -1,26 +1,29 @@
 import { Day } from './date.model';
 
 export class Cron {
-  private seconds: string;
   private minutes: string;
   private hours: string;
   private dom: string;
   private month: string;
   private dow: Array<string>;
-  private year: string;
 
-  constructor(cronString: string = '0 0 0 ? *  *') {
+  constructor(cronString: string = '0 0 * * *') {
+    cronString.replace(new RegExp('undefined', 'g'), '*');
+
     const cronArray = cronString.split(' ');
-    this.seconds = cronArray[0];
-    this.minutes = cronArray[1];
-    this.hours = cronArray[2];
-    this.dom = cronArray[3];
-    this.month = cronArray[4];
-    this.dow = cronArray[5].split(',');
-    if (this.dow[0] === '') {
+
+    // Correção do espim antigo, onde era armazenado ano e segundos no CRON
+    if (cronArray.length == 7) {
+      cronArray.shift();
+    }
+    this.minutes = cronArray[0];
+    this.hours = cronArray[1];
+    this.dom = cronArray[2] === '?' ? '*' : cronArray[3];
+    this.month = cronArray[3];
+    this.dow = cronArray[4].split(',');
+    if (this.dow[0] === '*') {
       this.dow = [];
     }
-    this.year = cronArray[6];
   }
 
   getMinute() {
@@ -79,6 +82,6 @@ export class Cron {
   }
 
   toString() {
-    return `${this.seconds} ${this.minutes} ${this.hours} ${this.dom} ${this.month} ${this.dow} ${this.year}`;
+    return `${this.minutes} ${this.hours} ${this.dom} ${this.month} ${this.dow.length == 0 ? '*' : this.dow}`;
   }
 }
