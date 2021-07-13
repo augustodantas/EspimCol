@@ -9,10 +9,10 @@
             formControlName="selectedChoice"
             [value]="choice"
             type="radio"
-            [id]="choice.alias"
+            [id]="choice.alias + uid"
             name="selectedChoice"
           />
-          <label class="form-check-label" [for]="choice.alias">{{ choice.name }}</label>
+          <label class="form-check-label" [for]="choice.alias + uid">{{ choice.name }}</label>
         </div>
         <a (click)="clearValue()" href="javascript:" class="primary" *ngIf="form.get('selectedChoice').value">limpar</a>
       </div>

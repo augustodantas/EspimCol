@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Trigger } from 'src/app/private/models/trigger.model';
+import { v4 as uuid } from 'uuid';
 
 @Component({
   selector: 'esm-triggers',
@@ -9,6 +10,7 @@ import { Trigger } from 'src/app/private/models/trigger.model';
 })
 export class TriggersComponent {
   @Output() response: EventEmitter<Trigger> = new EventEmitter<Trigger>();
+  uid: string = uuid();
 
   choices: any[] = [
     {
