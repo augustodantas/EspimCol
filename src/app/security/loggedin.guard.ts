@@ -35,7 +35,6 @@ export class LoggedInGuard implements CanLoad, CanActivate, CanActivateChild {
   }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-    console.log('verificou se pode ativar');
     return this.checkAuthentication(state);
   }
 

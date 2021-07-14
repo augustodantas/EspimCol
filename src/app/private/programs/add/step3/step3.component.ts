@@ -49,7 +49,6 @@ export class Step3Component implements OnInit {
       )
       .subscribe((response) => {
         this.loading = false;
-        console.log('loading false');
         this.users = response.data;
       });
   }

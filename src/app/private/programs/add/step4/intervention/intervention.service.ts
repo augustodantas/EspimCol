@@ -117,7 +117,6 @@ export class InterventionService {
     this.currentState = this.states.length - 1;
 
     var jsonState = JSON.stringify(state);
-    console.log(jsonState);
     // localStorage.setItem('EDITOR_STATE', jsonState);
   }
 

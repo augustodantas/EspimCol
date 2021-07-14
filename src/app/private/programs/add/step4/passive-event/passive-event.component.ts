@@ -38,7 +38,6 @@ export class PassiveEventComponent implements OnInit {
       this.form.patchValue(this.event);
       // Adiciona as triggers e sensors ao evento
       this.event.triggers.forEach((it) => this.adicionarTrigger(new Trigger(it)));
-      console.log(this.event);
       this.event.sensors.forEach((it) => this.adicionarSensor(it as Sensor));
     }
   }
