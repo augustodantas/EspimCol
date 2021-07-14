@@ -55,12 +55,11 @@ export class SignupComponent implements OnInit {
       this._loaderService.show();
 
       this._daoService
-        .postObject(this.urlObservers + '/createAuth', dados)
+        .postObject(this.urlObservers + 'createAuth?include=user,observer.user', dados)
         .pipe(finalize(() => this._loaderService.hide()))
         .subscribe(
           (resp) => {
             this._toastr.success('Dados registrados com sucesso!');
-            resp.user.observer = resp.observer;
             this._loginService.handleAuth(resp);
           },
           (resp) => FormUtil.setErrorsBackend(this.form, resp.data, this.formElement)

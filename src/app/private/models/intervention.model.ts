@@ -82,7 +82,8 @@ export class QuestionIntervention extends Intervention {
     super(intervention);
 
     this.question_type = intervention.question_type;
-    this.conditions = intervention.conditions || {};
+    // Necessário o conditions ser do tipo object
+    this.conditions = isNullOrUndefined(intervention.conditions) || intervention.conditions.length == 0 ? {} : intervention.conditions;
     this.options = intervention.options || [];
     this.scales = intervention?.scales || [];
     this.type = 'question';

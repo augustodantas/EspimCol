@@ -89,6 +89,10 @@ export class NavbarComponent implements OnInit {
   }
 
   debug() {
-    // console.log('interventionElementsGraph', this.interventionService.interventionElementsGraph);
+    // let interventions = this.interventionService.getCurrentState();
+    // console.log(interventions[1].conditions);
+    // console.log(this.interventionService.getCurrentState());
+    // console.log(cloneDeep(this.interventionService.getCurrentState()));
+    // console.log(JSON.stringify(this.interventionService.getCurrentState()));
   }
 }
