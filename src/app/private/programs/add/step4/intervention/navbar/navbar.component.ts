@@ -1,6 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import {
+  CalendarIntervention,
   Intervention,
   MediaIntervention,
   QuestionIntervention,
@@ -42,6 +43,7 @@ export class NavbarComponent implements OnInit {
     else if (type === 'media') intervention = new MediaIntervention();
     else if (type === 'question') intervention = new QuestionIntervention({ question_type: subtype });
     else if (type === 'task') intervention = new TaskIntervention();
+    else if (type === 'calendar') intervention = new CalendarIntervention();
 
     this.interventionService.addIntervention(new HTMLInterventionElement(intervention));
   }

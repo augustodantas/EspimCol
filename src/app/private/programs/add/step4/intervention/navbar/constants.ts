@@ -58,4 +58,10 @@ export const ITENS_QUESTION: any[] = [
     alias: 'external_app',
     type: 'task',
   },
+  {
+    icon: 'far fa-calendar-alt',
+    text: 'Abrir calendário',
+    alias: 'calendar',
+    type: 'calendar',
+  },
 ];

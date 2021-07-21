@@ -72,6 +72,20 @@ export class MediaIntervention extends Intervention {
   }
 }
 
+
+
+export class CalendarIntervention extends Intervention {
+  constructor(intervention: any = {}) {
+    super(intervention);
+    this.type = 'calendar';
+  }
+
+  getTypeDescription() {
+    return 'Abrir calendário';
+  }
+}
+
+
 export class QuestionIntervention extends Intervention {
   public question_type: number;
   public conditions: {};

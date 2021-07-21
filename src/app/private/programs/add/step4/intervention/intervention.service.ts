@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import cloneDeep from 'lodash/cloneDeep';
 import { Subject } from 'rxjs';
 import {
+  CalendarIntervention,
   Intervention,
   MediaIntervention,
   QuestionIntervention,
@@ -189,6 +190,7 @@ export class InterventionService {
     else if (data.type === 'media') intervention = new MediaIntervention(data);
     else if (data.type === 'question') intervention = new QuestionIntervention(data);
     else if (data.type === 'task') intervention = new TaskIntervention(data);
+    else if (data.type === 'calendar') intervention = new CalendarIntervention(data)
 
     return intervention;
   }
