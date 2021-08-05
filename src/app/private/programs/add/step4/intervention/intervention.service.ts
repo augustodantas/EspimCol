@@ -47,7 +47,6 @@ export class InterventionService {
     this.currentState = -1;
     this.loadState(interventions);
 
-    console.log(interventions);
     this.saveState();
   }
 
