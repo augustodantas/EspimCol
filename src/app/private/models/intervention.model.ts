@@ -14,6 +14,7 @@ export class Intervention {
   public type: string;
   public statement: string = '';
   public order_position: number;
+  public graph_index: number;
   public first: boolean;
   public next: number;
   public obrigatory: boolean = false;
@@ -25,13 +26,14 @@ export class Intervention {
 
   constructor(intervention: any = {}) {
     this.id = intervention.id;
-    this.statement = intervention.statement ? intervention.statement : '';
+    this.statement = intervention.statement ?? '';
     this.order_position = intervention.order_position;
+    this.graph_index = intervention.graph_index;
     this.first = !isNullOrUndefined(intervention.first) ? intervention.first : false;
     this.next = intervention.next;
     this.obrigatory = !isNullOrUndefined(intervention.obrigatory) ? intervention.obrigatory : false;
 
-    this.medias = intervention.medias ? intervention.medias : [];
+    this.medias = intervention.medias ?? [];
     this.complexConditions = intervention.complexConditions;
 
     this.x = intervention.x;
@@ -72,8 +74,6 @@ export class MediaIntervention extends Intervention {
   }
 }
 
-
-
 export class CalendarIntervention extends Intervention {
   constructor(intervention: any = {}) {
     super(intervention);
@@ -84,7 +84,6 @@ export class CalendarIntervention extends Intervention {
     return 'Abrir calendário';
   }
 }
-
 
 export class QuestionIntervention extends Intervention {
   public question_type: number;

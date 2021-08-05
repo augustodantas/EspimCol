@@ -53,9 +53,9 @@ export class InterventionService {
   fixOrderAndNextForOldSPIMInterventions(interventions: Intervention[]) {
     // Old espim did not save order position correctly, so here we have to correct
     interventions.sort((a, b) => {
-      if (a.order_position < b.order_position) {
+      if (a.graph_index < b.graph_index) {
         return -1;
-      } else if (a.order_position > b.order_position) {
+      } else if (a.graph_index > b.graph_index) {
         return 1;
       } else {
         return 0;
@@ -65,17 +65,19 @@ export class InterventionService {
     // Old espim did not save order position correctly, so here we have to correct
     const orderPositions = {};
     interventions.forEach(function (element, key) {
-      orderPositions[element.order_position] = key;
+      orderPositions[element.graph_index] = key;
     });
 
     interventions.map((intervention, mapIndex) => {
-      intervention.order_position = mapIndex;
+      intervention.graph_index = mapIndex;
 
       if (intervention.type === 'question' && (intervention as QuestionIntervention).question_type == 1) {
         let question = intervention as QuestionIntervention;
 
         Object.keys(question.conditions).map((key) => {
-          question.conditions[key] = orderPositions[question.conditions[key]];
+          question.conditions[key] = !isNullOrUndefined(orderPositions[question.conditions[key]])
+            ? orderPositions[question.conditions[key]]
+            : null;
         });
       }
 
@@ -190,7 +192,7 @@ export class InterventionService {
     else if (data.type === 'media') intervention = new MediaIntervention(data);
     else if (data.type === 'question') intervention = new QuestionIntervention(data);
     else if (data.type === 'task') intervention = new TaskIntervention(data);
-    else if (data.type === 'calendar') intervention = new CalendarIntervention(data)
+    else if (data.type === 'calendar') intervention = new CalendarIntervention(data);
 
     return intervention;
   }

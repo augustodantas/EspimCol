@@ -25,7 +25,7 @@ export class InterventionItemComponent implements OnInit, AfterViewInit {
   private _modalMediaRef: BsModalRef;
 
   get graphIndex(): number {
-    return this.interventionHtmlElements.findIndex((value) => value.uuid === this.interventionCoordinate.uuid);
+    return this.interventionCoordinate.intervention.graph_index;
   }
 
   get interventionHtmlElements(): HTMLInterventionElement[] {

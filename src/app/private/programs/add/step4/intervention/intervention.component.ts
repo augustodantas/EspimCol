@@ -50,10 +50,14 @@ export class InterventionComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.interventionService.clearBoard$.subscribe((add) => this.clearBoard());
-    this.interventionService.newInterventions$.subscribe((add) => this.createIntervention(add.intervention));
+    this.interventionService.newInterventions$.subscribe((add) => {
+      this.createIntervention(add.intervention);
+      this.updateGraphIndexes();
+    });
     this.interventionService.removeIntervention$.subscribe((index) => {
       this.interventionComponents[index].destroy();
       this.interventionComponents.splice(index, 1);
+      this.updateGraphIndexes();
     });
 
     this.interventionService.init(this.interventionsToInit);
@@ -65,6 +69,12 @@ export class InterventionComponent implements AfterViewInit {
     });
 
     this.interventionComponents = [];
+  }
+
+  updateGraphIndexes() {
+    this.interventionComponents.forEach((interventionComponent, index) => {
+      interventionComponent.instance.interventionCoordinate.intervention.graph_index = index;
+    });
   }
 
   createIntervention(intervention: HTMLInterventionElement) {
