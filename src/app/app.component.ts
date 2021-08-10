@@ -21,7 +21,7 @@ export class AppComponent implements OnDestroy {
     private _loaderService: LoaderService,
     private readonly loginService: LoginService
   ) {
-    translate.setDefaultLang('en');
+    translate.setDefaultLang('pt');
   }
 
   ngOnInit() {

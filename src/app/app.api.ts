@@ -30,5 +30,7 @@ export const ESPIM_REST_Media: string = BASE_ESPIM_API + 'media/';
 
 export const ESPIM_REST_ExternalApplications: string = ESPIM_API + 'external-applications/';
 
+export const ESPIM_REST_Levels: string = ESPIM_API + 'levels/';
+
 // config default page size
 export const PAGE_SIZE = 10;

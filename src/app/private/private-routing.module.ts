@@ -24,6 +24,10 @@ const routes: Routes = [
         path: 'external-applications',
         loadChildren: () => import('./external-applications/external-applications.module').then((m) => m.ExternalApplicationsModule),
       },
+      {
+        path: 'levels',
+        loadChildren: () => import('./levels/levels.module').then((m) => m.LevelsModule),
+      },
     ],
   },
 ];

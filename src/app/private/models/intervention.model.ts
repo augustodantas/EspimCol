@@ -31,7 +31,8 @@ export class Intervention {
     this.graph_index = intervention.graph_index;
     this.first = !isNullOrUndefined(intervention.first) ? intervention.first : false;
     this.next = intervention.next;
-    this.obrigatory = !isNullOrUndefined(intervention.obrigatory) ? intervention.obrigatory : false;
+
+    this.obrigatory = true;
 
     this.medias = intervention.medias ?? [];
     this.complexConditions = intervention.complexConditions;
@@ -67,6 +68,7 @@ export class MediaIntervention extends Intervention {
 
     this.media_type = intervention.media_type ? intervention.media_type : '';
     this.type = 'media';
+    this.obrigatory = !isNullOrUndefined(intervention.obrigatory) ? intervention.obrigatory : false;
   }
 
   getTypeDescription() {
@@ -78,6 +80,7 @@ export class CalendarIntervention extends Intervention {
   constructor(intervention: any = {}) {
     super(intervention);
     this.type = 'calendar';
+    this.obrigatory = !isNullOrUndefined(intervention.obrigatory) ? intervention.obrigatory : false;
   }
 
   getTypeDescription() {
@@ -93,6 +96,11 @@ export class QuestionIntervention extends Intervention {
 
   constructor(intervention: any = {}) {
     super(intervention);
+
+    // Se for igual a 1, é obrigatório
+    if (intervention.question_type !== 1) {
+      this.obrigatory = !isNullOrUndefined(intervention.obrigatory) ? intervention.obrigatory : false;
+    }
 
     this.question_type = intervention.question_type;
     // Necessário o conditions ser do tipo object
@@ -121,6 +129,7 @@ export class TaskIntervention extends Intervention {
   constructor(intervention: any = {}) {
     super(intervention);
 
+    this.obrigatory = !isNullOrUndefined(intervention.obrigatory) ? intervention.obrigatory : false;
     this.app_package = intervention.app_package ? intervention.app_package : '';
     this.parameters = intervention.parameters ? intervention.parameters : {};
     this.start_from_notification = intervention.start_from_notification;

@@ -24,6 +24,13 @@ export class InterventionItemComponent implements OnInit, AfterViewInit {
   offset: { x: number; y: number } = { x: 0, y: 0 };
   private _modalMediaRef: BsModalRef;
 
+  get obrigatory(): boolean {
+    return (
+      this.interventionCoordinate.type === 'empty' ||
+      (this.interventionCoordinate.type === 'question' && this.interventionCoordinate.question_type === 1)
+    );
+  }
+
   get graphIndex(): number {
     return this.interventionCoordinate.intervention.graph_index;
   }
