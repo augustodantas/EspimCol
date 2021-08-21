@@ -111,8 +111,14 @@
       },
       "gamification": {
         "title": "Gamificação",
-        "levels": "Levels",
         "badges": "Badges"
+      },
+      "admin": {
+        "title": "Admin",
+        "roles": "Grupos",
+        "users": "Usuários",
+        "levels": "Levels",
+        "externalApplication": "Aplicações externas"
       },
 
       "results": {
@@ -121,7 +127,7 @@
       },
       "profile": {
         "settings": "Configurações",
-        "externalApplication": "Aplicações externas",
+
         "exit": "Sair"
       }
     },
@@ -188,12 +194,47 @@
       }
     },
 
+    "roles": {
+      "add": {
+        "title": "Novo grupo",
+        "titleEdit": "Editar grupo",
+        "name": "Nome",
+        "saveButton": "SALVAR"
+      },
+      "list": {
+        "addButton": "Novo grupo",
+        "pageTitle": "Lista de grupos",
+        "totalNumber": "Total de grupos",
+        "listTitle": "Lista de grupos",
+        "noObjects": "Não há grupos cadastrados."
+      }
+    },
+
+    "users": {
+      "add": {
+        "title": "Novo usuário",
+        "titleEdit": "Editar usuário",
+        "name": "Nome",
+        "email": "E-mail",
+        "roles": "Grupos",
+        "saveButton": "SALVAR"
+      },
+      "list": {
+        "addButton": "Novo usuário",
+        "pageTitle": "Lista de usuários",
+        "totalNumber": "Total de usuários",
+        "listTitle": "Lista de usuários",
+        "noObjects": "Não há usuários cadastrados."
+      }
+    },
+
     "levels": {
       "add": {
         "title": "Novo level",
         "titleEdit": "Editar level",
         "name": "Nome",
         "minPoints": "Mínimo de pontos",
+        "maxPoints": "Máximo de pontos",
         "saveButton": "SALVAR"
       },
       "list": {

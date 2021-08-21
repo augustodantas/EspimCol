@@ -1,12 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
-import { SocialUser } from 'ngx-social-login';
 import { ESPIM_REST_Observers } from 'src/app/app.api';
 import { LoginService } from 'src/app/security/login/login.service';
 
 import { DAOService } from '../dao/dao.service';
 import { Observer } from '../models/observer.model';
+import { User } from '../models/user.model';
 import { ObserversService } from './observers.service';
 
 @Component({
@@ -16,7 +16,7 @@ import { ObserversService } from './observers.service';
 export class ObserversComponent implements OnInit {
   urlObservers: string = ESPIM_REST_Observers;
 
-  user: SocialUser;
+  user: User;
   observer: Observer;
 
   observerForm: FormGroup;

@@ -4,21 +4,21 @@ import { Component } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, finalize, switchMap } from 'rxjs/operators';
-import { ESPIM_REST_Levels } from 'src/app/app.api';
+import { ESPIM_REST_Roles } from 'src/app/app.api';
 import { LoaderService } from 'src/app/services/loader.service';
 import { SwalService } from 'src/app/services/swal.service';
 
 import { DAOService } from '../../dao/dao.service';
-import { Level } from '../../models/level.model';
+import { Role } from '../../models/role.model';
 
 @Component({
-  selector: 'esm-levels-list',
+  selector: 'esm-roles-list',
   templateUrl: './list.component.html',
   providers: [DecimalPipe],
 })
-export class LevelListComponent {
-  url: string = ESPIM_REST_Levels;
-  levels: Level[];
+export class ListComponent {
+  url: string = ESPIM_REST_Roles;
+  roles: Role[];
   loading: boolean = true;
   search: Subject<string> = new Subject<string>();
   searchTerm: string = '';
@@ -34,12 +34,12 @@ export class LevelListComponent {
         debounceTime(300),
         distinctUntilChanged(),
         switchMap(() => {
-          return this.getLevels();
+          return this.getRoles();
         })
       )
       .subscribe((response) => {
         this.loading = false;
-        this.setLevels(response);
+        this.setRoles(response);
       });
   }
 
@@ -47,7 +47,7 @@ export class LevelListComponent {
     if (search) {
       this.searchTerm = $event;
     }
-    this.levels = [];
+    this.roles = [];
     this.loading = true;
     this.search.next($event);
   }
@@ -56,21 +56,21 @@ export class LevelListComponent {
     this.search.next('');
   }
 
-  getLevels(): Observable<any> {
+  getRoles(): Observable<any> {
     let params = new HttpParams().set('search', this.searchTerm).set('orderBy', 'created_at').set('sortedBy', 'desc');
     return this.daoService.getObjects(this.url, params);
   }
 
-  setLevels(response) {
-    this.levels = response.data;
+  setRoles(response) {
+    this.roles = response.data;
   }
 
-  deleteItem(level: Level) {
-    this._swalService.confirmDelete(`${level.name} - ${level.min_points} até ${level.max_points} pontos`, 'level').then((result) => {
+  deleteRole(role: Role) {
+    this._swalService.confirmDelete(role.name, 'grupo').then((result) => {
       if (result.isConfirmed) {
         this._loaderService.show();
         this.daoService
-          .deleteObject(this.url, level.id.toString())
+          .deleteObject(this.url, role.id.toString())
           .pipe(finalize(() => this._loaderService.hide()))
           .subscribe((resp) => {
             this.handleChange(resp);

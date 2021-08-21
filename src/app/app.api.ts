@@ -32,5 +32,11 @@ export const ESPIM_REST_ExternalApplications: string = ESPIM_API + 'external-app
 
 export const ESPIM_REST_Levels: string = ESPIM_API + 'levels/';
 
+export const ESPIM_REST_Roles: string = ESPIM_API + 'roles/';
+
+export const ESPIM_REST_Permissions: string = ESPIM_API + 'permissions/';
+
+export const ESPIM_REST_Users: string = ESPIM_API + 'users/';
+
 // config default page size
 export const PAGE_SIZE = 10;

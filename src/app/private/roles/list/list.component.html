@@ -1,9 +1,9 @@
 <main class="px-5 mx-auto mt-4 mb-5 card card-lg w-main">
   <!--Título & busca-->
   <div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="h4" translate>private.levels.list.pageTitle</h1>
-    <a [routerLink]="['/private/levels/add']" class="btn btn-link align-self-end" *ngxPermissionsOnly="['LEVELS_ADD']" translate
-      >private.levels.list.addButton</a
+    <h1 class="h4" translate>private.roles.list.pageTitle</h1>
+    <a [routerLink]="['/private/roles/add']" class="btn btn-link align-self-end" translate *ngxPermissionsOnly="['ROLES_ADD']"
+      >private.roles.list.addButton</a
     >
   </div>
 
@@ -11,28 +11,28 @@
   <form>
     <!-- Cabeçalho -->
     <esm-list-header
-      [title]="'private.levels.list.listTitle' | translate"
-      [subtitle]="'private.levels.list.totalNumber' | translate"
+      [title]="'private.roles.list.listTitle' | translate"
+      [subtitle]="'private.roles.list.totalNumber' | translate"
     ></esm-list-header>
 
-    <div class="alert alert-info" *ngIf="!loading && levels.length == 0">Nenhum level encontrado</div>
+    <div class="alert alert-info" *ngIf="!loading && roles.length == 0">Nenhum grupo encontrado</div>
 
     <table class="table table-hover">
       <tbody>
-        <tr *ngFor="let level of levels">
+        <tr *ngFor="let role of roles">
           <td scope="row">
-            <a [routerLink]="['/private/levels/edit', level.id]">
-              {{ level.name }} - {{ level.min_points }} até {{ level.max_points }} pontos
+            <a [routerLink]="['/private/roles/edit', role.id]">
+              {{ role.name }}
             </a>
           </td>
 
-          <td width="100" *ngxPermissionsOnly="['LEVELS_EDIT', 'LEVELS_DELETE']">
+          <td width="100" *ngxPermissionsOnly="['ROLES_EDIT', 'ROLES_DELETE']">
             <div class="mx-3 d-flex align-items-center">
-              <a [routerLink]="['/private/levels/edit', level.id]">
+              <a [routerLink]="['/private/roles/edit', role.id]" *ngxPermissionsOnly="['ROLES_EDIT']">
                 <i class="mr-3 fas fa-edit fa-lg text-primary"></i>
               </a>
-              <a href="javascript:">
-                <i class="fas fa-trash-alt fa-lg text-primary" (click)="deleteItem(level)"></i>
+              <a href="javascript:" *ngxPermissionsOnly="['ROLES_DELETE']">
+                <i class="fas fa-trash-alt fa-lg text-primary" (click)="deleteRole(role)"></i>
               </a>
             </div>
           </td>

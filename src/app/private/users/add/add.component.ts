@@ -1,23 +1,27 @@
+import { HttpParams } from '@angular/common/http';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
-import { ESPIM_REST_Levels } from 'src/app/app.api';
+import { ESPIM_REST_Roles, ESPIM_REST_Users } from 'src/app/app.api';
 import { LoaderService } from 'src/app/services/loader.service';
 import { FormUtil } from 'src/app/util/util.form.service';
 
 import { DAOService } from '../../dao/dao.service';
+import { Role } from '../../models/role.model';
 
 @Component({
-  selector: 'esm-levels-add',
+  selector: 'esm-roles-add',
   templateUrl: './add.component.html',
 })
-export class LevelsAddComponent implements OnInit {
+export class AddComponent implements OnInit {
   @ViewChild('formElement') formElement: ElementRef;
 
-  url: string = ESPIM_REST_Levels;
+  url: string = ESPIM_REST_Users;
+  urlRoles: string = ESPIM_REST_Roles;
+  roles: Role[] = [];
   form: FormGroup;
   editing: boolean = false;
   loading: boolean = true;
@@ -36,24 +40,26 @@ export class LevelsAddComponent implements OnInit {
     this.id = this.activeRoute.snapshot.params.id;
 
     this.form = this._formBuilder.group({
-      name: this._formBuilder.control('', [Validators.required]),
-      min_points: this._formBuilder.control('', [Validators.required]),
-      max_points: this._formBuilder.control('', [Validators.required]),
+      name: this._formBuilder.control(null, [Validators.required]),
+      email: this._formBuilder.control(null, [Validators.required]),
+      roles: this._formBuilder.control([], [Validators.required]),
     });
 
-    if (this.id) {
-      this.fetchData(this.id);
-    } else {
-      this.loading = false;
-    }
+    this.fetchData(this.id);
+
+    this.getUsers();
   }
 
   fetchData(id: string) {
     this._loaderService.show();
+
+    let params = new HttpParams().set('include', 'roles');
+
     this._daoService
-      .getObject(this.url, id)
+      .getObject(this.url, id, params)
       .pipe(finalize(() => this._loaderService.hide()))
       .subscribe((response) => {
+        response.data.roles = response.data.roles.map((role) => role.id);
         this.form.patchValue({ ...response.data });
       });
   }
@@ -73,7 +79,7 @@ export class LevelsAddComponent implements OnInit {
               FormUtil.setErrorsBackend(this.form, response);
             } else {
               this._toastr.success(response.message);
-              this.route.navigate(['/private/levels/list']);
+              this.route.navigate(['/private/users/list']);
             }
           },
           (resp) => FormUtil.setErrorsBackend(this.form, resp.data)
@@ -84,10 +90,12 @@ export class LevelsAddComponent implements OnInit {
   sendRequest(): Observable<any> {
     var dados = { ...this.form.value };
 
-    if (this.id) {
-      return this._daoService.putObject(this.url + this.id, dados);
-    } else {
-      return this._daoService.postObject(this.url, dados);
-    }
+    return this._daoService.putObject(this.url + this.id, dados);
+  }
+
+  getUsers(): void {
+    this._daoService.getObjects(this.urlRoles).subscribe((response) => {
+      this.roles = response.data;
+    });
   }
 }

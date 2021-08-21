@@ -2,39 +2,29 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PermissionsGuard } from 'src/app/security/permissions.guard';
 
-import { ExternalApplicationAddComponent } from './add/add.component';
-import { ExternalApplicationListComponent } from './list/list.component';
+import { AddComponent } from './add/add.component';
+import { ListComponent } from './list/list.component';
 
 const routes: Routes = [
   {
     path: 'list',
-    component: ExternalApplicationListComponent,
     canActivate: [PermissionsGuard],
     data: {
       permissions: {
-        only: ['EXTERNAL_APP_LIST'],
+        only: ['USERS_LIST'],
       },
     },
-  },
-  {
-    path: 'add',
-    component: ExternalApplicationAddComponent,
-    canActivate: [PermissionsGuard],
-    data: {
-      permissions: {
-        only: ['EXTERNAL_APP_ADD'],
-      },
-    },
+    component: ListComponent,
   },
   {
     path: 'edit/:id',
-    component: ExternalApplicationAddComponent,
     canActivate: [PermissionsGuard],
     data: {
       permissions: {
-        only: ['EXTERNAL_APP_EDIT'],
+        only: ['USERS_EDIT'],
       },
     },
+    component: AddComponent,
   },
   { path: '**', redirectTo: '/private', pathMatch: 'full' },
 ];
@@ -43,4 +33,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class ExternalApplicationRoutingModule {}
+export class UsersRoutingModule {}

@@ -70,7 +70,7 @@ export class ErrorHandlerInterceptor implements HttpInterceptor {
     }
 
     if (error.status === 422) {
-      this._swalService.showFormErrors(this._getTitle(error), error.error.message);
+      this._swalService.showFormErrors(this._getTitle(error), error.error.errors);
     } else {
       this._toastr.error(this._getMessage(error), this._getTitle(error));
     }

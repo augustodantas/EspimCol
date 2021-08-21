@@ -8,8 +8,8 @@ const components = [FocusInvalidInputDirective, FocusInput];
 
 @NgModule({
   declarations: [...components],
-  imports: [NgxPermissionsModule],
-  exports: [...components],
+  imports: [],
+  exports: [...components, NgxPermissionsModule],
 })
 export class SharedModule {
   static forRoot(): ModuleWithProviders<SharedModule> {

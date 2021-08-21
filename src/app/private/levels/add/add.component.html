@@ -33,28 +33,48 @@
           </div>
 
           <div class="row">
-            <div class="col-6 form-group">
+            <div class="col-3 form-group">
               <div class="form-label-group">
                 <input
-                  id="package"
-                  name="package"
-                  type="text"
-                  placeholder="{{ 'private.levels.add.package' | translate }}"
+                  id="min_points"
+                  name="min_points"
+                  type="number"
+                  placeholder="{{ 'private.levels.add.minPoints' | translate }}"
                   class="form-control border-bottom"
-                  formControlName="package"
-                  [readonly]="editing"
+                  formControlName="min_points"
                 />
-                <label for="email" translate>private.levels.add.package</label>
+                <label for="min_points" translate>private.levels.add.minPoints</label>
               </div>
               <input-validations
-                *ngIf="form.controls['package'].invalid && form.controls['package'].touched"
-                [errors]="form.controls['package'].errors"
-                label="Package"
+                *ngIf="form.controls['min_points'].invalid && form.controls['min_points'].touched"
+                [errors]="form.controls['min_points'].errors"
+                label="Mínimo de pontos"
               >
               </input-validations>
             </div>
           </div>
 
+          <div class="row">
+            <div class="col-3 form-group">
+              <div class="form-label-group">
+                <input
+                  id="max_points"
+                  name="max_points"
+                  type="number"
+                  placeholder="{{ 'private.levels.add.maxPoints' | translate }}"
+                  class="form-control border-bottom"
+                  formControlName="max_points"
+                />
+                <label for="max_points" translate>private.levels.add.maxPoints</label>
+              </div>
+              <input-validations
+                *ngIf="form.controls['max_points'].invalid && form.controls['max_points'].touched"
+                [errors]="form.controls['max_points'].errors"
+                label="Máximo de pontos"
+              >
+              </input-validations>
+            </div>
+          </div>
           <div class="row justify-content-end">
             <div class="col-auto">
               <a routerLink="/private/levels/list" class="btn btn-success btn-lg btn-shadow">VOLTAR</a>

@@ -1,12 +1,12 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { SocialUser } from 'angularx-social-login';
 import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import { ESPIM_REST_Observers } from 'src/app/app.api';
 import { DAOService } from 'src/app/private/dao/dao.service';
+import { User } from 'src/app/private/models/user.model';
 import { LoginService } from 'src/app/security/login/login.service';
 import { LoaderService } from 'src/app/services/loader.service';
 import { isNullOrUndefined } from 'src/app/util/functions';
@@ -25,7 +25,7 @@ export class SignupComponent implements OnInit {
     email: this.formBuilder.control('', [Validators.required]),
     role: this.formBuilder.control('', [Validators.required]),
   });
-  user$: Observable<SocialUser>;
+  user$: Observable<User>;
 
   constructor(
     private _loginService: LoginService,

@@ -21,16 +21,14 @@ type ReturnGuard = Observable<boolean> | Promise<boolean> | boolean;
   providedIn: 'root',
 })
 export class PermissionsGuard implements CanActivate, CanActivateChild, CanLoad {
-  routeURL: string;
+  routeURL: string = '/private';
 
   constructor(
     private readonly _ngxPermissionsGuard: NgxPermissionsGuard,
     private readonly _loginService: LoginService,
     private readonly _toastr: ToastrService,
     private readonly _router: Router
-  ) {
-    this.routeURL = this._router.url;
-  }
+  ) {}
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): ReturnGuard {
     return this._checkPermission(this._ngxPermissionsGuard.canActivate(next, state));

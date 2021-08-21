@@ -62,19 +62,34 @@
             </li>
           </ul>
         </li>
-        <li class="py-3 nav-item dropdown w-100 w-xl-px-200" [routerLinkActive]="['active']">
+
+        <li
+          class="py-3 nav-item dropdown w-100 w-xl-px-200"
+          [routerLinkActive]="['active']"
+          *ngxPermissionsOnly="['ROLES_LIST', 'PERMISSIONS_LIST']"
+        >
           <a href="#" class="text-center text-white nav-link dropdown-toggle" role="button" data-toggle="dropdown" translate
-            >private.header.gamification.title</a
+            >private.header.admin.title</a
           >
           <ul class="py-0 text-center dropdown-menu w-xl-px-200 py-xl-2">
-            <li>
-              <a [routerLinkActive]="['active']" [routerLink]="['/private/levels/list']" class="dropdown-item" translate
-                >private.header.gamification.levels</a
+            <li *ngxPermissionsOnly="['ROLES_LIST']">
+              <a [routerLinkActive]="['active']" [routerLink]="['/private/roles/list']" class="dropdown-item" translate
+                >private.header.admin.roles</a
               >
             </li>
-            <li>
-              <a [routerLinkActive]="['active']" [routerLink]="['/private/badges/list']" class="dropdown-item" translate
-                >private.header.gamification.badges</a
+            <li *ngxPermissionsOnly="['USERS_LIST']">
+              <a [routerLinkActive]="['active']" [routerLink]="['/private/users/list']" class="dropdown-item" translate
+                >private.header.admin.users</a
+              >
+            </li>
+            <li *ngxPermissionsOnly="['LEVELS_LIST']">
+              <a [routerLinkActive]="['active']" routerLink="/private/levels/list" class="dropdown-item" translate
+                >private.header.admin.levels</a
+              >
+            </li>
+            <li *ngxPermissionsOnly="['EXTERNAL_APP_LIST']">
+              <a [routerLinkActive]="['active']" routerLink="/private/external-applications/list" class="dropdown-item" translate
+                >private.header.admin.externalApplication</a
               >
             </li>
           </ul>
@@ -108,23 +123,6 @@
             <li>
               <a class="text-center dropdown-item" routerLink="observers/add"
                 ><small class="font-weight-bold text-wrap">{{ _user.name }}</small></a
-              >
-            </li>
-            <!-- <li>
-              <a class="text-center dropdown-item" routerLink="observers/add"
-                ><small>{{ _user.email }}</small></a
-              >
-            </li> -->
-            <!-- <li class="dropdown-divider d-none d-xl-block"></li> -->
-            <!-- <li>
-              <a class="text-center dropdown-item" routerLink="observers/add"
-                ><i class="fas fa-cog"></i> <small translate>private.header.profile.settings</small></a
-              >
-            </li> -->
-            <li class="dropdown-divider d-none d-xl-block"></li>
-            <li>
-              <a class="text-center dropdown-item" routerLink="/private/external-applications/list"
-                ><i class="fas fa-play"></i> <small translate>private.header.profile.externalApplication</small></a
               >
             </li>
             <li class="dropdown-divider d-none d-xl-block"></li>
