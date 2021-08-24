@@ -8,6 +8,13 @@
 @import './app/stylesheets/_forms.scss';
 @import './app/stylesheets/_buttons.scss';
 
+@import './app/stylesheets/_uploadfile.scss';
+// Alerts
+.alert-sm {
+  padding: 0.45rem 1rem;
+  font-size: 0.9rem;
+}
+
 // Modal fullscreen
 .modal-fullscreen {
   max-width: 100% !important;

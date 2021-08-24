@@ -2,13 +2,6 @@ import { isNullOrUndefined, toChar } from 'src/app/util/functions';
 
 import { Media } from './media';
 
-export class ComplexCondition {
-  text?: string;
-  action: string;
-  condition: string;
-  value?: boolean = false;
-}
-
 export class Intervention {
   public id: number;
   public type: string;
@@ -22,7 +15,6 @@ export class Intervention {
   public y: number;
 
   public medias: Media[];
-  public complexConditions: ComplexCondition[];
 
   constructor(intervention: any = {}) {
     this.id = intervention.id;
@@ -35,7 +27,6 @@ export class Intervention {
     this.obrigatory = true;
 
     this.medias = intervention.medias ?? [];
-    this.complexConditions = intervention.complexConditions;
 
     this.x = intervention.x;
     this.y = intervention.y;

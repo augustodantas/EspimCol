@@ -1,0 +1,75 @@
+.videoBlocks {
+  position: relative;
+  display: inline-block;
+}
+
+#fileSelector {
+  display: none;
+}
+
+#uploadImage {
+  max-height: 400px;
+}
+
+.videoPlaceHolder {
+  float: left;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 320px;
+  height: 240px;
+  font-size: 10em;
+  background: #f7f7f7;
+  border: 1px solid #d6d6d6;
+}
+
+.videoPlayer {
+  float: left;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 320px;
+  height: 240px;
+  z-index: 1;
+}
+
+.audioPlaceHolder {
+  float: left;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 320px;
+  height: 240px;
+  font-size: 10em;
+  background: #f7f7f7;
+  border: 1px solid #d6d6d6;
+}
+
+.audioPlayer {
+  float: left;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 320px;
+  height: 240px;
+  z-index: 1;
+}
+
+.reddot {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  max-width: 50px;
+  max-height: 50px;
+  object-fit: cover;
+  z-index: 2;
+  visibility: hidden;
+}
+
+.fileSquare {
+  border: 1px dashed #d6d6d6;
+  background-color: #f7f7f7;
+  padding: 30px;
+  text-align: center;
+  font-size: 20px;
+}

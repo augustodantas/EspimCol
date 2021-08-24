@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import cloneDeep from 'lodash/cloneDeep';
-import { ComplexCondition } from 'src/app/private/models/intervention.model';
+import { ComplexCondition } from 'src/app/private/models/event.model';
 import { v4 as uuid } from 'uuid';
 
 import { COMPLEX_CONDITIONS } from '../../../constants';

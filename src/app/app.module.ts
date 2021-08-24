@@ -24,6 +24,7 @@ import { JsonDateInterceptor } from './interceptors/json-date.interceptor';
 import { AuthInterceptor } from './security/auth.interceptor';
 import { LoggedInGuard } from './security/loggedin.guard';
 import { SecurityModule } from './security/security.module';
+import { EndpointsService } from './services/endpoints.service';
 import { LoaderService } from './services/loader.service';
 
 // local modules
@@ -34,7 +35,7 @@ export class missingTranslationHandler implements MissingTranslationHandler {
   }
 }
 
-const providers = [LoaderService];
+const providers = [LoaderService, EndpointsService];
 
 @NgModule({
   declarations: [AppComponent],

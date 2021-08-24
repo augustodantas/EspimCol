@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { ComponentsModule } from 'src/app/components/components.module';
 
 import { SharedModule } from '../../app.shared.module';
+import { InputFileComponent } from '../components/input-file/input-file.component';
 import { ProgramsAddComponent } from './add/programsadd.component';
 import { StepPanelComponent } from './add/step-panel/step-panel.component';
 import { Step1Component } from './add/step1/step1.component';
@@ -14,7 +15,9 @@ import { Step3Component } from './add/step3/step3.component';
 import { ActiveEventComponent } from './add/step4/active-event/active-event.component';
 import { ChooseColorComponent } from './add/step4/choose-color/choose-color.component';
 import { ComplexConditionComponent } from './add/step4/complex-conditions/complex-conditions.component';
+import { GamificationConditionsComponent } from './add/step4/gamification-conditions/gamification-conditions.component';
 import { InterventionModule } from './add/step4/intervention/intervention.module';
+import { ModalAddBadgeComponent } from './add/step4/modal-add-badge/modal-add-badge.component';
 import { PassiveEventComponent } from './add/step4/passive-event/passive-event.component';
 import { SensorsComponent } from './add/step4/sensors/sensors.component';
 import { Step4Component } from './add/step4/step4.component';
@@ -49,8 +52,11 @@ import { ProgramsRoutingModule } from './programs-routing.module';
     RowHourComponent,
     ChooseColorComponent,
     ComplexConditionComponent,
+    GamificationConditionsComponent,
     ModalAddObserverComponent,
+    ModalAddBadgeComponent,
     ModalAddParticipantComponent,
+    InputFileComponent,
   ],
   imports: [InterventionModule, PortalModule, SharedModule, ComponentsModule, ProgramsRoutingModule, CommonModule],
   exports: [],

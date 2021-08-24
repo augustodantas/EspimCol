@@ -1,0 +1,16 @@
+.box-badge {
+  border: 1px dashed #d0d0d0;
+  text-align: center;
+  &.box-add {
+    min-height: 95px;
+    border-radius: 5px;
+    color: #000;
+    &:hover {
+      text-decoration: none;
+      background-color: #f3f3f3;
+    }
+    .fa-plus {
+      font-size: 21px;
+    }
+  }
+}

@@ -1,0 +1,20 @@
+<div class="fileSquare mt-2">
+  <div class="row"></div>
+  <div class="row">
+    <div class="col-12 text-center">
+      <p>Selecione uma imagem para enviar</p>
+      <label class="btn btn-primary">
+        Selecionar imagem
+        <input type="file" #inputFile (change)="selectFile($event)" accept="image/png,image/gif,image/jpg,image/jpeg" id="fileSelector" />
+      </label>
+    </div>
+  </div>
+  <div class="row d-flex justify-content-center" *ngIf="media">
+    <br />
+    <div class="img-thumbnail">
+      <img [src]="media.url" id="uploadImage" class="w-100" />
+      <button class="btn btn-danger btn-sm w-100" (click)="removerMidia()">Remover imagem <i class="far fa-trash-alt"></i></button>
+    </div>
+  </div>
+</div>
+<p class="help-block text-muted">São suportadas imagens nos formatos gif, jpg e png.</p>

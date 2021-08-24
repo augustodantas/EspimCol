@@ -38,5 +38,6 @@ export const ESPIM_REST_Permissions: string = ESPIM_API + 'permissions/';
 
 export const ESPIM_REST_Users: string = ESPIM_API + 'users/';
 
+export const ESPIM_REST_Badges: string = ESPIM_API + 'events/{{activeEventId}}/badges/';
 // config default page size
 export const PAGE_SIZE = 10;

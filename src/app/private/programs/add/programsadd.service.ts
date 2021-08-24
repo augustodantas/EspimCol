@@ -111,6 +111,12 @@ export class ProgramsAddService {
 
       item.interventions = this.fixInterventionsToSave(item.interventions);
 
+      if (item.gamificationConditions) {
+        item.gamificationConditions.badges = item.gamificationConditions.badges.map((badge) => {
+          return this.fixGamificationBadgeToSave(badge);
+        });
+      }
+
       return item;
     });
 
@@ -151,6 +157,13 @@ export class ProgramsAddService {
     });
 
     return interventions;
+  }
+
+  fixGamificationBadgeToSave(badge) {
+    return {
+      name: badge.name,
+      media_id: badge.media.id,
+    };
   }
 
   public get programValue(): Program {

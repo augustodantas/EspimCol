@@ -147,5 +147,11 @@
       [eventComplexConditions]="event.complexConditions"
       (response)="updateFormComplexConditions($event)"
     ></esm-complex-conditions>
+
+    <esm-gamification-conditions
+      (response)="updateFormGamificationConditions($event)"
+      [eventGamificationConditions]="event.gamificationConditions"
+      [activeEvent]="event"
+    ></esm-gamification-conditions>
   </form>
 </div>
