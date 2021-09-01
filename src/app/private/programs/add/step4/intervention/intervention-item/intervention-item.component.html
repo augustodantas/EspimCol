@@ -17,7 +17,13 @@
       <label [for]="graphIndex + '-first'">1ª Intervenção</label>
     </div>
     <div class="w-100 mb-3">
-      <input type="checkbox" [(ngModel)]="interventionCoordinate.obrigatory" [id]="graphIndex + '-obrigatory'" />
+      <input
+        type="checkbox"
+        [(ngModel)]="interventionCoordinate.obrigatory"
+        [id]="graphIndex + '-obrigatory'"
+        [checked]="obrigatory"
+        [disabled]="obrigatory"
+      />
       <label [for]="graphIndex + '-obrigatory'">Obrigatória</label>
     </div>
     <div class="d-flex flex-column">

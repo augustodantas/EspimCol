@@ -24,6 +24,20 @@ const routes: Routes = [
         path: 'external-applications',
         loadChildren: () => import('./external-applications/external-applications.module').then((m) => m.ExternalApplicationsModule),
       },
+
+      {
+        path: 'levels',
+        loadChildren: () => import('./levels/levels.module').then((m) => m.LevelsModule),
+      },
+
+      {
+        path: 'users',
+        loadChildren: () => import('./users/users.module').then((m) => m.UsersModule),
+      },
+      {
+        path: 'roles',
+        loadChildren: () => import('./roles/roles.module').then((m) => m.RolesModule),
+      },
     ],
   },
 ];

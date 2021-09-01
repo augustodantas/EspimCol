@@ -109,6 +109,11 @@
         "add": "Add",
         "list": "List"
       },
+      "levels": {
+        "title": "Levels",
+        "add": "Add",
+        "list": "List"
+      },
       "results": {
         "results": "Results",
         "list": "List"

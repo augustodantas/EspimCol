@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { SocialUser } from 'angularx-social-login';
 import { Observable } from 'rxjs';
+import { User } from 'src/app/private/models/user.model';
 import { LoginService } from 'src/app/security/login/login.service';
 
 @Component({
@@ -10,7 +10,7 @@ import { LoginService } from 'src/app/security/login/login.service';
 export class HeaderComponent implements OnInit {
   constructor(private _loginService: LoginService) {}
 
-  user$: Observable<SocialUser>;
+  user$: Observable<User>;
 
   ngOnInit() {
     this.user$ = this._loginService.user;

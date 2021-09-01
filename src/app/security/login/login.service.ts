@@ -1,11 +1,13 @@
 import { HttpParams } from '@angular/common/http';
 import { Injectable, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
-import { GoogleLoginProvider, SocialAuthService, SocialUser } from 'angularx-social-login';
+import { GoogleLoginProvider, SocialAuthService } from 'angularx-social-login';
+import { NgxPermissionsService } from 'ngx-permissions';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 import { BASE_ESPIM_API } from 'src/app/app.api';
 import { Observer } from 'src/app/private/models/observer.model';
+import { User } from 'src/app/private/models/user.model';
 import { ObserversService } from 'src/app/private/observers/observers.service';
 
 import { LoaderService } from './../../services/loader.service';
@@ -17,9 +19,9 @@ import { LocalStorageService } from './local-storage.service';
 export class LoginService {
   private _propertyName: string = 'accessToken';
   urlLogin: string = BASE_ESPIM_API + 'auth/';
-  private _currentUserSubject: BehaviorSubject<SocialUser>;
+  private _currentUserSubject: BehaviorSubject<User>;
   accessToken: string;
-  user: Observable<SocialUser>;
+  user: Observable<User>;
   userObserver: Observer;
 
   constructor(
@@ -28,9 +30,10 @@ export class LoginService {
     private router: Router,
     private zone: NgZone,
     private _observerService: ObserversService,
+    private _permissionsService: NgxPermissionsService,
     private readonly _localStorageService: LocalStorageService
   ) {
-    this._currentUserSubject = new BehaviorSubject<SocialUser>(null);
+    this._currentUserSubject = new BehaviorSubject<User>(null);
     this.accessToken = this._localStorageService.Get(this._propertyName);
     this.user = this._currentUserSubject.asObservable();
   }
@@ -52,12 +55,14 @@ export class LoginService {
     );
   }
 
-  fetchUser(): Observable<SocialUser> {
+  fetchUser(): Observable<User> {
     let params = new HttpParams().set('include', 'observer.user');
     return this._observerService.fetchUser(BASE_ESPIM_API + 'me', params).pipe(
       map((response) => {
         this._currentUserSubject.next(response.data);
         this.userObserver = response.data.observer;
+
+        this._permissionsService.loadPermissions(this.userValue.permissions);
         return response.data;
       })
     );
@@ -71,6 +76,7 @@ export class LoginService {
 
     this._currentUserSubject.next(response.user);
     this.userObserver = response.user.observer;
+    this._permissionsService.loadPermissions(this.userValue.permissions);
 
     if (this.userObserver) {
       this.router.navigate(['/private']);
@@ -85,7 +91,7 @@ export class LoginService {
     this.router.navigate(['/']);
   }
 
-  public get userValue(): SocialUser {
+  public get userValue(): User {
     return this._currentUserSubject.value;
   }
 

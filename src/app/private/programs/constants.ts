@@ -1,5 +1,5 @@
 import { Day } from '../models/date.model';
-import { ComplexCondition } from '../models/intervention.model';
+import { ComplexCondition } from '../models/event.model';
 
 export const LETRAS_FILTRO: string[] = [
   '*',

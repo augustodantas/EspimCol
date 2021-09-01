@@ -1,6 +1,5 @@
-import { SocialUser } from 'angularx-social-login';
-
 import { Address } from './address.model';
+import { User } from './user.model';
 
 export class Observer {
   id: number;
@@ -12,5 +11,5 @@ export class Observer {
   schooling: string;
   institution: string;
   address: Address;
-  user?: SocialUser;
+  user?: User;
 }

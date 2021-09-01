@@ -1,0 +1,54 @@
+<main class="px-5 mx-auto mt-4 mb-5 card card-lg w-main">
+  <!--Título & busca-->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h4" translate>private.levels.list.pageTitle</h1>
+    <a [routerLink]="['/private/levels/add']" class="btn btn-link align-self-end" *ngxPermissionsOnly="['LEVELS_ADD']" translate
+      >private.levels.list.addButton</a
+    >
+  </div>
+
+  <esm-search (doSearch)="handleChange($event, true)"></esm-search>
+  <form>
+    <!-- Cabeçalho -->
+    <esm-list-header
+      [title]="'private.levels.list.listTitle' | translate"
+      [subtitle]="'private.levels.list.totalNumber' | translate"
+    ></esm-list-header>
+
+    <div class="alert alert-info" *ngIf="!loading && levels.length == 0">Nenhum level encontrado</div>
+
+    <table class="table table-hover">
+      <tbody>
+        <tr *ngFor="let level of levels">
+          <td scope="row">
+            <a [routerLink]="['/private/levels/edit', level.id]">
+              {{ level.name }} - {{ level.min_points }} até {{ level.max_points }} pontos
+            </a>
+          </td>
+
+          <td width="100" *ngxPermissionsOnly="['LEVELS_EDIT', 'LEVELS_DELETE']">
+            <div class="mx-3 d-flex align-items-center">
+              <a [routerLink]="['/private/levels/edit', level.id]">
+                <i class="mr-3 fas fa-edit fa-lg text-primary"></i>
+              </a>
+              <a href="javascript:">
+                <i class="fas fa-trash-alt fa-lg text-primary" (click)="deleteItem(level)"></i>
+              </a>
+            </div>
+          </td>
+        </tr>
+
+        <ng-template [ngIf]="loading">
+          <tr *ngFor="let i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]" class="loading">
+            <td>
+              <div class="loader-bg"></div>
+            </td>
+            <td width="100">
+              <div class="loader-bg"></div>
+            </td>
+          </tr>
+        </ng-template>
+      </tbody>
+    </table>
+  </form>
+</main>

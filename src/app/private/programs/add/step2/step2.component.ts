@@ -21,16 +21,18 @@ import { ModalAddObserverComponent } from './modal-add-observer/modal-add-observ
 })
 export class Step2Component implements OnInit, OnDestroy {
   @ViewChild('search') searchElement: SearchComponent;
+
   program: Observable<Program>; // These are the observers of this program
   loading: boolean = true;
   search: Subject<string> = new Subject<string>();
   filterQuery: string = '*';
   observers: Observer[]; // These are the general observers
   programObservers: Observer[] = [];
-  private _subscription$: Subscription;
   urlObservers: string = ESPIM_REST_Observers;
   letters: string[] = LETRAS_FILTRO;
+
   private _modalRef: BsModalRef;
+  private _subscription$: Subscription;
 
   constructor(
     private daoService: DAOService,
@@ -60,7 +62,7 @@ export class Step2Component implements OnInit, OnDestroy {
   }
 
   isDisabled(observer: Observer) {
-    return observer.id === Number.parseInt(this.loginService.userValue.id);
+    return observer.id === this.loginService.userValue.id;
   }
 
   ngOnInit() {

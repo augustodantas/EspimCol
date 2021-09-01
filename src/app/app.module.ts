@@ -11,6 +11,7 @@ import {
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { MomentModule } from 'ngx-moment';
+import { NgxPermissionsModule } from 'ngx-permissions';
 import { ToastrModule } from 'ngx-toastr';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -23,6 +24,7 @@ import { JsonDateInterceptor } from './interceptors/json-date.interceptor';
 import { AuthInterceptor } from './security/auth.interceptor';
 import { LoggedInGuard } from './security/loggedin.guard';
 import { SecurityModule } from './security/security.module';
+import { EndpointsService } from './services/endpoints.service';
 import { LoaderService } from './services/loader.service';
 
 // local modules
@@ -33,7 +35,7 @@ export class missingTranslationHandler implements MissingTranslationHandler {
   }
 }
 
-const providers = [LoaderService];
+const providers = [LoaderService, EndpointsService];
 
 @NgModule({
   declarations: [AppComponent],
@@ -49,6 +51,7 @@ const providers = [LoaderService];
     // configure the imports
     HttpClientModule,
     SweetAlert2Module.forRoot(),
+    NgxPermissionsModule.forRoot(),
     ToastrModule.forRoot({
       closeButton: true,
       disableTimeOut: false,

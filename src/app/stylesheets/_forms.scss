@@ -35,6 +35,12 @@ input[type='radio']:after {
   border-radius: 50%;
   transition: 240ms;
 }
+
+input[disabled],
+input[disabled] ~ label {
+  opacity: 0.5;
+}
+
 input[type='radio']:before {
   position: absolute;
   left: 0;
@@ -124,10 +130,8 @@ select:focus {
 }
 
 // FLOATING LABELS
-
 .form-label-group {
   position: relative;
-  margin-bottom: 1rem;
 
   .form-control {
     height: calc(2em + 0.75rem + 2px);

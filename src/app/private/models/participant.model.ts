@@ -1,7 +1,7 @@
-import { SocialUser } from 'angularx-social-login';
+import { User } from './user.model';
 
 export class Participant {
   id: number;
   alias: string;
-  user?: SocialUser;
+  user?: User;
 }

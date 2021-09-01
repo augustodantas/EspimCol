@@ -3,8 +3,8 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
 import { take } from 'rxjs/operators';
-import { ActiveEvent, Event } from 'src/app/private/models/event.model';
-import { ComplexCondition, Intervention } from 'src/app/private/models/intervention.model';
+import { ActiveEvent, ComplexCondition, Event, GamificationConditions } from 'src/app/private/models/event.model';
+import { Intervention } from 'src/app/private/models/intervention.model';
 import { Trigger } from 'src/app/private/models/trigger.model';
 
 import { ESPIM_REST_Programs } from '../../../../../app.api';
@@ -35,6 +35,7 @@ export class ActiveEventComponent implements OnInit {
     isManual: this.formBuilder.control(false),
     interventions: this.formBuilder.control([]),
     complexConditions: this.formBuilder.array([]),
+    gamificationConditions: this.formBuilder.control(null),
   });
 
   constructor(private formBuilder: FormBuilder, private readonly _modalService: BsModalService) {}
@@ -75,8 +76,14 @@ export class ActiveEventComponent implements OnInit {
   }
 
   updateFormComplexConditions(complexConditions: ComplexCondition[]) {
+    this.event.complexConditions = complexConditions;
     this.complexConditionsFormArray.clear();
     complexConditions.forEach((it) => this.adicionarComplexCondition(it));
+  }
+
+  updateFormGamificationConditions(gamificationConditions: GamificationConditions) {
+    this.event.gamificationConditions = gamificationConditions;
+    this.form.get('gamificationConditions').setValue(gamificationConditions);
   }
 
   adicionarComplexCondition(complexCondition: ComplexCondition) {
