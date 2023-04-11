@@ -153,5 +153,8 @@
       [eventGamificationConditions]="event.gamificationConditions"
       [activeEvent]="event"
     ></esm-gamification-conditions>
+    <div class="col-12 border border-secondary ms-2 me-2" [ngbCollapse]="isOpenChatBotOptions">
+      <chatbot [event]="event"></chatbot>
+    </div>
   </form>
 </div>
