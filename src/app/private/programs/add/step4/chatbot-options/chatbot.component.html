@@ -1,4 +1,11 @@
-<div class="container-fluid mb-2 me-2">
+<div class="row my-2">
+    <div class="col-12 d-flex justify-content-end">
+        <a href="javascript:" class="btn btn-light btn-sm min-100" (click)="isOpen = !isOpen">
+          Configurar assistente
+        </a>
+    </div>
+</div>
+<div class="container-fluid mb-2 card" [collapse]="!isOpen">
     <div class="row py-3">
         <div class="col form-group">
             <label for="intent" class="d-block"><b>Assunto</b></label>
@@ -7,23 +14,27 @@
         </div>
     </div>
     <div class="row py-3">
-        <div class="col form-group">
-            <label for="message" class="d-block"><b>Exemplo de mensagem do usuário:</b></label>
-            <small class="form-text text-muted">Informe exemplos de mensagens que o usuário pode informar ao assistente
-                sobre o <b>assunto</b> relacionado.</small>
-            <div #messages>
-                <message-input></message-input>
-            </div>            
-            <button (click)="addNewMessage()" class="btn text-muted form-text mx-auto d-block">+ Adicionar exemplo</button>
+        <div class="col">
+            <div class="form-group">
+                <label for="message" class="d-block"><b>Exemplo de mensagem do usuário:</b></label>
+                <small class="form-text text-muted">Informe exemplos de mensagens que o usuário pode informar ao assistente
+                    sobre o <b>assunto</b> relacionado.</small>
+                <div #messages>
+                    <message-input></message-input>
+                </div>
+            </div>
+            <button (click)="addNewMessage()" class="btn text-muted form-text mx-auto d-block">+ Adicionar exemplo</button>    
         </div>
-        <div class="col form-group">
-            <label for="answer" class="d-block"><b>Respostas:</b></label>
-            <small class="form-text text-muted">Informe as respostas que o assistente deve fornecer quando questionado
-                sobre determinado <b>assunto</b>.</small>
-            <div #answers>
-                <answer-input></answer-input>
-            </div>            
-            <button (click)="addNewAnswer()" class="btn text-muted form-text mx-auto d-block">+ Adicionar resposta</button>
+        <div class="col">
+            <div class="form-group">
+                <label for="answer" class="d-block"><b>Respostas:</b></label>
+                <small class="form-text text-muted">Informe as respostas que o assistente deve fornecer quando questionado
+                    sobre determinado <b>assunto</b>.</small>
+                <div #answers>
+                    <answer-input></answer-input>
+                </div>
+                </div>
+                <button (click)="addNewAnswer()" class="btn text-muted form-text mx-auto d-block">+ Adicionar resposta</button>
         </div>
     </div>
     <div class="row py-3">

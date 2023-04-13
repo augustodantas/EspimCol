@@ -6,7 +6,7 @@ import { Component, OnInit, Input, Output, EventEmitter, ElementRef} from '@angu
     <div class="input-group p-3">
         <input type="text" class="form-control" name="answer" placeholder="Resposta do assistente">
         <div class="input-group-append">
-            <button (click)="delete()" class="btn mx-2" type="button"><fa-icon [icon]="trash"></fa-icon></button>
+            <button (click)="delete()" class="btn mx-2" type="button"><i class="fas fa-trash-alt"></i></button>
         </div>
     </div>`})
 

@@ -16,7 +16,9 @@ import { ActiveEventComponent } from './add/step4/active-event/active-event.comp
 import { ChooseColorComponent } from './add/step4/choose-color/choose-color.component';
 import { ComplexConditionComponent } from './add/step4/complex-conditions/complex-conditions.component';
 import { GamificationConditionsComponent } from './add/step4/gamification-conditions/gamification-conditions.component';
-import { ChatbotComponent } from './add/step4/chatbot-options/chatbot.component'
+import { ChatbotComponent } from './add/step4/chatbot-options/chatbot.component';
+import { AnswerInput } from './add/step4/chatbot-options/form-components/answer.component';
+import { MessageInput } from './add/step4/chatbot-options/form-components/message.component';
 import { InterventionModule } from './add/step4/intervention/intervention.module';
 import { ModalAddBadgeComponent } from './add/step4/modal-add-badge/modal-add-badge.component';
 import { PassiveEventComponent } from './add/step4/passive-event/passive-event.component';
@@ -55,6 +57,7 @@ import { ProgramsRoutingModule } from './programs-routing.module';
     ComplexConditionComponent,
     GamificationConditionsComponent,
     ChatbotComponent,
+    AnswerInput,MessageInput,
     ModalAddObserverComponent,
     ModalAddBadgeComponent,
     ModalAddParticipantComponent,
