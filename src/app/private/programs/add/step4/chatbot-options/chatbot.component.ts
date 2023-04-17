@@ -15,7 +15,7 @@ import { MessageInput } from './form-components/message.component';
 export class ChatbotComponent implements OnInit {
   @Input() event: ActiveEvent = new ActiveEvent();
 
-  isOpen: boolean = true;
+  isOpen: boolean = false;
 
   @ViewChild('intents',{static : false, read : ViewContainerRef}) intents: ViewContainerRef | undefined;
    private componentRef: ComponentRef<any> | undefined;
