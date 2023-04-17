@@ -5,6 +5,7 @@ import { ActiveEvent } from 'src/app/private/models/event.model';
 import { Intent } from 'src/app/private/models/intent.model';
 
 import { AnswerInput, ImageAnswerInput, VideoAnswerInput } from './form-components/answer.component';
+import { IntentCard } from './form-components/intent.component';
 import { MessageInput } from './form-components/message.component';
 
 @Component({
@@ -14,11 +15,10 @@ import { MessageInput } from './form-components/message.component';
 export class ChatbotComponent implements OnInit {
   @Input() event: ActiveEvent = new ActiveEvent();
 
-  isOpen: boolean = false;
+  isOpen: boolean = true;
 
-  @ViewChild('messages',{static : false, read : ViewContainerRef}) messages: ViewContainerRef | undefined;
-  @ViewChild('answers',{static : false, read : ViewContainerRef}) answers: ViewContainerRef | undefined;
-  private componentRef: ComponentRef<any> | undefined;
+  @ViewChild('intents',{static : false, read : ViewContainerRef}) intents: ViewContainerRef | undefined;
+   private componentRef: ComponentRef<any> | undefined;
 
   answer = [AnswerInput]
 
@@ -43,22 +43,12 @@ export class ChatbotComponent implements OnInit {
     throw new Error('Method not implemented.');
   }
 
-  addNewMessage(){
-    let childComponent = this.resolver.resolveComponentFactory(MessageInput);
-    this.componentRef = this.messages!.createComponent(childComponent);
-  }
-
-  addNewAnswer(){
-    let childComponent = this.resolver.resolveComponentFactory(VideoAnswerInput);
-    //let childComponent = this.resolver.resolveComponentFactory(ImageAnswerInput);
-
-    //let childComponent = this.resolver.resolveComponentFactory(AnswerInput);
-    this.componentRef = this.answers!.createComponent(childComponent);
+  addIntent(){
+    let childComponent = this.resolver.resolveComponentFactory(IntentCard);
+    this.componentRef = this.intents!.createComponent(childComponent);
   }
 
   updateIntent() {
-    this.dao.postObject(CHATBOT_URL + 'intent', { "name": this.intent.name }).subscribe()
-    this.dao.postObject(CHATBOT_URL + 'addJson', this.intent).subscribe()
-    this.dao.postObject(CHATBOT_URL + 'train', this.messages).subscribe()
+    alert('opa');
   }
 }

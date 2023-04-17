@@ -19,6 +19,7 @@ import { GamificationConditionsComponent } from './add/step4/gamification-condit
 import { ChatbotComponent } from './add/step4/chatbot-options/chatbot.component';
 import { AnswerInput } from './add/step4/chatbot-options/form-components/answer.component';
 import { MessageInput } from './add/step4/chatbot-options/form-components/message.component';
+import { IntentCard } from './add/step4/chatbot-options/form-components/intent.component';
 import { InterventionModule } from './add/step4/intervention/intervention.module';
 import { ModalAddBadgeComponent } from './add/step4/modal-add-badge/modal-add-badge.component';
 import { PassiveEventComponent } from './add/step4/passive-event/passive-event.component';
@@ -57,7 +58,7 @@ import { ProgramsRoutingModule } from './programs-routing.module';
     ComplexConditionComponent,
     GamificationConditionsComponent,
     ChatbotComponent,
-    AnswerInput,MessageInput,
+    AnswerInput,MessageInput,IntentCard,
     ModalAddObserverComponent,
     ModalAddBadgeComponent,
     ModalAddParticipantComponent,
