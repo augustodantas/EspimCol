@@ -1,6 +1,6 @@
 <div class="row card box-event m-2">
   <div class="card-header box-header justify-content-between d-flex">
-      <h5>{{ intent.name ? intent.name : 'Novo assunto' }}</h5>
+      <h6 class="my-2">{{ intent.name ? intent.name : 'Novo assunto' }}</h6>
       <div class="box-buttons">
           <a class="btn btn-default btn-sm" (click)="isOpen = !isOpen"><i class="fas fa-edit"></i></a>
           <a class="btn btn-default btn-sm" (click)="delete()"><i class="fas fa-trash-alt"></i></a>
@@ -33,8 +33,48 @@
                   <div #answers>
                   </div>
               </div>
-              <button (click)="addNewAnswer()" class="btn text-muted form-text mx-auto d-block">+ Adicionar resposta</button>
+              <button (click)="openModal(template)" class="btn text-muted form-text mx-auto d-block">+ Adicionar resposta</button>
           </div>
       </div>
   </div>
 </div>
+
+<ng-template #template>
+    <div class="modal-header">
+      <h6 class="modal-title pull-left my-1">Escolha o tipo de resposta</h6>
+      <button type="button" class="close btn-close pull-right" aria-label="Close" (click)="modalRef?.hide()">
+        <span aria-hidden="true" class="visually-hidden">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="container">
+        <div (click)="addNewAnswer('text')" class="row btn btn-white card p-4 my-1">
+            <div class="col">
+                <i class="mx-auto fas fa-comment fa-2x"></i>
+            </div>
+            <div class="col">
+                <h6 class="text-center mx-auto">Resposta em texto</h6>
+                <p class="small text-center">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+            </div>
+        </div>
+        <div (click)="addNewAnswer('img')" class="row btn btn-white card p-4 my-1">
+            <div class="col">
+                <i class="mx-auto fas fa-image fa-2x"></i>
+            </div>
+            <div class="col">
+                <h6 class="text-center mx-auto">Resposta em imagem</h6>
+                <p class="small text-center">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+            </div>
+        </div>
+        <div (click)="addNewAnswer('video')" class="row btn btn-white card p-4 my-1">
+            <div class="col">
+                <i class="mx-auto fas fa-video fa-2x"></i>
+            </div>
+            <div class="col">
+                <h6 class="text-center mx-auto">Resposta em vídeo</h6>
+                <p class="small text-center">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+            </div>
+        </div>
+      </div>
+    </div>
+</ng-template>  

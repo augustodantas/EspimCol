@@ -1,8 +1,9 @@
-import { Component, ComponentFactoryResolver, ComponentRef, ElementRef, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { TemplateRef, Component, ComponentFactoryResolver, ComponentRef, ElementRef, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { CHATBOT_URL } from 'src/app/app.api';
 import { DAOService } from 'src/app/private/dao/dao.service';
 import { ActiveEvent } from 'src/app/private/models/event.model';
 import { Intent } from 'src/app/private/models/intent.model';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
 import { AnswerInput, ImageAnswerInput, VideoAnswerInput } from './answer.component';
 import { MessageInput } from './message.component';
@@ -13,6 +14,7 @@ import { MessageInput } from './message.component';
 }) export class IntentCard {
 
   isOpen: boolean = true;
+  modalRef?: BsModalRef;
 
   @ViewChild('messages',{static : false, read : ViewContainerRef}) messages: ViewContainerRef | undefined;
   @ViewChild('answers',{static : false, read : ViewContainerRef}) answers: ViewContainerRef | undefined;
@@ -35,11 +37,15 @@ import { MessageInput } from './message.component';
     "traits": []
   }]
 
-  constructor(private dao: DAOService,private resolver: ComponentFactoryResolver,private host: ElementRef<HTMLElement>) { }
+  constructor(private dao: DAOService,private resolver: ComponentFactoryResolver,private host: ElementRef<HTMLElement>,private modalService: BsModalService) { }
 
-  ngOnInit(): void {
-    throw new Error('Method not implemented.');
-  }
+    openModal(template: TemplateRef<any>) {
+      this.modalRef = this.modalService.show(template);
+    }
+
+    ngOnInit(): void {
+      throw new Error('Method not implemented.');
+    }
 
     delete() {
         this.host.nativeElement.remove();
@@ -50,11 +56,17 @@ import { MessageInput } from './message.component';
       this.componentRef = this.messages!.createComponent(childComponent);
     }
   
-    addNewAnswer(){
-      let childComponent = this.resolver.resolveComponentFactory(VideoAnswerInput);
-      //let childComponent = this.resolver.resolveComponentFactory(ImageAnswerInput);
-  
-      //let childComponent = this.resolver.resolveComponentFactory(AnswerInput);
+    addNewAnswer(type:string){
+      let childComponent;
+      
+      if(type == 'video'){
+        childComponent = this.resolver.resolveComponentFactory(VideoAnswerInput);
+      }else if(type == 'img'){
+        childComponent = this.resolver.resolveComponentFactory(ImageAnswerInput);
+      }else{
+        childComponent = this.resolver.resolveComponentFactory(AnswerInput);
+      }  
+      
       this.componentRef = this.answers!.createComponent(childComponent);
     }
   
