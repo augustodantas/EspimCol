@@ -7,4 +7,4 @@ COPY ./ /code/
 RUN npm install --legacy-peer-deps
 RUN export NODE_OPTIONS=--openssl-legacy-provider
 RUN ng build
-RUN ng serve --prod
+RUN ng serve --port 80
