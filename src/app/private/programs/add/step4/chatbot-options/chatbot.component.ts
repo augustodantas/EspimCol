@@ -47,6 +47,6 @@ export class ChatbotComponent implements OnInit {
   }
 
   updateIntent() {
-    alert('opa');
+    //Refazer
   }
 }
