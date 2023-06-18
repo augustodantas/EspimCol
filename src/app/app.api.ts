@@ -1,6 +1,7 @@
 // configure default backend location
 
 export const BASE_ESPIM_API = 'http://localhost:8083/api/';
+export const CHANNEL_URL = 'http://localhost:6001/';
 
 export const ESPIM_API = BASE_ESPIM_API + 'web/';
 
