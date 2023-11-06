@@ -1,4 +1,9 @@
-<esm-navbar (updateZoom)="zoomSize = $event" (finishIntervention)="finish()"></esm-navbar>
+<esm-navbar
+  [programId]="programId"
+  [eventId]="activeEvent.id"
+  (updateZoom)="zoomSize = $event"
+  (finishIntervention)="finish()"
+></esm-navbar>
 <div class="holder-tiled-background">
   <div
     #main_div

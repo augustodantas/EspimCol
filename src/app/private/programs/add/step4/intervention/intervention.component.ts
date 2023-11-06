@@ -36,6 +36,7 @@ export class InterventionComponent implements AfterViewInit {
   @Output() response: EventEmitter<Intervention[]> = new EventEmitter<Intervention[]>();
   @Input() interventionsToInit: Intervention[] = [];
   @Input() activeEvent: ActiveEvent;
+  @Input() programId: number;
 
   @ViewChild('container', { read: ViewContainerRef }) interventionsContainer;
   @ViewChild('main_div') mainDiv: ElementRef;
@@ -60,7 +61,9 @@ export class InterventionComponent implements AfterViewInit {
       this.updateGraphIndexes();
     });
 
-    this.interventionService.init(this.interventionsToInit);
+    this.interventionService.init(this.interventionsToInit, this.programId, this.activeEvent.id);
+    console.log(this.programId);
+    console.log(this.activeEvent);
   }
 
   clearBoard() {

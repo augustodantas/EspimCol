@@ -14,6 +14,7 @@ import { Observer } from '../../../models/observer.model';
 import { LETRAS_FILTRO } from '../../constants';
 import { ProgramsAddService } from '../programsadd.service';
 import { ModalAddObserverComponent } from './modal-add-observer/modal-add-observer.component';
+import { ChannelService } from 'src/app/services/channel.service';
 
 @Component({
   selector: 'esm-step2',
@@ -34,13 +35,18 @@ export class Step2Component implements OnInit, OnDestroy {
   private _modalRef: BsModalRef;
   private _subscription$: Subscription;
 
+  //Atributos do canal
+  locId: number = -1;
+  needSet: boolean = true;
+
   constructor(
     private daoService: DAOService,
     private programAddService: ProgramsAddService,
     private router: Router,
     private _route: ActivatedRoute,
     private loginService: LoginService,
-    private _modalService: BsModalService
+    private _modalService: BsModalService,
+    private channel: ChannelService
   ) {
     this.program = this.programAddService.program;
     this.search
@@ -71,6 +77,16 @@ export class Step2Component implements OnInit, OnDestroy {
 
     this._subscription$ = this.programAddService.program.subscribe((programInstance: Program) => {
       this.programObservers = programInstance.observers;
+
+      //Mátodo que define o canal de entrada de dados do canal websocket
+      if (this.needSet) {
+        this.channel.echo.private('program.' + programInstance.id).listenForWhisper('step2' + programInstance.id, (e: any) => {
+          console.log('Observer', e);
+          this.channelUpdate(e);
+        });
+        this.needSet = false;
+        this.locId = programInstance.id;
+      }
     });
   }
 
@@ -84,6 +100,7 @@ export class Step2Component implements OnInit, OnDestroy {
    */
   addProgramObserver(observer: Observer) {
     this.programObservers.push(observer);
+    this.sendUpdate('a', observer);
   }
 
   /**
@@ -94,6 +111,7 @@ export class Step2Component implements OnInit, OnDestroy {
       this.programObservers.findIndex((value: Observer) => value.id === observer.id),
       1
     );
+    this.sendUpdate('r', observer);
   }
 
   filter_by(letter: string) {
@@ -148,5 +166,44 @@ export class Step2Component implements OnInit, OnDestroy {
       this.handleChange(observer);
       this.addProgramObserver(observer);
     });
+  }
+
+  //Métodos do WebSocket
+  // recebe os dados
+  channelUpdate(dado: any) {
+    //r-remove a-add
+    if (dado.tipo == 'r') {
+      this.programObservers.splice(
+        this.programObservers.findIndex((value: Observer) => value.id === dado.observardor.id),
+        1
+      );
+    } else {
+      this.programObservers.push(dado.observardor);
+      if (!this.acha(dado.observardor, this.observers)) {
+        this.observers.push(dado.observardor);
+      }
+    }
+  }
+
+  acha(dado: any, obs: Observer[]): boolean {
+    for (let i = 0; i < obs.length; i++) {
+      if (dado.id == obs[i].id) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  //Envia os dados
+  //O Tipo vai ser a-add r-remove
+  sendUpdate(tipo: string, observardor: Observer) {
+    console.log(tipo);
+    let dado: any = {};
+    dado.id = this.locId;
+    console.log(observardor);
+    dado.tipo = tipo;
+    dado.observardor = observardor;
+    console.log('mandou');
+    this.channel.chanelSend(this.locId, 'step2' + this.locId, dado);
   }
 }

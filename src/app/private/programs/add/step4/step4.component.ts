@@ -8,6 +8,7 @@ import { Program } from '../../../models/program.model';
 import { ProgramsAddService } from '../programsadd.service';
 import { ActiveEventComponent } from './active-event/active-event.component';
 import { PassiveEventComponent } from './passive-event/passive-event.component';
+import { ChannelService } from 'src/app/services/channel.service';
 
 @Component({
   selector: 'esm-step4',
@@ -22,7 +23,12 @@ export class Step4Component implements OnInit {
   activeEvents: Array<Event>;
   urlPrograms: string = ESPIM_REST_Programs;
 
-  constructor(private programAddService: ProgramsAddService, private _swalService: SwalService) {}
+  //Atributos referente aos comando de colaboração
+  geraId: number = 100;
+  locId: number = -1;
+  needSet: boolean = true;
+
+  constructor(private programAddService: ProgramsAddService, private _swalService: SwalService, private channel: ChannelService) {}
 
   trackByFn(index, item) {
     return index;
@@ -32,6 +38,17 @@ export class Step4Component implements OnInit {
     this.programAddService.program.subscribe((programInstance: Program) => {
       this.passiveEvents = programInstance.passiveEvents;
       this.activeEvents = programInstance.activeEvents;
+
+      //Método para ficar escutando o canal...
+      if (this.needSet && programInstance.id) {
+        this.channel.echo.private('program.' + programInstance.id).listenForWhisper('step4' + programInstance.id, (e: any) => {
+          console.log('Eventos', e);
+          this.channelUpdate(e);
+        });
+        console.log(programInstance);
+        this.needSet = false;
+        this.locId = programInstance.id;
+      }
     });
   }
 
@@ -49,11 +66,25 @@ export class Step4Component implements OnInit {
   }
 
   addPassiveEvent() {
-    this.passiveEvents.push(new Event());
+    //Tem que mudar para criar o evento no banco antes...
+    let locEvent: Event = new Event();
+    locEvent.id = this.geraId;
+    locEvent.title = 'Coleta por Sensor ' + this.geraId;
+    this.geraId++;
+
+    this.passiveEvents.push(locEvent);
+    this.sendUpdate(locEvent);
   }
 
   addActiveEvent() {
-    this.activeEvents.push(new ActiveEvent());
+    //Tem que mudar para criar o evento no banco antes...
+    let locEvent: ActiveEvent = new ActiveEvent();
+    locEvent.id = this.geraId;
+    locEvent.title = 'Evento Ativo ' + this.geraId;
+    this.geraId++;
+
+    this.activeEvents.push(locEvent);
+    this.sendUpdate(locEvent);
   }
 
   submit() {
@@ -101,5 +132,27 @@ export class Step4Component implements OnInit {
       this.programAddService.saveLocalStep(dados);
       this.programAddService.saveProgram();
     }
+  }
+
+  //Métodos do WebSocket
+  // recebe os dados
+  channelUpdate(dado: any) {
+    console.log('Chegou evento');
+    if (dado.evento.type == 'active') {
+      this.activeEvents.push(dado.evento);
+    } else {
+      this.passiveEvents.push(dado.evento);
+    }
+  }
+
+  //Envia os dados
+  //O Tipo vai ser a-add r-remove
+  sendUpdate(evento: Event) {
+    let dado: any = {};
+    dado.id = this.locId;
+    console.log(evento);
+    dado.evento = evento;
+    console.log('mandou');
+    this.channel.chanelSend(this.locId, 'step4' + this.locId, dado);
   }
 }

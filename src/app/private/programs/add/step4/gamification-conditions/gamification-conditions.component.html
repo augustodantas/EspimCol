@@ -18,6 +18,7 @@
                 placeholder="0"
                 class="form-control border-bottom col-5"
                 formControlName="completion_points"
+                (change)="sendUpdate({ acao: 'f', campo: 'completion_points' })"
               />
               <div class="input-group-append">
                 <span class="input-group-text">pontos</span>
@@ -44,6 +45,7 @@
                 placeholder="0"
                 class="form-control border-bottom col-5"
                 formControlName="completion_half_points"
+                (change)="sendUpdate({ acao: 'f', campo: 'completion_half_points' })"
               />
               <div class="input-group-append">
                 <span class="input-group-text">pontos</span>
@@ -70,6 +72,7 @@
                 placeholder="0"
                 class="form-control border-bottom col-5"
                 formControlName="uncomplete_points"
+                (change)="sendUpdate({ acao: 'f', campo: 'uncomplete_points' })"
               />
               <div class="input-group-append">
                 <span class="input-group-text">pontos</span>

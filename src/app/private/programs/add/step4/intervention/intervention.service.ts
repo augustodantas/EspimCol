@@ -9,6 +9,7 @@ import {
   TaskIntervention,
 } from 'src/app/private/models/intervention.model';
 import { LocalStorageService } from 'src/app/security/login/local-storage.service';
+import { ChannelService } from 'src/app/services/channel.service';
 import { SwalService } from 'src/app/services/swal.service';
 import { isNullOrUndefined } from 'src/app/util/functions';
 import { v4 as uuid } from 'uuid';
@@ -26,6 +27,9 @@ export class InterventionService {
   removeIntervention$: Subject<number> = new Subject<number>();
   hasMultiplePaths: boolean = false;
 
+  programId: number = -1;
+  eventId: number = -1;
+
   // interventionElementsGraph: number[][];
   newInterventions$: Subject<{ graphIndex: number; intervention: HTMLInterventionElement }> = new Subject<{
     graphIndex: number;
@@ -36,18 +40,33 @@ export class InterventionService {
 
   states: any[] = [];
   currentState: number = -1;
-  constructor(private readonly _localStorageService: LocalStorageService, private readonly _swalService: SwalService) {}
+  constructor(
+    private readonly _localStorageService: LocalStorageService,
+    private readonly _swalService: SwalService,
+    private channel: ChannelService
+  ) {}
 
   get firstIntervention(): number {
     return this.graphElements.findIndex((value) => value.intervention.first == true);
   }
 
-  init(interventions: Intervention[]) {
+  init(interventions: Intervention[], programId: number, eventId: number) {
     this.states = [];
     this.currentState = -1;
     this.loadState(interventions);
 
+    this.programId = programId;
+    this.eventId = eventId;
+
     this.saveState();
+
+    //Método para ficar escutando o canal...
+    this.channel.echo
+      .private('program.' + this.programId)
+      .listenForWhisper('interventionService' + this.programId + 'ae' + this.eventId, (e: any) => {
+        console.log('Eventos', e);
+        this.channelUpdate(e);
+      });
   }
 
   fixOrderAndNextForOldSPIMInterventions(interventions: Intervention[]) {
@@ -223,7 +242,7 @@ export class InterventionService {
     this.saveState();
   }
 
-  removeIntervention(graphIndex: number) {
+  removeIntervention(graphIndex: number, channelSend: boolean = true) {
     this.saveCurrentState();
 
     this.interventionElementsGraph.splice(graphIndex, 1);
@@ -250,6 +269,13 @@ export class InterventionService {
     this.redrawGraph$.next();
 
     this.saveState();
+
+    if (channelSend) {
+      let dado: any = {};
+      dado.acao = 'r';
+      dado.index = graphIndex;
+      this.sendUpdate(dado);
+    }
   }
 
   graphElement(i: number) {
@@ -288,6 +314,25 @@ export class InterventionService {
   setFirst(graphIndex: number) {
     this.firstInterventionChange$.next(graphIndex);
     this.redrawGraph$.next();
+  }
+
+  //Métodos do WebSocket
+  // recebe os dados
+  channelUpdate(dado: any) {
+    console.log('Chegou Intervention Service');
+    //ação a-add, r-remove, d-delete event, f-campo do form
+    if ((dado.acao = 'r')) {
+      this.removeIntervention(dado.index, false);
+    }
+  }
+
+  //Envia os dados
+  //O Tipo vai ser a-add r-remove
+  sendUpdate(dado: any) {
+    dado.id = this.programId;
+    console.log(dado);
+    console.log('mandou');
+    this.channel.chanelSend(this.programId, 'interventionService' + this.programId + 'ae' + this.eventId, dado);
   }
 }
 

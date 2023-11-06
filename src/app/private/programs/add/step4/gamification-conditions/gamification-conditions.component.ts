@@ -13,6 +13,7 @@ import { isNullOrUndefined } from 'src/app/util/functions';
 import { v4 as uuid } from 'uuid';
 
 import { ModalAddBadgeComponent } from '../modal-add-badge/modal-add-badge.component';
+import { ChannelService } from 'src/app/services/channel.service';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -27,6 +28,7 @@ export class GamificationConditionsComponent implements OnInit {
   urlBadges: string = ESPIM_REST_Badges;
 
   @Input() activeEvent: ActiveEvent;
+  @Input() programId: number;
   @Input() eventGamificationConditions: GamificationConditions;
   @Output() response: EventEmitter<GamificationConditions> = new EventEmitter<GamificationConditions>();
 
@@ -36,7 +38,8 @@ export class GamificationConditionsComponent implements OnInit {
     private readonly _loaderService: LoaderService,
     private readonly _endpointsService: EndpointsService,
     private readonly _toastr: ToastrService,
-    private readonly _daoService: DAOService
+    private readonly _daoService: DAOService,
+    private channel: ChannelService
   ) {}
 
   ngOnInit() {
@@ -57,6 +60,14 @@ export class GamificationConditionsComponent implements OnInit {
     this.form.valueChanges.pipe(untilDestroyed(this)).subscribe((value) => {
       this.response.emit(new GamificationConditions(this.form.value));
     });
+
+    //Método para ficar escutando o canal...
+    this.channel.echo
+      .private('program.' + this.programId)
+      .listenForWhisper('gamification' + this.programId + 'ae' + this.activeEvent.id, (e: any) => {
+        console.log('Gamification', e);
+        this.channelUpdate(e);
+      });
   }
 
   adicionarBadge(value: Badge): void {
@@ -101,5 +112,26 @@ export class GamificationConditionsComponent implements OnInit {
         this._toastr.success(resp.message);
         this.badgesFormArray.removeAt(index);
       });
+  }
+
+  //Métodos do WebSocket
+  // recebe os dados
+  channelUpdate(dado: any) {
+    console.log('Chegou Gamificação');
+    //f-campo do form
+    this.form.get(dado.campo).setValue(dado.valor);
+    this.form.get(dado.campo).dirty;
+  }
+
+  //Envia os dados
+  //O Tipo vai ser a-add r-remove
+  sendUpdate(dado: any) {
+    if (dado.acao == 'f') {
+      //acao f é alteração nos campos do form
+      dado.valor = this.form.get(dado.campo).value;
+    }
+    console.log(dado);
+    console.log('mandou');
+    this.channel.chanelSend(this.programId, 'gamification' + this.programId + 'ae' + this.activeEvent.id, dado);
   }
 }

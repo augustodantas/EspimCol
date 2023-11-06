@@ -4,6 +4,7 @@ import { UntilDestroy } from '@ngneat/until-destroy';
 import { Event } from 'src/app/private/models/event.model';
 import { Sensor } from 'src/app/private/models/sensor.model';
 import { Trigger } from 'src/app/private/models/trigger.model';
+import { ChannelService } from 'src/app/services/channel.service';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -15,6 +16,7 @@ export class PassiveEventComponent implements OnInit {
   @Input() event: Event;
   @Input() events: Event[];
   @Input() index: number;
+  @Input() locId: number;
 
   isOpen: boolean = false;
 
@@ -27,7 +29,7 @@ export class PassiveEventComponent implements OnInit {
     triggers: this.formBuilder.array([]),
   });
 
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(private formBuilder: FormBuilder, private channel: ChannelService) {}
 
   ngOnInit(): void {
     if (!this.event.id) {
@@ -40,11 +42,22 @@ export class PassiveEventComponent implements OnInit {
       this.event.triggers.forEach((it) => this.adicionarTrigger(new Trigger(it)));
       this.event.sensors.forEach((it) => this.adicionarSensor(it as Sensor));
     }
+
+    //Método para ficar escutando o canal...
+    this.channel.echo.private('program.' + this.locId).listenForWhisper('passive' + this.locId + 'pe' + this.event.id, (e: any) => {
+      console.log('Eventos Passivos', e);
+      this.channelUpdate(e);
+    });
   }
 
   updateFormSensors(sensors: Sensor[]) {
     this.sensorFormArray.clear();
     sensors.forEach((it) => this.adicionarSensor(it));
+    let dado: any = {};
+    dado.acao = 'a';
+    dado.tipo = 'sensor';
+    dado.sensor = sensors;
+    this.sendUpdate(dado);
   }
 
   adicionarSensor(sensor: Sensor) {
@@ -53,10 +66,25 @@ export class PassiveEventComponent implements OnInit {
 
   adicionarTrigger(value: Trigger): void {
     this.triggerFormArray.push(this.formBuilder.control(value));
+    let dado: any = {};
+    dado.acao = 'a';
+    dado.tipo = 'trigger';
+    let trigger: any = {};
+    trigger.id = value.id;
+    trigger.condition = value.condition.toString();
+    trigger.priority = value.priority;
+    trigger.timeout = value.timeout;
+    dado.trigger = trigger;
+    this.sendUpdate(dado);
   }
 
   removerTrigger(index: number): void {
     this.triggerFormArray.removeAt(index);
+    let dado: any = {};
+    dado.acao = 'r';
+    dado.tipo = 'trigger';
+    dado.trigger = index;
+    this.sendUpdate(dado);
   }
 
   get triggerFormArray(): FormArray {
@@ -74,7 +102,11 @@ export class PassiveEventComponent implements OnInit {
   deleteEvent() {
     this.isOpen = !this.isOpen;
     this.form.reset();
+    let dado: any = {};
+    dado.acao = 'd';
+    this.sendUpdate(dado);
     this.removeEvent(this.event);
+    return;
   }
 
   removeEvent(event: Event) {
@@ -92,5 +124,56 @@ export class PassiveEventComponent implements OnInit {
       this.isOpen = true;
     }
     return this.form.valid;
+  }
+
+  //Métodos do WebSocket
+  // recebe os dados
+  channelUpdate(dado: any) {
+    console.log('Chegou evento');
+    //ação a-add, r-remove, d-delete event, f-campo do form
+    if (dado.acao == 'd') {
+      //Apagar evento
+      this.isOpen = false;
+      this.form.reset();
+      this.removeEvent(this.event);
+      return;
+    } else {
+      if (dado.acao == 'a') {
+        if (dado.tipo == 'trigger') {
+          let auxTrigger: Trigger = new Trigger(dado.trigger);
+          console.log(dado.trigger);
+          this.triggerFormArray.push(this.formBuilder.control(auxTrigger));
+        } else {
+          //sensor
+          console.log(dado.sensor);
+          this.sensorFormArray.clear();
+          dado.sensor.forEach((it: any) => {
+            this.adicionarSensor(it);
+          });
+        }
+      } else {
+        if (dado.acao == 'r') {
+          if (dado.tipo == 'trigger') {
+            this.triggerFormArray.removeAt(dado.trigger);
+          }
+        } else {
+          this.form.get(dado.campo).setValue(dado.valor);
+          this.form.get(dado.campo).dirty;
+        }
+      }
+    }
+  }
+
+  //Envia os dados
+  //O Tipo vai ser a-add r-remove
+  sendUpdate(dado: any) {
+    dado.id = this.locId;
+    if (dado.acao == 'f') {
+      //acao f é alteração nos campos do form
+      dado.valor = this.form.get(dado.campo).value;
+    }
+    console.log(dado);
+    console.log('mandou');
+    this.channel.chanelSend(this.locId, 'passive' + this.locId + 'pe' + this.event.id, dado);
   }
 }

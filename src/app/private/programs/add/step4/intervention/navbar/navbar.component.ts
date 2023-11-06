@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import {
   CalendarIntervention,
@@ -11,6 +11,7 @@ import { SwalService } from 'src/app/services/swal.service';
 
 import { HTMLInterventionElement, InterventionService } from '../intervention.service';
 import { ITENS_QUESTION } from './constants';
+import { ChannelService } from 'src/app/services/channel.service';
 
 @Component({
   selector: 'esm-navbar',
@@ -25,16 +26,25 @@ export class NavbarComponent implements OnInit {
   zoom: number = 1;
   @Output() updateZoom: EventEmitter<number> = new EventEmitter<number>();
   @Output() finishIntervention: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Input() programId: number = -1;
+  @Input() eventId: number = -1;
 
   constructor(
     public bsModalRef: BsModalRef,
     private interventionService: InterventionService,
-    private readonly _swalService: SwalService
+    private readonly _swalService: SwalService,
+    private channel: ChannelService
   ) {}
 
   ngOnInit(): void {
     // this.over1200px = window.innerWidth > 950;
     // if (this.over1200px) this.mobileToggleActivated = false;
+    //Método para ficar escutando o canal...
+    console.log('navbar' + this.programId + 'ae' + this.eventId);
+    this.channel.echo.private('program.' + this.programId).listenForWhisper('navbar' + this.programId + 'ae' + this.eventId, (e: any) => {
+      console.log('Eventos', e);
+      this.channelUpdate(e);
+    });
   }
 
   addIntervention(type: string, subtype?: number) {
@@ -45,7 +55,14 @@ export class NavbarComponent implements OnInit {
     else if (type === 'task') intervention = new TaskIntervention();
     else if (type === 'calendar') intervention = new CalendarIntervention();
 
-    this.interventionService.addIntervention(new HTMLInterventionElement(intervention));
+    let locHtmlIntervention: HTMLInterventionElement = new HTMLInterventionElement(intervention);
+    this.interventionService.addIntervention(locHtmlIntervention);
+
+    //enviar dados para o canal...
+    let dado: any = {};
+    dado.intervention = intervention;
+    dado.uuid = locHtmlIntervention.uuid;
+    this.sendUpdate(dado);
   }
 
   nextStateEnabled(): boolean {
@@ -96,5 +113,24 @@ export class NavbarComponent implements OnInit {
     // console.log(this.interventionService.getCurrentState());
     // console.log(cloneDeep(this.interventionService.getCurrentState()));
     // console.log(JSON.stringify(this.interventionService.getCurrentState()));
+  }
+
+  //Métodos do WebSocket
+  // recebe os dados
+  channelUpdate(dado: any) {
+    console.log('Chegou Navbar');
+    let locHtmlIntervention: HTMLInterventionElement = this.interventionService.transformToClass(dado.intervention);
+    locHtmlIntervention.uuid = dado.uuid;
+    this.interventionService.addIntervention(locHtmlIntervention);
+  }
+
+  //Envia os dados
+  //O Tipo vai ser a-add r-remove
+  sendUpdate(dado: any) {
+    console.log('navbar' + this.programId + 'ae' + this.eventId);
+    dado.id = this.interventionService.programId;
+    console.log(dado);
+    console.log('mandou');
+    this.channel.chanelSend(this.programId, 'navbar' + this.programId + 'ae' + this.eventId, dado);
   }
 }

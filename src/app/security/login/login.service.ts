@@ -13,9 +13,6 @@ import { ObserversService } from 'src/app/private/observers/observers.service';
 import { LoaderService } from './../../services/loader.service';
 import { LocalStorageService } from './local-storage.service';
 
-import Echo from 'laravel-echo';
-import pusher from 'pusher-js';
-
 @Injectable({
   providedIn: 'root',
 })
@@ -26,7 +23,6 @@ export class LoginService {
   accessToken: string;
   user: Observable<User>;
   userObserver: Observer;
-  Echo: Echo;
 
   constructor(
     private _loaderService: LoaderService,
@@ -40,41 +36,6 @@ export class LoginService {
     this._currentUserSubject = new BehaviorSubject<User>(null);
     this.accessToken = this._localStorageService.Get(this._propertyName);
     this.user = this._currentUserSubject.asObservable();
-    const Pusher = pusher;
-    this.Echo = new Echo({
-      broadcaster: 'pusher',
-      key: 'Vbzjq50DrSGPP7tZls51UUKNSWmoRhoXelMWzelf9jc',
-      wsHost: '127.0.0.1',
-      wsPort: 6001,
-      wssPort: 6001,
-      cluster: 'mt1',
-      forceTLS: false,
-      encrypted: true,
-      disableStats: true,
-      enabledTransports: ['ws', 'wss'],
-      authEndpoint: 'http://127.0.0.1:8083/api/broadcasting/auth',
-      auth: {
-          headers: {
-              Authorization: 'Bearer ' + this.accessToken,
-          },
-      }
-    });
-
-    console.log(this.Echo);
-    this.Echo.private('program.1').listen('.ProgramEvent', (data: any) => {
-      console.log('data Is : ', data);
-    })
-
-    setInterval(() => {
-      this.Echo.private('program.1').whisper('typing', {
-          message: 'hola!'
-      });
-    }, 3000);
-
-    this.Echo.private('program.1').listenForWhisper('typing', (e) => {
-        console.log('Typing');
-        console.log(e);
-    })
   }
 
   loginWithGoogle(): void {

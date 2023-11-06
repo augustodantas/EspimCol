@@ -32,7 +32,7 @@
           (click)="removeProgramUser(selectedUser)"
           *ngFor="let selectedUser of sort(programUsers)"
         >
-          {{ selectedUser.name ? selectedUser.name : selectedUser.alias }} <i class="fas fa-times pointer ml-2"></i>
+          {{ selectedUser.name ? selectedUser.name : selectedUser.email }} <i class="fas fa-times pointer ml-2"></i>
         </a>
       </div>
     </div>

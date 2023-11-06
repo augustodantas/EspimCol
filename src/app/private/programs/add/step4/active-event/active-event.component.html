@@ -29,7 +29,7 @@
     </div>
   </div>
 
-  <form focusInvalidInput class="card-body box-body" [formGroup]="form" [collapse]="!isOpen">
+  <div focusInvalidInput class="card-body box-body" [formGroup]="form" [collapse]="!isOpen">
     <div class="row">
       <div class="col-6 form-group">
         <div class="form-label-group">
@@ -40,6 +40,7 @@
             focusInput
             type="text"
             placeholder="Título"
+            (change)="sendUpdate({ acao: 'f', campo: 'title' })"
           />
           <label class="form-label" [for]="'title-active' + index">Título <b class="text-danger">*</b>:</label>
         </div>
@@ -62,6 +63,7 @@
             maxlength="200"
             placeholder="Descrição do evento"
             formControlName="description"
+            (change)="sendUpdate({ acao: 'f', campo: 'description' })"
           ></textarea>
           <label [for]="'program-description-active' + index"> Descrição do programa </label>
         </div>
@@ -138,13 +140,20 @@
 
     <div class="row">
       <div class="col-12 form-group">
-        <input type="checkbox" [id]="'is-manual-' + index" formControlName="isManual" />
+        <input
+          type="checkbox"
+          [id]="'is-manual-' + index"
+          formControlName="isManual"
+          (change)="sendUpdate({ acao: 'f', campo: 'isManual' })"
+        />
         <label [for]="'is-manual-' + index">Participante pode auto-iniciar o evento?</label>
       </div>
     </div>
 
     <esm-complex-conditions
       [eventComplexConditions]="event.complexConditions"
+      [programId]="locId"
+      [eventId]="event.id"
       (response)="updateFormComplexConditions($event)"
     ></esm-complex-conditions>
 
@@ -152,6 +161,7 @@
       (response)="updateFormGamificationConditions($event)"
       [eventGamificationConditions]="event.gamificationConditions"
       [activeEvent]="event"
+      [programId]="locId"
     ></esm-gamification-conditions>
-  </form>
+  </div>
 </div>

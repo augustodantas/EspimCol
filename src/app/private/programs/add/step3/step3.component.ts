@@ -13,6 +13,8 @@ import { Program } from '../../../models/program.model';
 import { LETRAS_FILTRO } from '../../constants';
 import { ProgramsAddService } from '../programsadd.service';
 import { ModalAddParticipantComponent } from './modal-add-participant/modal-add-participant.component';
+import { ChannelService } from 'src/app/services/channel.service';
+import { Participant } from 'src/app/private/models/participant.model';
 
 @Component({
   selector: 'esm-step3',
@@ -31,12 +33,17 @@ export class Step3Component implements OnInit {
   letters: string[] = LETRAS_FILTRO;
   private _modalRef: BsModalRef;
 
+  //Atributos do canal
+  locId: number = -1;
+  needSet: boolean = true;
+
   constructor(
     private daoService: DAOService,
     private programAddService: ProgramsAddService,
     private router: Router,
     private activeRoute: ActivatedRoute,
-    private _modalService: BsModalService
+    private _modalService: BsModalService,
+    private channel: ChannelService
   ) {
     this.program = this.programAddService.program;
     this.search
@@ -63,6 +70,17 @@ export class Step3Component implements OnInit {
 
     this._subscription$ = this.programAddService.program.subscribe((programInstance: Program) => {
       this.programUsers = programInstance.users;
+      console.log(this.programUsers);
+
+      //Método para ficar escutando o canal...
+      if (this.needSet) {
+        this.channel.echo.private('program.' + programInstance.id).listenForWhisper('step3' + programInstance.id, (e: any) => {
+          console.log('Usuários', e);
+          this.channelUpdate(e);
+        });
+        this.needSet = false;
+        this.locId = programInstance.id;
+      }
     });
   }
 
@@ -76,6 +94,7 @@ export class Step3Component implements OnInit {
    */
   addProgramUser(participant: User) {
     this.programUsers.push(participant);
+    this.sendUpdate('a', participant);
   }
 
   /**
@@ -86,6 +105,7 @@ export class Step3Component implements OnInit {
       this.programUsers.findIndex((value: User) => value.id === participant.id),
       1
     );
+    this.sendUpdate('r', participant);
   }
 
   filter_by(letter: string) {
@@ -146,5 +166,46 @@ export class Step3Component implements OnInit {
       this.handleChange(participant);
       this.addProgramUser(participant);
     });
+  }
+
+  //Métodos do WebSocket
+  // recebe os dados
+  channelUpdate(dado: any) {
+    //r-remove a-add
+    if (dado.tipo == 'r') {
+      this.programUsers.splice(
+        this.programUsers.findIndex((value: User) => value.id === dado.participant.id),
+        1
+      );
+    } else {
+      if (!this.acha(dado.participant, this.users)) {
+        this.users.push(dado.participant);
+      }
+      if (!this.acha(dado.participant, this.programUsers)) {
+        this.programUsers.push(dado.participant);
+      }
+    }
+  }
+
+  acha(dado: any, usuarios: User[]): boolean {
+    for (let i = 0; i < usuarios.length; i++) {
+      if (dado.id == usuarios[i].id) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  //Envia os dados
+  //O Tipo vai ser a-add r-remove
+  sendUpdate(tipo: string, participant: User) {
+    console.log(tipo);
+    let dado: any = {};
+    dado.id = this.locId;
+    console.log(participant);
+    dado.tipo = tipo;
+    dado.participant = participant;
+    console.log('mandou');
+    this.channel.chanelSend(this.locId, 'step3' + this.locId, dado);
   }
 }
