@@ -29,6 +29,8 @@ export class NavbarComponent implements OnInit {
   @Input() programId: number = -1;
   @Input() eventId: number = -1;
 
+  texto: string = 'disabled';
+
   constructor(
     public bsModalRef: BsModalRef,
     private interventionService: InterventionService,
@@ -128,7 +130,7 @@ export class NavbarComponent implements OnInit {
   //O Tipo vai ser a-add r-remove
   sendUpdate(dado: any) {
     console.log('navbar' + this.programId + 'ae' + this.eventId);
-    dado.id = this.interventionService.programId;
+    dado.id = this.programId;
     console.log(dado);
     console.log('mandou');
     this.channel.chanelSend(this.programId, 'navbar' + this.programId + 'ae' + this.eventId, dado);

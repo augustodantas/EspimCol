@@ -7,6 +7,7 @@ import { Media } from 'src/app/private/models/media';
 import { isNullOrUndefined } from 'src/app/util/functions';
 
 import { HTMLInterventionElement, InterventionService } from '../intervention.service';
+import { ChannelService } from 'src/app/services/channel.service';
 
 @Component({
   selector: 'esm-intervention-item',
@@ -24,6 +25,8 @@ export class InterventionItemComponent implements OnInit, AfterViewInit {
   offset: { x: number; y: number } = { x: 0, y: 0 };
   private _modalMediaRef: BsModalRef;
 
+  programId: number = 0;
+
   get obrigatory(): boolean {
     return (
       this.interventionCoordinate.type === 'empty' ||
@@ -39,7 +42,11 @@ export class InterventionItemComponent implements OnInit, AfterViewInit {
     return this.interventionService.graphElements;
   }
 
-  constructor(private interventionService: InterventionService, private readonly _modalService: BsModalService) {}
+  constructor(
+    private interventionService: InterventionService,
+    private readonly _modalService: BsModalService,
+    private channel: ChannelService
+  ) {}
 
   ngOnInit(): void {
     this.interventionService.firstInterventionChange$.subscribe((value) => {
@@ -49,6 +56,14 @@ export class InterventionItemComponent implements OnInit, AfterViewInit {
         this.interventionCoordinate.first = true;
       }
     });
+
+    console.log('inter' + this.programId + 'int' + this.interventionCoordinate.intervention.id);
+    this.channel.echo
+      .private('program.' + this.programId)
+      .listenForWhisper('inter' + this.programId + 'int' + this.interventionCoordinate.intervention.id, (e: any) => {
+        console.log('intervention', e);
+        this.channelUpdate(e);
+      });
   }
 
   ngAfterContentInit(): void {
@@ -146,5 +161,28 @@ export class InterventionItemComponent implements OnInit, AfterViewInit {
     this._modalMediaRef.content.response.pipe(take(1)).subscribe((value: Media) => {
       this.interventionCoordinate.intervention.medias.push(value);
     });
+  }
+
+  //Métodos do WebSocket
+  // recebe os dados
+  channelUpdate(dado: any) {
+    console.log('Chegou Intervention-item');
+    //ação a-add, r-remove, d-delete event, f-campo do form
+    if ((dado.acao = 'f')) {
+      this.interventionCoordinate[dado.campo] = dado.value;
+    }
+  }
+
+  //Envia os dados
+  //O Tipo vai ser a-add r-remove
+  sendUpdate(dado: any) {
+    dado.id = this.programId;
+    if ((dado.acao = 'f')) {
+      dado.value = this.interventionCoordinate[dado.campo];
+    }
+    console.log(dado);
+    console.log('mandou');
+    console.log('inter' + this.programId + 'int' + this.interventionCoordinate.intervention.id);
+    this.channel.chanelSend(this.programId, 'inter' + this.programId + 'int' + this.interventionCoordinate.intervention.id, dado);
   }
 }

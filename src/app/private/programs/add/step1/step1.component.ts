@@ -19,7 +19,7 @@ export class Step1Component implements OnDestroy {
   private _subscription$: Subscription;
   //Canal
   needSet: boolean = true;
-  locId: number = -1;
+  programId: number = -1;
   auxDate: string = '';
   whatDate: string = '';
   auxHour: String = '';
@@ -56,15 +56,15 @@ export class Step1Component implements OnDestroy {
 
   setProgram(program: Program) {
     this.form.reset();
-
     //Mátodo que define o canal de entrada de dados do canal websocket
-    if (this.needSet) {
+    if (this.needSet && program.id) {
+      console.log(program);
       this.channel.echo.private('program.' + program.id).listenForWhisper('step1' + program.id, (e: any) => {
         console.log('evento 1', e);
         this.channelUpdate(e);
       });
       this.needSet = false;
-      this.locId = program.id;
+      this.programId = program.id;
     }
 
     if (program['starts']) {
@@ -127,24 +127,23 @@ export class Step1Component implements OnDestroy {
             this.form.get(campo).dirty;
           }
         }
-        console.log(campo, dado[campo]);
-        console.log(this.form);
-        console.log(this.form.get(campo).value);
+        //console.log(campo, dado[campo]);
+        //console.log(this.form);
+        //console.log(this.form.get(campo).value);
       }
-      console.log(campo, dado[campo]);
+      //console.log(campo, dado[campo]);
     }
   }
 
   sendUpdate(campo: string) {
     console.log(campo);
     let dado: any = {};
-    dado.id = this.locId;
-    console.log(this.form.get(campo).value);
+    dado.id = this.programId;
 
     dado[campo] = this.form.get(campo).value;
-    console.log('Alterou');
+    console.log(dado);
     if (!this.needSet) {
-      this.channel.chanelSend(this.locId, 'step1' + this.locId, dado);
+      this.channel.chanelSend(this.programId, 'step1' + this.programId, dado);
     }
   }
 
@@ -177,9 +176,9 @@ export class Step1Component implements OnDestroy {
     setTimeout(() => {
       let aux: string = moment(this.form.get(data).value).format('DD/MM/YYYY');
       console.log(data);
-      console.log(this.whatDate);
-      console.log(this.auxDate);
-      console.log(aux);
+      //console.log(this.whatDate);
+      //console.log(this.auxDate);
+      //console.log(aux);
 
       if (data == this.whatDate && this.auxDate != aux) {
         this.sendUpdate(data);

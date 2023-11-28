@@ -23,6 +23,7 @@
         [id]="graphIndex + '-obrigatory'"
         [checked]="obrigatory"
         [disabled]="obrigatory"
+        (change)="sendUpdate({ acao: 'f', campo: 'obrigatory' })"
       />
       <label [for]="graphIndex + '-obrigatory'">Obrigatória</label>
     </div>
@@ -32,7 +33,12 @@
           interventionCoordinate.statement.length
         }}/800)</label
       >
-      <textarea [id]="graphIndex + '-statement'" [(ngModel)]="interventionCoordinate.statement" maxlength="800"></textarea>
+      <textarea
+        [id]="graphIndex + '-statement'"
+        [(ngModel)]="interventionCoordinate.statement"
+        maxlength="800"
+        (change)="sendUpdate({ acao: 'f', campo: 'statement' })"
+      ></textarea>
     </div>
 
     <div class="holder-media my-4">
@@ -53,6 +59,7 @@
       *ngIf="interventionCoordinate.type === 'question'"
       [intervention]="interventionCoordinate.intervention"
       [graphIndex]="graphIndex"
+      [programId]="programId"
     ></esm-question>
 
     <esm-media

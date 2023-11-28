@@ -110,6 +110,8 @@ export class InterventionComponent implements AfterViewInit {
 
     interventionComponent.instance.offset = { x: offsetX, y: offsetY };
     interventionComponent.instance.interventionCoordinate = intervention;
+    interventionComponent.instance.programId = this.programId;
+
     this.interventionComponents.push(interventionComponent);
 
     setTimeout(() => {

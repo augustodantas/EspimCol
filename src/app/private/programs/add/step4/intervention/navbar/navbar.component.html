@@ -11,7 +11,20 @@
       >
       <ul class="dropdown-menu">
         <li *ngFor="let itemQuestion of itensQuestion">
-          <a class="dropdown-item" href="javascript:" (click)="addIntervention(itemQuestion.type, itemQuestion.subtype)">
+          <a
+            *ngIf="itemQuestion.enabled"
+            class="dropdown-item"
+            href="javascript:"
+            (click)="addIntervention(itemQuestion.type, itemQuestion.subtype)"
+          >
+            <i [class]="itemQuestion.icon" class="pr-1"></i><span>{{ itemQuestion.text }}</span>
+          </a>
+          <a
+            *ngIf="!itemQuestion.enabled"
+            class="dropdown-item disabled"
+            href="javascript:"
+            (click)="addIntervention(itemQuestion.type, itemQuestion.subtype)"
+          >
             <i [class]="itemQuestion.icon" class="pr-1"></i><span>{{ itemQuestion.text }}</span>
           </a>
         </li>

@@ -3,6 +3,7 @@ export const ITENS_QUESTION: any[] = [
     icon: 'fa fa-comment',
     text: 'Mensagem',
     type: 'empty',
+    enabled: true,
   },
   {
     icon: 'fa fa-align-left',
@@ -10,6 +11,7 @@ export const ITENS_QUESTION: any[] = [
     alias: 'empty_question',
     type: 'question',
     subtype: 0,
+    enabled: true,
   },
   {
     icon: 'fas fa-dot-circle',
@@ -17,6 +19,7 @@ export const ITENS_QUESTION: any[] = [
     alias: 'singlecheck',
     type: 'question',
     subtype: 1,
+    enabled: false,
   },
   {
     icon: 'fas fa-check-square',
@@ -24,6 +27,7 @@ export const ITENS_QUESTION: any[] = [
     alias: 'multiple_check',
     type: 'question',
     subtype: 2,
+    enabled: true,
   },
   {
     icon: 'fa fa-ruler-combined',
@@ -31,6 +35,7 @@ export const ITENS_QUESTION: any[] = [
     alias: 'likert',
     type: 'question',
     subtype: 3,
+    enabled: false,
   },
   {
     icon: 'fa fa-pencil-ruler',
@@ -38,6 +43,7 @@ export const ITENS_QUESTION: any[] = [
     alias: 'custom_likert',
     type: 'question',
     subtype: 31,
+    enabled: false,
   },
   {
     icon: 'fas fa-balance-scale',
@@ -45,23 +51,27 @@ export const ITENS_QUESTION: any[] = [
     alias: 'semantic',
     type: 'question',
     subtype: 4,
+    enabled: false,
   },
   {
     icon: 'fas fa-video',
     text: 'Solicitar Mídia',
     alias: 'midia',
     type: 'media',
+    enabled: false,
   },
   {
     icon: 'fas fa-mobile',
     text: 'Aplicação externa',
     alias: 'external_app',
     type: 'task',
+    enabled: false,
   },
   {
     icon: 'far fa-calendar-alt',
     text: 'Abrir calendário',
     alias: 'calendar',
     type: 'calendar',
+    enabled: false,
   },
 ];

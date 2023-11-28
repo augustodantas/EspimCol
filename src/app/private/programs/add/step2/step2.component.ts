@@ -36,7 +36,7 @@ export class Step2Component implements OnInit, OnDestroy {
   private _subscription$: Subscription;
 
   //Atributos do canal
-  locId: number = -1;
+  programId: number = -1;
   needSet: boolean = true;
 
   constructor(
@@ -85,7 +85,7 @@ export class Step2Component implements OnInit, OnDestroy {
           this.channelUpdate(e);
         });
         this.needSet = false;
-        this.locId = programInstance.id;
+        this.programId = programInstance.id;
       }
     });
   }
@@ -199,11 +199,11 @@ export class Step2Component implements OnInit, OnDestroy {
   sendUpdate(tipo: string, observardor: Observer) {
     console.log(tipo);
     let dado: any = {};
-    dado.id = this.locId;
+    dado.id = this.programId;
     console.log(observardor);
     dado.tipo = tipo;
     dado.observardor = observardor;
     console.log('mandou');
-    this.channel.chanelSend(this.locId, 'step2' + this.locId, dado);
+    this.channel.chanelSend(this.programId, 'step2' + this.programId, dado);
   }
 }

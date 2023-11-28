@@ -152,7 +152,7 @@
 
     <esm-complex-conditions
       [eventComplexConditions]="event.complexConditions"
-      [programId]="locId"
+      [programId]="programId"
       [eventId]="event.id"
       (response)="updateFormComplexConditions($event)"
     ></esm-complex-conditions>
@@ -161,7 +161,7 @@
       (response)="updateFormGamificationConditions($event)"
       [eventGamificationConditions]="event.gamificationConditions"
       [activeEvent]="event"
-      [programId]="locId"
+      [programId]="programId"
     ></esm-gamification-conditions>
   </div>
 </div>

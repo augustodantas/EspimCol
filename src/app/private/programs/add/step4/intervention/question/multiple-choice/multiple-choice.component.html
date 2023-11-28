@@ -10,6 +10,7 @@
     placeholder="Opção"
     [(ngModel)]="intervention.options[i]"
     [id]="graphIndex + 'alternative' + i"
+    (change)="sendUpdate({ acao: 'f', index: i })"
   ></textarea>
   <i class="fas fa-minus-circle text-primary pr-1 pl-3" (click)="removeChoice(i)" style="font-size: 1.3em"></i>
 </div>

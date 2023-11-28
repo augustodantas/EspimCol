@@ -22,7 +22,7 @@ export class ActiveEventComponent implements OnInit {
   @Input() event: ActiveEvent;
   @Input() events: Event[];
   @Input() index: number;
-  @Input() locId: number;
+  @Input() programId: number;
   isOpen: boolean = false;
   private _modalInterventionRef: BsModalRef;
   loadingInterventions: boolean = false;
@@ -61,7 +61,7 @@ export class ActiveEventComponent implements OnInit {
     }
 
     //Método para ficar escutando o canal...
-    this.channel.echo.private('program.' + this.locId).listenForWhisper('active' + this.locId + 'ae' + this.event.id, (e: any) => {
+    this.channel.echo.private('program.' + this.programId).listenForWhisper('active' + this.programId + 'ae' + this.event.id, (e: any) => {
       console.log('Eventos', e);
       this.channelUpdate(e);
     });
@@ -169,7 +169,7 @@ export class ActiveEventComponent implements OnInit {
   }
 
   goToInterventions(): void {
-    console.log(this.locId);
+    console.log(this.programId);
     const config: ModalOptions<InterventionComponent> = {
       class: 'modal-fullscreen modal-intervention',
       keyboard: false,
@@ -177,7 +177,7 @@ export class ActiveEventComponent implements OnInit {
       initialState: {
         activeEvent: this.event,
         interventionsToInit: this.form.get('interventions').value,
-        programId: this.locId,
+        programId: this.programId,
       },
     };
 
@@ -224,13 +224,14 @@ export class ActiveEventComponent implements OnInit {
   //Envia os dados
   //O Tipo vai ser a-add r-remove
   sendUpdate(dado: any) {
-    dado.id = this.locId;
+    dado.id = this.programId;
+    dado.eventId = this.event.id;
     if (dado.acao == 'f') {
       //acao f é alteração nos campos do form
       dado.valor = this.form.get(dado.campo).value;
     }
     console.log(dado);
     console.log('mandou');
-    this.channel.chanelSend(this.locId, 'active' + this.locId + 'ae' + this.event.id, dado);
+    this.channel.chanelSend(this.programId, 'active' + this.programId + 'ae' + this.event.id, dado);
   }
 }

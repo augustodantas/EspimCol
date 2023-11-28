@@ -16,7 +16,7 @@ export class PassiveEventComponent implements OnInit {
   @Input() event: Event;
   @Input() events: Event[];
   @Input() index: number;
-  @Input() locId: number;
+  @Input() programId: number;
 
   isOpen: boolean = false;
 
@@ -44,7 +44,7 @@ export class PassiveEventComponent implements OnInit {
     }
 
     //Método para ficar escutando o canal...
-    this.channel.echo.private('program.' + this.locId).listenForWhisper('passive' + this.locId + 'pe' + this.event.id, (e: any) => {
+    this.channel.echo.private('program.' + this.programId).listenForWhisper('passive' + this.programId + 'pe' + this.event.id, (e: any) => {
       console.log('Eventos Passivos', e);
       this.channelUpdate(e);
     });
@@ -167,13 +167,14 @@ export class PassiveEventComponent implements OnInit {
   //Envia os dados
   //O Tipo vai ser a-add r-remove
   sendUpdate(dado: any) {
-    dado.id = this.locId;
+    dado.id = this.programId;
+    dado.eventId = this.event.id;
     if (dado.acao == 'f') {
       //acao f é alteração nos campos do form
       dado.valor = this.form.get(dado.campo).value;
     }
     console.log(dado);
     console.log('mandou');
-    this.channel.chanelSend(this.locId, 'passive' + this.locId + 'pe' + this.event.id, dado);
+    this.channel.chanelSend(this.programId, 'passive' + this.programId + 'pe' + this.event.id, dado);
   }
 }

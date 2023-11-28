@@ -25,7 +25,7 @@ export class Step4Component implements OnInit {
 
   //Atributos referente aos comando de colaboração
   geraId: number = 100;
-  locId: number = -1;
+  programId: number = -1;
   needSet: boolean = true;
 
   constructor(private programAddService: ProgramsAddService, private _swalService: SwalService, private channel: ChannelService) {}
@@ -47,7 +47,7 @@ export class Step4Component implements OnInit {
         });
         console.log(programInstance);
         this.needSet = false;
-        this.locId = programInstance.id;
+        this.programId = programInstance.id;
       }
     });
   }
@@ -149,10 +149,10 @@ export class Step4Component implements OnInit {
   //O Tipo vai ser a-add r-remove
   sendUpdate(evento: Event) {
     let dado: any = {};
-    dado.id = this.locId;
+    dado.id = this.programId;
     console.log(evento);
     dado.evento = evento;
     console.log('mandou');
-    this.channel.chanelSend(this.locId, 'step4' + this.locId, dado);
+    this.channel.chanelSend(this.programId, 'step4' + this.programId, dado);
   }
 }
