@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChildren } from '@angular/core';
-import { ESPIM_REST_Programs } from 'src/app/app.api';
+import { ESPIM_REST_Events, ESPIM_REST_Programs } from 'src/app/app.api';
 import { SwalService } from 'src/app/services/swal.service';
 import { isNullOrUndefined } from 'src/app/util/functions';
 
@@ -9,6 +9,7 @@ import { ProgramsAddService } from '../programsadd.service';
 import { ActiveEventComponent } from './active-event/active-event.component';
 import { PassiveEventComponent } from './passive-event/passive-event.component';
 import { ChannelService } from 'src/app/services/channel.service';
+import { DAOService } from 'src/app/private/dao/dao.service';
 
 @Component({
   selector: 'esm-step4',
@@ -28,7 +29,12 @@ export class Step4Component implements OnInit {
   programId: number = -1;
   needSet: boolean = true;
 
-  constructor(private programAddService: ProgramsAddService, private _swalService: SwalService, private channel: ChannelService) {}
+  constructor(
+    private programAddService: ProgramsAddService,
+    private _swalService: SwalService,
+    private channel: ChannelService,
+    private daoService: DAOService
+  ) {}
 
   trackByFn(index, item) {
     return index;
@@ -68,23 +74,30 @@ export class Step4Component implements OnInit {
   addPassiveEvent() {
     //Tem que mudar para criar o evento no banco antes...
     let locEvent: Event = new Event();
-    locEvent.id = this.geraId;
-    locEvent.title = 'Coleta por Sensor ' + this.geraId;
-    this.geraId++;
+    //locEvent.id = this.geraId;
+    locEvent.title = 'Coleta por Sensor '; // + this.geraId;
+    //this.geraId++;
 
-    this.passiveEvents.push(locEvent);
-    this.sendUpdate(locEvent);
+    this.daoService.postObject(ESPIM_REST_Events, locEvent).subscribe((volta: any) => {
+      locEvent.id = volta.id;
+      locEvent.title = 'Coleta por Sensor ' + volta.id;
+      this.passiveEvents.push(locEvent);
+      this.sendUpdate(locEvent);
+    });
   }
 
   addActiveEvent() {
     //Tem que mudar para criar o evento no banco antes...
     let locEvent: ActiveEvent = new ActiveEvent();
-    locEvent.id = this.geraId;
-    locEvent.title = 'Evento Ativo ' + this.geraId;
-    this.geraId++;
-
-    this.activeEvents.push(locEvent);
-    this.sendUpdate(locEvent);
+    //locEvent.id = this.geraId;
+    locEvent.title = 'Evento Ativo '; //+ this.geraId;
+    //this.geraId++;
+    this.daoService.postObject(ESPIM_REST_Events, locEvent).subscribe((volta: any) => {
+      locEvent.id = volta.id;
+      locEvent.title = 'Evento Ativo ' + volta.id;
+      this.activeEvents.push(locEvent);
+      this.sendUpdate(locEvent);
+    });
   }
 
   submit() {
@@ -152,7 +165,10 @@ export class Step4Component implements OnInit {
     dado.id = this.programId;
     console.log(evento);
     dado.evento = evento;
-    console.log('mandou');
-    this.channel.chanelSend(this.programId, 'step4' + this.programId, dado);
+    dado.tipo = 'a';
+    this.daoService.patchObject(ESPIM_REST_Programs, dado).subscribe((volta: any) => {
+      console.log('mandou');
+      this.channel.chanelSend(this.programId, 'step4' + this.programId, dado);
+    });
   }
 }

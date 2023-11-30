@@ -7,6 +7,8 @@ import { Observable, Subscription } from 'rxjs';
 import { Program } from '../../../models/program.model';
 import { ProgramsAddService } from '../programsadd.service';
 import { ChannelService } from 'src/app/services/channel.service';
+import { DAOService } from 'src/app/private/dao/dao.service';
+import { ESPIM_REST_Programs } from 'src/app/app.api';
 
 @Component({
   selector: 'esm-step1',
@@ -30,7 +32,8 @@ export class Step1Component implements OnDestroy {
     private formBuilder: FormBuilder,
     private router: Router,
     private _route: ActivatedRoute,
-    private channel: ChannelService
+    private channel: ChannelService,
+    private _dao: DAOService
   ) {
     this.form = this.formBuilder.group({
       title: ['', Validators.required],
@@ -139,11 +142,16 @@ export class Step1Component implements OnDestroy {
     console.log(campo);
     let dado: any = {};
     dado.id = this.programId;
-
     dado[campo] = this.form.get(campo).value;
+    dado.tela = 'step1';
     console.log(dado);
+
     if (!this.needSet) {
-      this.channel.chanelSend(this.programId, 'step1' + this.programId, dado);
+      console.log('Enviou!!!');
+      this._dao.patchObject(ESPIM_REST_Programs, dado).subscribe((volta: any) => {
+        console.log('Voltou');
+        this.channel.chanelSend(this.programId, 'step1' + this.programId, dado);
+      });
     }
   }
 

@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
 import { Observable, Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, take } from 'rxjs/operators';
-import { ESPIM_REST_Observers } from 'src/app/app.api';
+import { ESPIM_REST_Observers, ESPIM_REST_Programs } from 'src/app/app.api';
 import { Program } from 'src/app/private/models/program.model';
 import { SearchComponent } from 'src/app/private/search/search.component';
 
@@ -200,10 +200,13 @@ export class Step2Component implements OnInit, OnDestroy {
     console.log(tipo);
     let dado: any = {};
     dado.id = this.programId;
+    dado.tela = 'step2';
     console.log(observardor);
     dado.tipo = tipo;
     dado.observardor = observardor;
-    console.log('mandou');
-    this.channel.chanelSend(this.programId, 'step2' + this.programId, dado);
+    this.daoService.patchObject(ESPIM_REST_Programs, dado).subscribe((volta: any) => {
+      console.log('mandou');
+      this.channel.chanelSend(this.programId, 'step2' + this.programId, dado);
+    });
   }
 }

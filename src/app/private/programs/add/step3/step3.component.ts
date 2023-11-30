@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
 import { Observable, Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, take } from 'rxjs/operators';
-import { ESPIM_REST_ProgramUsers } from 'src/app/app.api';
+import { ESPIM_REST_ProgramUsers, ESPIM_REST_Programs } from 'src/app/app.api';
 import { User } from 'src/app/private/models/user.model';
 import { SearchComponent } from 'src/app/private/search/search.component';
 
@@ -34,7 +34,7 @@ export class Step3Component implements OnInit {
   private _modalRef: BsModalRef;
 
   //Atributos do canal
-  locId: number = -1;
+  programId: number = -1;
   needSet: boolean = true;
 
   constructor(
@@ -79,7 +79,7 @@ export class Step3Component implements OnInit {
           this.channelUpdate(e);
         });
         this.needSet = false;
-        this.locId = programInstance.id;
+        this.programId = programInstance.id;
       }
     });
   }
@@ -201,11 +201,14 @@ export class Step3Component implements OnInit {
   sendUpdate(tipo: string, participant: User) {
     console.log(tipo);
     let dado: any = {};
-    dado.id = this.locId;
+    dado.id = this.programId;
+    dado.tela = 'step3';
     console.log(participant);
     dado.tipo = tipo;
     dado.participant = participant;
-    console.log('mandou');
-    this.channel.chanelSend(this.locId, 'step3' + this.locId, dado);
+    this.daoService.patchObject(ESPIM_REST_Programs, dado).subscribe((volta: any) => {
+      console.log('mandou');
+      this.channel.chanelSend(this.programId, 'step3' + this.programId, dado);
+    });
   }
 }
