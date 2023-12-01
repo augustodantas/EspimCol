@@ -143,6 +143,9 @@ export class Step1Component implements OnDestroy {
     let dado: any = {};
     dado.id = this.programId;
     dado[campo] = this.form.get(campo).value;
+    if (campo != 'title') {
+      dado.title = this.form.get('title').value;
+    }
     dado.tela = 'step1';
     console.log(dado);
 

@@ -174,13 +174,13 @@ export class Step2Component implements OnInit, OnDestroy {
     //r-remove a-add
     if (dado.tipo == 'r') {
       this.programObservers.splice(
-        this.programObservers.findIndex((value: Observer) => value.id === dado.observardor.id),
+        this.programObservers.findIndex((value: Observer) => value.id === dado.observers.id),
         1
       );
     } else {
-      this.programObservers.push(dado.observardor);
-      if (!this.acha(dado.observardor, this.observers)) {
-        this.observers.push(dado.observardor);
+      this.programObservers.push(dado.observers);
+      if (!this.acha(dado.observers, this.observers)) {
+        this.observers.push(dado.observers);
       }
     }
   }
@@ -203,7 +203,7 @@ export class Step2Component implements OnInit, OnDestroy {
     dado.tela = 'step2';
     console.log(observardor);
     dado.tipo = tipo;
-    dado.observardor = observardor;
+    dado.observers = observardor;
     this.daoService.patchObject(ESPIM_REST_Programs, dado).subscribe((volta: any) => {
       console.log('mandou');
       this.channel.chanelSend(this.programId, 'step2' + this.programId, dado);
