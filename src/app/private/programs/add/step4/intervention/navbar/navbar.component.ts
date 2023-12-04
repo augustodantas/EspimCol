@@ -6,6 +6,7 @@ import {
   MediaIntervention,
   QuestionIntervention,
   TaskIntervention,
+  TaskPythonIntervention,
 } from 'src/app/private/models/intervention.model';
 import { SwalService } from 'src/app/services/swal.service';
 
@@ -44,6 +45,7 @@ export class NavbarComponent implements OnInit {
     else if (type === 'question') intervention = new QuestionIntervention({ question_type: subtype });
     else if (type === 'task') intervention = new TaskIntervention();
     else if (type === 'calendar') intervention = new CalendarIntervention();
+    else if (type === 'taskpython') intervention = new TaskPythonIntervention();
 
     this.interventionService.addIntervention(new HTMLInterventionElement(intervention));
   }

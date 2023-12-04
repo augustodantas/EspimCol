@@ -15,7 +15,7 @@
           <input
             type="file"
             (change)="selectFile($event)"
-            accept="video/mp4,audio/mp3,audio/wav,audio/ogg,image/png,image/gif,image/jpg,image/jpeg"
+            accept="video/mp4,audio/mp3,audio/wav,audio/ogg,image/png,image/gif,image/jpg,image/jpeg,application/zip"
             capture="camera"
             id="fileSelector"
           />
@@ -26,11 +26,15 @@
     <div class="row d-flex justify-content-center">
       <video [src]="file.url" id="uploadVideo" height="360" controls *ngIf="file?.type == 'video'"></video>
       <audio [src]="file.url" id="uploadAudio" width="480" controls *ngIf="file?.type == 'audio'"></audio>
-      <img [src]="file.url" id="uploadImage" class="img-thumbnail" *ngIf="file?.type == 'image'" />
+      <img [src]="file.url" id="uploadImage" spam="img-thumbnail" *ngIf="file?.type == 'image'" />
+      <button class="btn btn-success btn-shadow min-100" (click)="uploadZip()" (disabled)="(!file)" *ngIf="file?.type == 'application'">
+        Validar Input/Output
+      </button>
     </div>
   </div>
   <p class="help-block text-muted">
-    São suportadas imagens nos formatos gif, jpg e png; vídeos no formato mp4 e áudios no formato mp3, wav e ogg.
+    São suportadas imagens nos formatos gif, jpg e png; vídeos no formato mp4 e áudios no formato mp3, wav e ogg; arquivos para correção de
+    código em formato zip (in/out).
   </p>
 
   <div class="row">

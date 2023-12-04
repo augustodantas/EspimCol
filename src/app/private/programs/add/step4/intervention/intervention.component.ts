@@ -184,7 +184,6 @@ export class InterventionComponent implements AfterViewInit {
         if (result.isConfirmed) {
           if (this.activeEvent.id) {
             let interventionsToSave = this.programAddService.fixInterventionsToSave(cloneDeep(interventions));
-
             this.programAddService
               .saveStep({ activeEvent: { id: this.activeEvent.id, interventions: interventionsToSave } })
               .subscribe(() => {

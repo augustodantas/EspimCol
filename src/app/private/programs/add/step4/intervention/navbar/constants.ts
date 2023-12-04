@@ -64,4 +64,10 @@ export const ITENS_QUESTION: any[] = [
     alias: 'calendar',
     type: 'calendar',
   },
+  {
+    icon: 'far fa-desktop',
+    text: 'Corretor Python',
+    alias: 'desktop',
+    type: 'taskpython',
+  },
 ];

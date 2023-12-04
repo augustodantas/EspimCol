@@ -7,6 +7,7 @@ import {
   MediaIntervention,
   QuestionIntervention,
   TaskIntervention,
+  TaskPythonIntervention,
 } from 'src/app/private/models/intervention.model';
 import { LocalStorageService } from 'src/app/security/login/local-storage.service';
 import { SwalService } from 'src/app/services/swal.service';
@@ -185,7 +186,9 @@ export class InterventionService {
     return new HTMLInterventionElement(this.getInterventionClass(data));
   }
 
-  getInterventionClass(data: Intervention): Intervention | MediaIntervention | QuestionIntervention | TaskIntervention {
+  getInterventionClass(
+    data: Intervention
+  ): Intervention | MediaIntervention | QuestionIntervention | TaskIntervention | CalendarIntervention | TaskPythonIntervention {
     let intervention: Intervention;
 
     if (data.type === 'empty') intervention = new Intervention(data);
@@ -193,6 +196,7 @@ export class InterventionService {
     else if (data.type === 'question') intervention = new QuestionIntervention(data);
     else if (data.type === 'task') intervention = new TaskIntervention(data);
     else if (data.type === 'calendar') intervention = new CalendarIntervention(data);
+    else if (data.type === 'taskpython') intervention = new TaskPythonIntervention(data);
 
     return intervention;
   }

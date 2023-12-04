@@ -127,3 +127,20 @@ export class TaskIntervention extends Intervention {
     this.type = 'task';
   }
 }
+
+export class TaskPythonIntervention extends Intervention {
+  public media_type: string = '';
+
+  constructor(intervention: any = {}) {
+    super(intervention);
+
+    this.media_type = intervention.media_type ? intervention.media_type : 'application/zip';
+    this.type = 'taskpython';
+
+    this.obrigatory = !isNullOrUndefined(intervention.obrigatory) ? intervention.obrigatory : false;
+  }
+
+  getTypeDescription() {
+    return 'Corretor Python';
+  }
+}
