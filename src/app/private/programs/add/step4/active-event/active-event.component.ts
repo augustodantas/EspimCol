@@ -10,6 +10,7 @@ import { Trigger } from 'src/app/private/models/trigger.model';
 import { ESPIM_REST_Programs } from '../../../../../app.api';
 import { InterventionComponent } from '../intervention/intervention.component';
 import { ChannelService } from 'src/app/services/channel.service';
+import { DAOService } from 'src/app/private/dao/dao.service';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -40,7 +41,12 @@ export class ActiveEventComponent implements OnInit {
     gamificationConditions: this.formBuilder.control(null),
   });
 
-  constructor(private formBuilder: FormBuilder, private readonly _modalService: BsModalService, private channel: ChannelService) {}
+  constructor(
+    private formBuilder: FormBuilder,
+    private readonly _modalService: BsModalService,
+    private channel: ChannelService,
+    private daoService: DAOService
+  ) {}
 
   ngOnInit(): void {
     // Verifica se é um "NOVO EVENTO"
@@ -82,11 +88,13 @@ export class ActiveEventComponent implements OnInit {
   }
 
   removerTrigger(index: number): void {
-    this.triggerFormArray.removeAt(index);
     let dado: any = {};
     dado.acao = 'r';
     dado.tipo = 'trigger';
     dado.trigger = index;
+    dado.triggerId = this.triggerFormArray[index].id;
+
+    this.triggerFormArray.removeAt(index);
     this.sendUpdate(dado);
   }
 
@@ -230,8 +238,11 @@ export class ActiveEventComponent implements OnInit {
       //acao f é alteração nos campos do form
       dado.valor = this.form.get(dado.campo).value;
     }
-    console.log(dado);
-    console.log('mandou');
-    this.channel.chanelSend(this.programId, 'active' + this.programId + 'ae' + this.event.id, dado);
+
+    this.daoService.patchObject(ESPIM_REST_Programs, dado).subscribe((volta: any) => {
+      console.log(dado);
+      console.log('mandou');
+      this.channel.chanelSend(this.programId, 'active' + this.programId + 'ae' + this.event.id, dado);
+    });
   }
 }
