@@ -29,6 +29,11 @@ import { TriggersComponent } from './add/step4/triggers/triggers.component';
 import { UserCheckBoxComponent } from './add/user-checkbox/user-checkbox.component';
 import { ProgramsListComponent } from './list/programslist.component';
 import { ProgramsRoutingModule } from './programs-routing.module';
+import { ChatComponent } from './add/chat/chat.component';
+import { EditoresComponent } from './add/editores/editores.component';
+import { HistoricoComponent } from './add/historico/historico.component';
+import { ModalComentsComponent } from './add/modal-coments/modal-coments.component';
+import { ModalAddComentsComponent } from './add/modal-coments/modal-add-coments/modal-add-coments.component';
 
 // imports from dependencies
 
@@ -57,6 +62,11 @@ import { ProgramsRoutingModule } from './programs-routing.module';
     ModalAddBadgeComponent,
     ModalAddParticipantComponent,
     InputFileComponent,
+    ChatComponent,
+    EditoresComponent,
+    HistoricoComponent,
+    ModalComentsComponent,
+    ModalAddComentsComponent,
   ],
   imports: [InterventionModule, PortalModule, SharedModule, ComponentsModule, ProgramsRoutingModule, CommonModule],
   exports: [],

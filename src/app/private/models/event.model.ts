@@ -36,6 +36,7 @@ export class GamificationConditions {
 
 export class Event {
   id: number;
+  program_id: number;
   title: string = '';
   description: string = '';
   color: string = '';

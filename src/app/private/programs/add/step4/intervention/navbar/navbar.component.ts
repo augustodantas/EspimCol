@@ -12,6 +12,8 @@ import { SwalService } from 'src/app/services/swal.service';
 import { HTMLInterventionElement, InterventionService } from '../intervention.service';
 import { ITENS_QUESTION } from './constants';
 import { ChannelService } from 'src/app/services/channel.service';
+import { DAOService } from 'src/app/private/dao/dao.service';
+import { ESPIM_REST_Programs } from 'src/app/app.api';
 
 @Component({
   selector: 'esm-navbar',
@@ -35,7 +37,8 @@ export class NavbarComponent implements OnInit {
     public bsModalRef: BsModalRef,
     private interventionService: InterventionService,
     private readonly _swalService: SwalService,
-    private channel: ChannelService
+    private channel: ChannelService,
+    private dao: DAOService
   ) {}
 
   ngOnInit(): void {
@@ -56,15 +59,20 @@ export class NavbarComponent implements OnInit {
     else if (type === 'question') intervention = new QuestionIntervention({ question_type: subtype });
     else if (type === 'task') intervention = new TaskIntervention();
     else if (type === 'calendar') intervention = new CalendarIntervention();
-
-    let locHtmlIntervention: HTMLInterventionElement = new HTMLInterventionElement(intervention);
-    this.interventionService.addIntervention(locHtmlIntervention);
-
-    //enviar dados para o canal...
     let dado: any = {};
+    dado.id = this.programId;
+    dado.eventId = this.eventId;
+    dado.tela = 'navbar';
     dado.intervention = intervention;
-    dado.uuid = locHtmlIntervention.uuid;
-    this.sendUpdate(dado);
+
+    this.dao.patchObject(ESPIM_REST_Programs, dado).subscribe((volta: any) => {
+      intervention.id = volta.id;
+      let locHtmlIntervention: HTMLInterventionElement = new HTMLInterventionElement(intervention);
+      this.interventionService.addIntervention(locHtmlIntervention);
+      dado.uuid = locHtmlIntervention.uuid;
+      //enviar dados para o canal...
+      this.sendUpdate(dado);
+    });
   }
 
   nextStateEnabled(): boolean {

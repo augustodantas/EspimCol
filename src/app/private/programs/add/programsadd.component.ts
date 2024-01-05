@@ -10,6 +10,22 @@ import { StepPanelComponent } from './step-panel/step-panel.component';
 })
 export class ProgramsAddComponent {
   @ViewChild(StepPanelComponent) stepPanel: StepPanelComponent;
+
+  chatOn: boolean = false;
+  historicOn: boolean = false;
+
+  tamanho(): number {
+    if (!this.chatOn && !this.historicOn) {
+      return 0;
+    } else {
+      if (this.chatOn && this.historicOn) {
+        return 2;
+      } else {
+        return 1;
+      }
+    }
+  }
+
   constructor(private router: Router, private activeRoute: ActivatedRoute, private programsAddService: ProgramsAddService) {}
 
   ngOnInit() {

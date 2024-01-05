@@ -1,0 +1,21 @@
+<!-- Button trigger modal -->
+<div class="w-100 mt-2 border border-primary" style="height: 280px; overflow-y: scroll">
+  <div *ngFor="let message of messages" [ngClass]="{ 'ml-1': message.user != 'teste 1', 'mr-1': message.user == 'teste 1' }">
+    <p class="outro" *ngIf="message.user != 'teste 1'">
+      <font style="font-weight: bold"> {{ message.user }} <br /> </font>
+      {{ message.message }} <br />
+      <font style="color: cyan; font-size: 8">{{ message.date }} - {{ message.time }}</font>
+    </p>
+    <p class="eu" *ngIf="message.user == 'teste 1'">
+      <font style="font-weight: bold">Você<br /></font>
+      {{ message.message }} <br />
+      <font style="color: gray; font-size: 8">{{ message.date }} - {{ message.time }}</font>
+    </p>
+  </div>
+</div>
+<div class="w-100 mt-2">
+  <textarea class="w-100" row="4" [(ngModel)]="mensagem"></textarea>
+</div>
+<div class="w-100">
+  <button type="button" class="btn btn-primary w-100" (click)="enviarChat()">Enviar</button>
+</div>

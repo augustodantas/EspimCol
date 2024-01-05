@@ -1,0 +1,5 @@
+<div class="w-100 mt-2 border border-primary" style="height: 380px; overflow-y: scroll">
+  <div *ngFor="let message of historic">
+    <p class="eu">{{ message.order }}: {{ message.user }} {{ message.action }} dia {{ message.date }} às {{ message.time }}</p>
+  </div>
+</div>

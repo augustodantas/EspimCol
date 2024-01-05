@@ -1,4 +1,46 @@
-<main class="card card-lg mx-auto my-4 w-main mb-5" id="container">
-  <esm-step-panel></esm-step-panel>
-  <router-outlet></router-outlet>
-</main>
+<div class="container">
+  <div class="row">
+    <div class="my-4" [ngClass]="{ 'col-1': !chatOn, 'col-2': chatOn }">
+      <button
+        type="button"
+        data-toggle="tooltip"
+        data-placement="top"
+        title="Chat"
+        class="btn btn-link rounded w-100"
+        (click)="chatOn = !chatOn"
+      >
+        <i *ngIf="!chatOn" class="fas fa-comments text-success fa-3x"></i>
+        <i *ngIf="chatOn" class="fas fa-comment-slash text-warning fa-3x"></i>
+      </button>
+      <div [collapse]="!chatOn">
+        <esm-chat></esm-chat>
+      </div>
+    </div>
+    <div [ngClass]="{ 'col-10': tamanho() === 0, 'col-9': tamanho() === 1, 'col-8': tamanho() === 2 }">
+      <main class="card card-lg mx-auto my-2 mb-2" id="container">
+        <div class="w-100 d-flex justify-content-between p-1">
+          <esm-editores></esm-editores>
+          <esm-modal-coments></esm-modal-coments>
+        </div>
+        <esm-step-panel></esm-step-panel>
+        <router-outlet></router-outlet>
+      </main>
+    </div>
+    <div class="my-4" [ngClass]="{ 'col-1': !historicOn, 'col-2': historicOn }">
+      <button
+        type="button"
+        data-toggle="tooltip"
+        data-placement="top"
+        title="Histórico"
+        class="btn btn-link rounded w-100"
+        (click)="historicOn = !historicOn"
+      >
+        <i *ngIf="!historicOn" class="fas fa-book-open text-success fa-3x"></i>
+        <i *ngIf="historicOn" class="fas fa-book text-warning fa-3x"></i>
+      </button>
+      <div [collapse]="!historicOn">
+        <esm-historico></esm-historico>
+      </div>
+    </div>
+  </div>
+</div>

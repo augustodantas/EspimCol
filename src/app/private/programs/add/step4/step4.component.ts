@@ -77,6 +77,7 @@ export class Step4Component implements OnInit {
     //locEvent.id = this.geraId;
     locEvent.title = 'Coleta por Sensor '; // + this.geraId;
     //this.geraId++;
+    locEvent.program_id = this.programId;
 
     this.daoService.postObject(ESPIM_REST_Events, locEvent).subscribe((volta: any) => {
       locEvent.id = volta.id;
@@ -91,6 +92,7 @@ export class Step4Component implements OnInit {
     let locEvent: ActiveEvent = new ActiveEvent();
     //locEvent.id = this.geraId;
     locEvent.title = 'Evento Ativo '; //+ this.geraId;
+    locEvent.program_id = this.programId;
     //this.geraId++;
     this.daoService.postObject(ESPIM_REST_Events, locEvent).subscribe((volta: any) => {
       locEvent.id = volta.id;
