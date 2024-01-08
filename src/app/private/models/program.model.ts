@@ -5,7 +5,7 @@ import { Observer } from './observer.model';
 import { User } from './user.model';
 
 export class Program {
-  id: number;
+  id: number = 1;
   title: string = '';
   description: string = '';
   starts: string = '';
@@ -21,9 +21,9 @@ export class Program {
   passiveEvents: Array<Event> = [];
   activeEvents: Array<Event> = [];
   users: Array<User> = [];
-  chatMessages: Array<ChatProgram> = [];
-  comments: Array<ChatProgram> = [];
-  historic: Array<HistoricProgram> = [];
+  chatMessages: ChatProgram[] = [];
+  comments: ChatProgram[] = [];
+  historic: HistoricProgram[] = [];
 
   constructor(program: any = {}) {}
 }

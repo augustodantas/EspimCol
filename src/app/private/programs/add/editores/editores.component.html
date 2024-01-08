@@ -1,9 +1,7 @@
 <div class="w-100 d-flex justify-content-between p-1">
   <div>
     <span class="text-primary"><b>Editores Ativos:</b></span>
-    <span class="ml-2 bg-success text-white">Editor 1</span>
-    <span class="ml-2 bg-success text-white">Editor 1</span>
-    <span class="ml-2 bg-success text-white">Editor 1</span>
-    <span class="ml-2 bg-success text-white">Editor 1</span>
+    <span class="ml-2 bg-success text-white"> Você </span>
+    <span *ngFor="let editor of editores" class="ml-2 bg-success text-white"> {{ editor }} </span>
   </div>
 </div>
