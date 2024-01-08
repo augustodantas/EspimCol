@@ -26,7 +26,7 @@ export class EditoresComponent implements OnInit, OnDestroy {
     private _dao: DAOService,
     private _login: LoginService
   ) {
-    this.user = _login.userObserver.user.name.split(' ')[0];
+    this.user = _login.userName();
     this._subscription$ = this.programAddService.program.subscribe((programInstance: Program) => {
       if (this.needSet && programInstance.id) {
         //this.messages = programInstance.chatMessages;

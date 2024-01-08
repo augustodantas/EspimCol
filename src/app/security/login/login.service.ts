@@ -105,4 +105,8 @@ export class LoginService {
   isLoggedIn(): boolean {
     return !!this.accessToken;
   }
+
+  public userName(): string {
+    return this.userObserver.user.name.split(' ')[0];
+  }
 }
