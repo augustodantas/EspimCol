@@ -1,6 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UntilDestroy } from '@ngneat/until-destroy';
+import { ESPIM_REST_Programs } from 'src/app/app.api';
+import { DAOService } from 'src/app/private/dao/dao.service';
 import { Event } from 'src/app/private/models/event.model';
 import { Sensor } from 'src/app/private/models/sensor.model';
 import { Trigger } from 'src/app/private/models/trigger.model';
@@ -29,7 +31,7 @@ export class PassiveEventComponent implements OnInit {
     triggers: this.formBuilder.array([]),
   });
 
-  constructor(private formBuilder: FormBuilder, private channel: ChannelService) {}
+  constructor(private formBuilder: FormBuilder, private channel: ChannelService, private daoService: DAOService) {}
 
   ngOnInit(): void {
     if (!this.event.id) {
@@ -169,12 +171,15 @@ export class PassiveEventComponent implements OnInit {
   sendUpdate(dado: any) {
     dado.id = this.programId;
     dado.eventId = this.event.id;
+    dado.tela = 'passive';
     if (dado.acao == 'f') {
       //acao f é alteração nos campos do form
       dado.valor = this.form.get(dado.campo).value;
     }
     console.log(dado);
-    console.log('mandou');
-    this.channel.chanelSend(this.programId, 'passive' + this.programId + 'pe' + this.event.id, dado);
+    this.daoService.patchObject(ESPIM_REST_Programs, dado).subscribe((volta: any) => {
+      console.log('mandou');
+      this.channel.chanelSend(this.programId, 'passive' + this.programId + 'pe' + this.event.id, dado);
+    });
   }
 }

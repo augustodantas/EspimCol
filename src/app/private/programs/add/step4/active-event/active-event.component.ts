@@ -234,6 +234,7 @@ export class ActiveEventComponent implements OnInit {
   sendUpdate(dado: any) {
     dado.id = this.programId;
     dado.eventId = this.event.id;
+    dado.tela = 'active';
     if (dado.acao == 'f') {
       //acao f é alteração nos campos do form
       dado.valor = this.form.get(dado.campo).value;
