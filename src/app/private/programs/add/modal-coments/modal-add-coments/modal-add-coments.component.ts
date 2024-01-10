@@ -6,7 +6,7 @@ import { ProgramsAddService } from '../../programsadd.service';
 import { ChannelService } from 'src/app/services/channel.service';
 import { DAOService } from 'src/app/private/dao/dao.service';
 import { LoginService } from 'src/app/security/login/login.service';
-import { ESPIM_REST_Programs } from 'src/app/app.api';
+import { ESPIM_REST_Comment, ESPIM_REST_Programs } from 'src/app/app.api';
 import { Program } from 'src/app/private/models/program.model';
 
 @Component({
@@ -66,7 +66,7 @@ export class ModalAddComentsComponent implements OnInit {
     let locMensagem: ChatProgram = { date: '', time: '', message: this.mensagem, user: this.user };
     dado.comment = locMensagem;
     console.log(dado);
-    this._dao.patchObject(ESPIM_REST_Programs, dado).subscribe((volta: any) => {
+    this._dao.postObject(ESPIM_REST_Comment, dado).subscribe((volta: any) => {
       locMensagem.id = volta.id;
       locMensagem.time = volta.time;
       locMensagem.date = volta.date;
@@ -85,7 +85,7 @@ export class ModalAddComentsComponent implements OnInit {
     dado.acao = 'd';
     dado.comment = this.messages[id];
     console.log(dado);
-    this._dao.patchObject(ESPIM_REST_Programs, dado).subscribe((volta: any) => {
+    this._dao.deleteObject(ESPIM_REST_Comment, dado).subscribe((volta: any) => {
       let apagar = -1;
       for (let i = 0; i < this.messages.length; i++) {
         if (this.messages[i].id == id) {

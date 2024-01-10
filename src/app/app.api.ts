@@ -41,5 +41,12 @@ export const ESPIM_REST_Permissions: string = ESPIM_API + 'permissions/';
 export const ESPIM_REST_Users: string = ESPIM_API + 'users/';
 
 export const ESPIM_REST_Badges: string = ESPIM_API + 'events/{{activeEventId}}/badges/';
+
+// configure Historic module url
+export const ESPIM_REST_Historic: string = ESPIM_API + 'historics/';
+// configure chat module url
+export const ESPIM_REST_Chat: string = ESPIM_API + 'chat/';
+// configure coment module url
+export const ESPIM_REST_Comment: string = ESPIM_API + 'comment/';
 // config default page size
 export const PAGE_SIZE = 10;

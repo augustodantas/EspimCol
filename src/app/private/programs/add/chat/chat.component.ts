@@ -3,7 +3,7 @@ import { ChatProgram } from 'src/app/private/models/chat.program.model';
 import { ProgramsAddService } from '../programsadd.service';
 import { ChannelService } from 'src/app/services/channel.service';
 import { DAOService } from 'src/app/private/dao/dao.service';
-import { ESPIM_REST_Programs } from 'src/app/app.api';
+import { ESPIM_REST_Chat, ESPIM_REST_Programs } from 'src/app/app.api';
 import { Subscription } from 'rxjs';
 import { Program } from 'src/app/private/models/program.model';
 import { LoginService } from 'src/app/security/login/login.service';
@@ -60,7 +60,7 @@ export class ChatComponent implements OnInit {
     let locMensagem: ChatProgram = { date: '', time: '', message: this.mensagem, user: this.user };
     dado.chatProgram = locMensagem;
     console.log(dado);
-    this._dao.patchObject(ESPIM_REST_Programs, dado).subscribe((volta: any) => {
+    this._dao.postObject(ESPIM_REST_Chat, dado).subscribe((volta: any) => {
       locMensagem.id = volta.id;
       locMensagem.time = volta.time;
       locMensagem.date = volta.date;
