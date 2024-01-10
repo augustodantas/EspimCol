@@ -201,7 +201,7 @@ export class Step2Component implements OnInit, OnDestroy {
     let dado: any = {};
     dado.id = this.programId;
     dado.tela = 'step2';
-    console.log(observardor);
+    console.log(dado);
     dado.tipo = tipo;
     dado.observers = observardor;
     this.daoService.patchObject(ESPIM_REST_Programs, dado).subscribe((volta: any) => {

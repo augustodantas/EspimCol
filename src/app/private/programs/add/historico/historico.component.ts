@@ -6,6 +6,7 @@ import { ChannelService } from 'src/app/services/channel.service';
 import { DAOService } from 'src/app/private/dao/dao.service';
 import { LoginService } from 'src/app/security/login/login.service';
 import { Program } from 'src/app/private/models/program.model';
+import { ESPIM_REST_Historic } from 'src/app/app.api';
 
 @Component({
   selector: 'esm-historico',
@@ -38,9 +39,12 @@ export class HistoricoComponent implements OnInit {
     this.user = _login.userName();
     this._subscription$ = this.programAddService.program.subscribe((programInstance: Program) => {
       if (this.needSet && programInstance.id) {
-        this.historic = programInstance.historic;
-        console.log(programInstance);
+        //this.historic = programInstance.historic;
         this.programId = programInstance.id;
+        //this._dao.getObjects(ESPIM_REST_Historic + '/' + this.programId).subscribe((volta: any) => {
+        //  this.historic = volta;
+        //});
+        console.log(programInstance);
         this.needSet = false;
         this.channel.echo.private('program.' + this.programId).listenForWhisper('historic' + this.programId, (e: any) => {
           this.historic.push(e);

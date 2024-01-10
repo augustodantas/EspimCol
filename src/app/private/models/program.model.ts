@@ -5,7 +5,7 @@ import { Observer } from './observer.model';
 import { User } from './user.model';
 
 export class Program {
-  id: number = 1;
+  id: number = 1000;
   title: string = '';
   description: string = '';
   starts: string = '';

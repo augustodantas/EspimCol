@@ -3,6 +3,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { ProgramsAddService } from './programsadd.service';
 import { StepPanelComponent } from './step-panel/step-panel.component';
+import { Program } from '../../models/program.model';
+import { DAOService } from '../../dao/dao.service';
+import { ESPIM_REST_Programs } from 'src/app/app.api';
 
 @Component({
   selector: 'esm-programs-add',
@@ -26,7 +29,12 @@ export class ProgramsAddComponent {
     }
   }
 
-  constructor(private router: Router, private activeRoute: ActivatedRoute, private programsAddService: ProgramsAddService) {}
+  constructor(
+    private router: Router,
+    private activeRoute: ActivatedRoute,
+    private programsAddService: ProgramsAddService,
+    private _dao: DAOService
+  ) {}
 
   ngOnInit() {
     let id = this.activeRoute.snapshot.params.id;
@@ -36,11 +44,11 @@ export class ProgramsAddComponent {
     if (id) {
       this.programsAddService.fetchData(id);
     } else {
+      //this.programsAddService.criarProgram();
       this.router.navigate(['./first'], {
         relativeTo: this.activeRoute,
         queryParams: { reset: true },
       });
-
       this.programsAddService.clearData();
     }
   }

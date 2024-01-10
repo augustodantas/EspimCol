@@ -44,6 +44,9 @@ export class ModalAddComentsComponent implements OnInit {
         //this.messages = programInstance.chatMessages;
         console.log(programInstance);
         this.programId = programInstance.id;
+        //this._dao.getObjects(ESPIM_REST_Comment + '/' + this.programId).subscribe((volta: any) => {
+        //  this.messages = volta;
+        //});
         this.needSet = false;
         this.channel.echo.private('program.' + this.programId).listenForWhisper('comment' + this.programId, (e: any) => {
           this.channelUpdate(e);

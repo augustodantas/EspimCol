@@ -54,7 +54,7 @@ export class Step1Component implements OnDestroy {
 
   ngOnDestroy(): void {
     this._subscription$.unsubscribe();
-    this.programAddService.saveLocalStep(this.form.value);
+    //this.programAddService.saveLocalStep(this.form.value);
   }
 
   setProgram(program: Program) {
@@ -196,6 +196,6 @@ export class Step1Component implements OnDestroy {
       } else {
         console.log('Não Mudou');
       }
-    }, 100);
+    }, 500);
   }
 }

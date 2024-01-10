@@ -107,6 +107,10 @@ export class LoginService {
   }
 
   public userName(): string {
-    return this.userObserver.user.name.split(' ')[0];
+    if (this.userObserver.user.name) {
+      return this.userObserver.user.name.split(' ')[0];
+    } else {
+      return 'Teste';
+    }
   }
 }

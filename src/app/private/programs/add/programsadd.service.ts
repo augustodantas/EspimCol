@@ -7,7 +7,7 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import { LoaderService } from 'src/app/services/loader.service';
 
-import { ESPIM_REST_Programs } from '../../../app.api';
+import { ESPIM_REST_Participants, ESPIM_REST_Programs, ESPIM_REST_Users } from '../../../app.api';
 import { LoginService } from '../../../security/login/login.service';
 import { DAOService } from '../../dao/dao.service';
 import { Program } from '../../models/program.model';
@@ -69,12 +69,27 @@ export class ProgramsAddService {
     this._currentProgramSubject.next(program);
   }
 
+  criarProgram() {
+    let program = new Program();
+    program.observers = [this.loginService.userObserver];
+    program.observer = this.loginService.userObserver;
+    program.title = 'Sem título';
+    program.description = 'Sem descrição';
+    this._daoService.postObject(ESPIM_REST_Participants, { alias: 'João', email: 'paralo@gmail.com' }).subscribe((user: any) => {
+      program.users = [user.id];
+      this._daoService.postObject(ESPIM_REST_Programs, program).subscribe((volta: any) => {
+        program.id = volta.id;
+        this._currentProgramSubject.next(program);
+      });
+    });
+  }
+
   /**
    * Saves an step patching "programs". Patching results in updating the attributes specified in programs
    */
   saveStep(dados: any): Observable<any> {
     let id = this.programValue.id;
-    if (id) {
+    if (id < 900) {
       // let programUpdated = { ...this.programValue, ...dados } as unknown as Program;
       this._loaderService.show();
 
@@ -132,7 +147,7 @@ export class ProgramsAddService {
 
     this._loaderService.show();
 
-    if (id) {
+    if (id < 900) {
       this._daoService
         .putObject(ESPIM_REST_Programs + id, program)
         .pipe(finalize(() => this._loaderService.hide()))

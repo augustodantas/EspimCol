@@ -41,8 +41,11 @@ export class ChatComponent implements OnInit {
     this._subscription$ = this.programAddService.program.subscribe((programInstance: Program) => {
       if (this.needSet && programInstance.id) {
         //this.messages = programInstance.chatMessages;
-        console.log(programInstance);
         this.programId = programInstance.id;
+        //this._dao.getObjects(ESPIM_REST_Chat + '/' + this.programId).subscribe((lista: any) => {
+        //  this.messages = lista;
+        //});
+        console.log(programInstance);
         this.needSet = false;
         this.channel.echo.private('program.' + this.programId).listenForWhisper('chat' + this.programId, (e: any) => {
           this.channelUpdate(e);
