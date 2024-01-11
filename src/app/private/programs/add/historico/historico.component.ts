@@ -38,12 +38,11 @@ export class HistoricoComponent implements OnInit {
   ) {
     this.user = _login.userName();
     this._subscription$ = this.programAddService.program.subscribe((programInstance: Program) => {
-      if (this.needSet && programInstance.id) {
-        //this.historic = programInstance.historic;
+      if (this.needSet && programInstance.id > 0) {
         this.programId = programInstance.id;
-        //this._dao.getObjects(ESPIM_REST_Historic + '/' + this.programId).subscribe((volta: any) => {
-        //  this.historic = volta;
-        //});
+        this._dao.getObjects(ESPIM_REST_Historic + this.programId + '/').subscribe((volta: any) => {
+          this.historic = volta;
+        });
         console.log(programInstance);
         this.needSet = false;
         this.channel.echo.private('program.' + this.programId).listenForWhisper('historic' + this.programId, (e: any) => {

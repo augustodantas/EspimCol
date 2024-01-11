@@ -39,12 +39,11 @@ export class ChatComponent implements OnInit {
     this.user = _login.userName();
 
     this._subscription$ = this.programAddService.program.subscribe((programInstance: Program) => {
-      if (this.needSet && programInstance.id) {
-        //this.messages = programInstance.chatMessages;
+      if (this.needSet && programInstance.id > 0) {
         this.programId = programInstance.id;
-        //this._dao.getObjects(ESPIM_REST_Chat + '/' + this.programId).subscribe((lista: any) => {
-        //  this.messages = lista;
-        //});
+        this._dao.getObjects(ESPIM_REST_Chat + this.programId + '/').subscribe((lista: any) => {
+          this.messages = lista;
+        });
         console.log(programInstance);
         this.needSet = false;
         this.channel.echo.private('program.' + this.programId).listenForWhisper('chat' + this.programId, (e: any) => {

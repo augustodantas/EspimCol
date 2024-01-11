@@ -44,12 +44,12 @@ export class ProgramsAddComponent {
     if (id) {
       this.programsAddService.fetchData(id);
     } else {
-      //this.programsAddService.criarProgram();
+      this.programsAddService.criarProgram();
       this.router.navigate(['./first'], {
         relativeTo: this.activeRoute,
         queryParams: { reset: true },
       });
-      this.programsAddService.clearData();
+      //this.programsAddService.clearData();
     }
   }
 }

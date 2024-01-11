@@ -60,7 +60,7 @@ export class Step1Component implements OnDestroy {
   setProgram(program: Program) {
     this.form.reset();
     //Mátodo que define o canal de entrada de dados do canal websocket
-    if (this.needSet && program.id) {
+    if (this.needSet && program.id > 0) {
       console.log(program);
       this.channel.echo.private('program.' + program.id).listenForWhisper('step1' + program.id, (e: any) => {
         console.log('evento 1', e);

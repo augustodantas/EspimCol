@@ -71,16 +71,14 @@ export class ProgramsAddService {
 
   criarProgram() {
     let program = new Program();
+    program.id = 0;
     program.observers = [this.loginService.userObserver];
     program.observer = this.loginService.userObserver;
     program.title = 'Sem título';
     program.description = 'Sem descrição';
-    this._daoService.postObject(ESPIM_REST_Participants, { alias: 'João', email: 'paralo@gmail.com' }).subscribe((user: any) => {
-      program.users = [user.id];
-      this._daoService.postObject(ESPIM_REST_Programs, program).subscribe((volta: any) => {
-        program.id = volta.id;
-        this._currentProgramSubject.next(program);
-      });
+    this._daoService.postObject(ESPIM_REST_Programs, program).subscribe((volta: any) => {
+      program.id = volta.id;
+      this._currentProgramSubject.next(program);
     });
   }
 
@@ -89,7 +87,7 @@ export class ProgramsAddService {
    */
   saveStep(dados: any): Observable<any> {
     let id = this.programValue.id;
-    if (id < 900) {
+    if (id) {
       // let programUpdated = { ...this.programValue, ...dados } as unknown as Program;
       this._loaderService.show();
 
@@ -147,7 +145,7 @@ export class ProgramsAddService {
 
     this._loaderService.show();
 
-    if (id < 900) {
+    if (id) {
       this._daoService
         .putObject(ESPIM_REST_Programs + id, program)
         .pipe(finalize(() => this._loaderService.hide()))
