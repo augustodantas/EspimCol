@@ -55,7 +55,7 @@ import { WorksComponent } from './works/works.component';
         providers: [
           {
             id: GoogleLoginProvider.PROVIDER_ID,
-            provider: new GoogleLoginProvider('465781881543-slrnopuhb3up2d97mlkmvgelgpsqthd0.apps.googleusercontent.com'),
+            provider: new GoogleLoginProvider('828775864880-255hvrrt48he9re9td2372a7h1eg5h6o.apps.googleusercontent.com'),
           },
         ],
       } as SocialAuthServiceConfig,

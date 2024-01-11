@@ -1,0 +1,275 @@
+{
+  "index": {
+    "footer": {
+      "works": "Como funciona",
+      "download": "Download",
+      "timeline": "Linha do tempo",
+      "team": "Equipe",
+      "documentation": "Documentação",
+      "subscribe": "Receba novidades sobre o ESPIM",
+      "subscribePlaceholder": "Seu endereço de e-mail",
+      "send": "Enviar"
+    },
+    "header": {
+      "works": "Como funciona",
+      "download": "Download",
+      "timeline": "Linha do tempo",
+      "team": "Equipe",
+      "documentation": "Documentação",
+      "signin": "Cadastre-se"
+    },
+    "home": {
+      "greetings": "Bem vindo ao ESPIM",
+      "invite": "ESPIM é uma ferramenta para intervenção programada",
+      "watch": "Assista uma introdução",
+      "system": "O sistema",
+      "systemDescription": "Aqui você deve preencher com uma descrição do sistema",
+      "espimFeatures": "Aqui você deve apresentar algumas características do ESPIM",
+      "espimAdvantages": "Aqui você deve digitar vantagens do ESPIM. O ESPIM tem muitas vantagens e muitos usuários das mais diversas áreas de pesquisa já utilizam",
+      "espimInformations": "Aqui você deve escrever algumas informações extra sobre o sistema. O ESPIM é uma ferramenta fantástica, você deveria utilizá-lo"
+    },
+    "works": {
+      "title": "Como funciona",
+      "description": "O vídeo a seguir apresenta o funcionamento do ESPIM"
+    },
+    "download": {
+      "welcome": "Bem vindo à página de download do SEMSEM",
+      "message": "Clique na figura a seguir para ser direcionado para a playstore"
+    },
+    "timeline": {
+      "title": "TIMELINE",
+      "text": "Texto exemplo"
+    },
+    "team": {
+      "title": "EQUIPE",
+      "developer": {
+        "name": "Nome sobrenome",
+        "position": "Engenheiro de Software"
+      }
+    },
+    "documentation": {
+      "title": "Em desenvolvimento..."
+    },
+    "signin": {
+      "welcomeMessage": "Bem vindo ao ESPIM, você ainda não tem registro? por favor, cadastre-se!",
+      "saveButton": "REGISTRE-SE",
+      "observers": {
+        "name": "Nome",
+        "namePlaceholder": "Qual o seu nome?",
+        "email": "E-mail",
+        "emailPlaceholder": "Qual o seu e-mail?",
+        "role": "Cargo",
+        "about": "Sobre você",
+        "aboutPlaceholder": "Conte-nos um pouco sobre você!",
+        "birthDate": "Data de Nascimento",
+        "schooling": {
+          "schooling": "Nível de Escolaridade",
+          "noschool": "Sem Escolaridade",
+          "elementaryincompleted": "Fundamental Incompleto",
+          "elementarycompleted": "Fundamental Completo",
+          "highschoolincompleted": "Ensino Médio Incompleto",
+          "highschoolcompleted": "Ensino Médio Completo",
+          "collegeincompleted": "Superior Incompleto",
+          "collegecompleted": "Superior Completo",
+          "masterscompleted": "Mestrado Completo",
+          "phdcompleted": "Doutorado Completo"
+        },
+        "institution": "Instituição",
+        "phoneNumber": "Número de telefone",
+        "address": {
+          "address": "Endereço",
+          "addressNumber": "Número",
+          "addressComplement": "Complemento",
+          "cep": "CEP",
+          "state": "Estado",
+          "city": "Cidade",
+          "country": "País"
+        },
+        "messageTitle": "Registrando observador!",
+        "addMessage": "O observador informado será registrado, mas as informações originais serão mantidas, caso o objeservador já tenha sido registrado anteriormente.",
+        "saveTitle": "Observador registrado!",
+        "saveMessage": "Observador registrado com sucesso!"
+      }
+    }
+  },
+  "security": {
+    "login": {
+      "button": "Entrar"
+    }
+  },
+  "private": {
+    "header": {
+      "participants": {
+        "participants": "Participantes",
+        "add": "Adicionar",
+        "list": "Listar"
+      },
+      "programs": {
+        "programs": "Programas",
+        "add": "Adicionar",
+        "list": "Listar"
+      },
+      "gamification": {
+        "title": "Gamificação",
+        "badges": "Badges"
+      },
+      "admin": {
+        "title": "Admin",
+        "roles": "Grupos",
+        "users": "Usuários",
+        "levels": "Levels",
+        "externalApplication": "Aplicações externas"
+      },
+
+      "results": {
+        "results": "Resultados",
+        "list": "Listar"
+      },
+      "profile": {
+        "settings": "Configurações",
+
+        "exit": "Sair"
+      }
+    },
+    "dashboard": {
+      "welcomeText": "Bem-vindo ao Método de Amostragem de Experiência e Intervenção Programada (ESPIM). ESPIM combina procedimentos selecionados de tecnologias de ensino programadas, técnicas do Método de Amostragem de Experiência (ESM) e computação ubíqua para planejar, criar e implementar programas de intervenção. O método foi modelado com base no uso de teorias associadas ao ESM e instrução programada para definir melhor planejamento de programas de intervenção e técnicas de computação ubíqua, como informação contextual e dispositivos móveis para implementar total ou parcialmente a intervenção programada. A definição e evolução do método foram construídas iterativamente, em parceria com pesquisadores, criando versões da solução de software que permite sua aplicação. Estudos de caso nas áreas de saúde e educação foram realizados para avaliar o método. "
+    },
+    "participants": {
+      "add": {
+        "title": "Novo participante",
+        "titleEdit": "Editar informações do participante",
+        "name": "Name",
+        "email": "E-mail",
+        "alias": "Alias",
+        "addNew": "Novo participante",
+        "saveButton": "SALVAR",
+        "saveAndAddAnother": "SALVAR E ADICIONAR OUTRO",
+        "messageTitle": "Adicionando participante"
+      },
+      "list": {
+        "addButton": "Novo participante",
+        "pageTitle": "Lista de participantes",
+        "listTitle": "Lista de participantes",
+        "totalNumber": "Total de participantes",
+        "noObjects": "Não há participantes cadastrados.",
+        "deleteMessageTitle": "Deletando participante.",
+        "deleteMessage": "Tem certeza de que deseja excluir este participante?",
+        "afterDeleteTitle": "Participante deletado!",
+        "afterDelete": "Participante deletado com sucesso!"
+      }
+    },
+    "search": {
+      "searchPlaceholder": "Digite para buscar..."
+    },
+    "programs": {
+      "add": {},
+      "list": {
+        "addButton": "Novo program",
+        "pageTitle": "Lista de programas",
+        "listTitle": "Lista de programas",
+        "totalNumber": "Total",
+        "onlyActives": "Somente programas ativos",
+        "noObjects": "Nenhum programa cadastrado",
+        "deleteMessageTitle": "Deletando programa.",
+        "deleteMessage": "Tem certeza de que deseja excluir este programa?",
+        "afterDeleteTitle": "Programa deletado!",
+        "afterDelete": "Programa deletado com sucesso!"
+      }
+    },
+    "observers": {},
+    "external-applications": {
+      "add": {
+        "title": "Nova aplicação externa",
+        "titleEdit": "Editar aplicação externa",
+        "name": "Nome",
+        "package": "Pacote",
+        "saveButton": "SALVAR"
+      },
+      "list": {
+        "addButton": "Nova aplicação externa",
+        "pageTitle": "Lista de aplicações externas",
+        "totalNumber": "Total de aplicações externas",
+        "listTitle": "Lista de aplicações externas",
+        "noObjects": "Não há aplicações externs cadastradas."
+      }
+    },
+
+    "roles": {
+      "add": {
+        "title": "Novo grupo",
+        "titleEdit": "Editar grupo",
+        "name": "Nome",
+        "saveButton": "SALVAR"
+      },
+      "list": {
+        "addButton": "Novo grupo",
+        "pageTitle": "Lista de grupos",
+        "totalNumber": "Total de grupos",
+        "listTitle": "Lista de grupos",
+        "noObjects": "Não há grupos cadastrados."
+      }
+    },
+
+    "users": {
+      "add": {
+        "title": "Novo usuário",
+        "titleEdit": "Editar usuário",
+        "name": "Nome",
+        "email": "E-mail",
+        "roles": "Grupos",
+        "saveButton": "SALVAR"
+      },
+      "list": {
+        "addButton": "Novo usuário",
+        "pageTitle": "Lista de usuários",
+        "totalNumber": "Total de usuários",
+        "listTitle": "Lista de usuários",
+        "noObjects": "Não há usuários cadastrados."
+      }
+    },
+
+    "levels": {
+      "add": {
+        "title": "Novo level",
+        "titleEdit": "Editar level",
+        "name": "Nome",
+        "minPoints": "Mínimo de pontos",
+        "maxPoints": "Máximo de pontos",
+        "saveButton": "SALVAR"
+      },
+      "list": {
+        "addButton": "Novo level",
+        "pageTitle": "Lista de levels",
+        "totalNumber": "Total de levels",
+        "listTitle": "Lista de levels",
+        "noObjects": "Não há levels cadastrados."
+      }
+    }
+  },
+  "errors": {
+    "Unknown Error": {
+      "title": "Erro Desconhecido",
+      "text": "Ocorreu um erro desconhecido. (status=0)"
+    },
+    "Bad Request": {
+      "title": "Requisição inválida",
+      "text": "Sua requisição é inválida (status=400)"
+    },
+    "Unauthorized": {
+      "title": "Usuário não autenticado",
+      "text": "Você deve logar para visualizar este conteúdo (status=401)"
+    },
+    "Forbidden": {
+      "title": "Você não tem permissão",
+      "text": "Seu acesso foi negado. (status=403)"
+    },
+    "Not Found": {
+      "title": "A requisição não retornou nada",
+      "text": "Você está tentando acessar algo que não existe. (status=404)"
+    },
+    "Method Not Allowed": {
+      "title": "Método não permitido",
+      "text": "Você está acessando com o método errado. (status=405)"
+    }
+  }
+}
