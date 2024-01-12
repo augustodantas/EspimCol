@@ -1,6 +1,6 @@
 // configure default backend location
 
-export const BASE_ESPIM_API = 'http://localhost:8083/api/';
+export const BASE_ESPIM_API = 'https://espim.icmc.usp.br:8083/api/';
 
 export const ESPIM_API = BASE_ESPIM_API + 'web/';
 
@@ -41,3 +41,7 @@ export const ESPIM_REST_Users: string = ESPIM_API + 'users/';
 export const ESPIM_REST_Badges: string = ESPIM_API + 'events/{{activeEventId}}/badges/';
 // config default page size
 export const PAGE_SIZE = 10;
+
+
+//Chatbot URL
+export const CHATBOT_URL = 'https://flask-api-chatobot.onrender.com/';
